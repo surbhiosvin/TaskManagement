@@ -1,0 +1,8 @@
+﻿@media (min-width: 992px) {
+    .page-content-wrapper .page-content {
+        margin-left: 45px !important;
+    }
+    .page-header-fixed .page-container{
+        margin-top:0 !important;
+    }
+}
