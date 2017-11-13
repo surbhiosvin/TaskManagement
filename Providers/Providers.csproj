@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Helper\AppConfig.cs" />
     <Compile Include="Helper\DataMapper.cs" />
+    <Compile Include="Helper\SqlHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers.SP\Repositories\EmployeeRepository.cs" />
     <Compile Include="Repositories\IEmployee.cs" />
