@@ -8,6 +8,7 @@ using Providers.Repositories;
 using System.Data.SqlClient;
 using System.Data;
 using Providers.Helper;
+using System.Web;
 
 namespace Providers.Providers.SP.Repositories
 {
@@ -48,6 +49,37 @@ namespace Providers.Providers.SP.Repositories
             {
                 return null;
             }
+        }
+        public UserDetails AuthenticateEmployees(UserDetails model)
+        {
+            SqlHelper objHelper = new SqlHelper();
+            UserDetails user = new UserDetails();
+            try
+            {
+                user = objHelper.Query<UserDetails>("GetEmployeeByEmail", new { email = model.Email }).FirstOrDefault();
+                if (user != null && user.UserId > 0)
+                {
+                    if (user.Password != model.Password)
+                    {
+                        return null;
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                ErrorLog.LogError(ex);
+                return null;
+            }
+            return user;
+        }
+        public UserDetails GetCurrentUserProfile()
+        {
+            UserDetails info = null;
+            if (!object.Equals(HttpContext.Current.Session["user"], null))
+            {
+                info = (UserDetails)HttpContext.Current.Session["user"];
+            }
+            return info;
         }
     }
 }

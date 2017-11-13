@@ -36,7 +36,8 @@ namespace TaskManagementOsvin.Controllers
                     if (result.StatusCode == HttpStatusCode.OK)
                     {
                         var contents = result.Content.ReadAsStringAsync().Result;
-                        var getUser = new JavaScriptSerializer().Deserialize<UserDetails>(contents);
+                        var user = new JavaScriptSerializer().Deserialize<UserDetails>(contents);
+                        Session["user"] = user;
                         return RedirectToAction("Welcome", "Dashboard");
                     }
                     else if (result.StatusCode == HttpStatusCode.NotFound)

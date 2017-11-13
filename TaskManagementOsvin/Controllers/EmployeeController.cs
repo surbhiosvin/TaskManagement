@@ -25,12 +25,12 @@ namespace TaskManagementOsvin.Controllers
                 if (model != null)
                 {
                     UserDetails user = new UserDetails() { Email = model.email, Password = model.password };
-                    var GetEmployee = EmployeeRepository.AuthenticateEmployee(user);
-                    if (GetEmployee != null)
+                    var Employee = EmployeeRepository.AuthenticateEmployees(user);
+                    if (Employee != null)
                     {
-                        GetEmployee.isSuccess = true;
-                        GetEmployee.response = "Success";
-                        httpResponse = Request.CreateResponse(HttpStatusCode.OK, GetEmployee);
+                        Employee.isSuccess = true;
+                        Employee.response = "Success";
+                        httpResponse = Request.CreateResponse(HttpStatusCode.OK, Employee);
                     }
                     else
                     {

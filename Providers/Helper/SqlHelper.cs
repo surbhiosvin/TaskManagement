@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Configuration;
 using Dapper;
 using System.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
-namespace ShotPlay.Helpers
+namespace Providers.Helper
 {
     public class SqlHelper
     {
-        private static string constr = ConfigurationManager.ConnectionStrings["constr"].ConnectionString;
-        private MySqlConnection con = new MySqlConnection(constr);
+        private static string constr = AppConfig.ConnectionString;
+        private SqlConnection con = new SqlConnection(constr);
          
         public int ExecuteScalar(string SpName, object param)
         {

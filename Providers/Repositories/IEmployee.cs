@@ -10,5 +10,6 @@ namespace Providers.Repositories
     public interface IEmployee
     {
         UserDetails AuthenticateEmployee(UserDetails model);
+        UserDetails AuthenticateEmployees(UserDetails model);
     }
 }
