@@ -9,6 +9,6 @@ namespace Providers.Repositories
 {
     public interface IEmployee
     {
-        UserDetails AuthenticateUser(UserDetails model);
+        UserDetails AuthenticateEmployee(UserDetails model);
     }
 }

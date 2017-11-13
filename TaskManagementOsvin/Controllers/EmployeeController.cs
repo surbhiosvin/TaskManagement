@@ -1,0 +1,57 @@
+﻿using Providers.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using TaskManagementOsvin.Models;
+using Providers.Providers.SP.Repositories;
+using DomainModel.EntityModel;
+
+namespace TaskManagementOsvin.Controllers
+{
+    public class EmployeeController : ApiController
+    {
+        static readonly IEmployee EmployeeRepository = new EmployeeRepository();
+        // GET api/<controller>
+        [HttpPost]
+        [Route("~/api/Employee/AuthenticateUser")]
+        public HttpResponseMessage AuthenticateUser(User model)
+        {
+            try
+            {
+                HttpResponseMessage httpResponse = new HttpResponseMessage();
+                if (model != null)
+                {
+                    UserDetails user = new UserDetails() { Email = model.email, Password = model.password };
+                    var GetEmployee = EmployeeRepository.AuthenticateEmployee(user);
+                    if (GetEmployee != null)
+                    {
+                        GetEmployee.isSuccess = true;
+                        GetEmployee.response = "Success";
+                        httpResponse = Request.CreateResponse(HttpStatusCode.OK, GetEmployee);
+                    }
+                    else
+                    {
+                        httpResponse = Request.CreateResponse(HttpStatusCode.Unauthorized, model);
+                    }
+                    return httpResponse;
+                }
+                else
+                {
+                    httpResponse = Request.CreateErrorResponse(HttpStatusCode.NotFound, "Not Found");
+                    return httpResponse;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.", StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+    }
+}

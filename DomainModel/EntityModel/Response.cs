@@ -8,7 +8,7 @@ namespace DomainModel.EntityModel
 {
     public class Response
     {
-        public string response { get; set; }
+        public string response { get; set; } = "Failure";
         public bool isSuccess { get; set; }
     }
 }
