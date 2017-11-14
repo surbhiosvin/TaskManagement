@@ -51,7 +51,7 @@ namespace TaskManagementOsvin.Security
                                  1,
                                  model.email,
                                  DateTime.Now,
-                                 DateTime.Now.AddSeconds(15),
+                                 DateTime.Now.AddMinutes(30),
                                  false,
                                  userData);
 

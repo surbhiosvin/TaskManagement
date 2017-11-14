@@ -36,8 +36,7 @@ namespace TaskManagementOsvin.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    UserDetails user = EmployeeRepository.GetCurrentUserProfile();
-                    model.UserId = user != null ? user.UserId : 0;
+                    model.UserId = UserManager.user.UserId;
                     var serialized = new JavaScriptSerializer().Serialize(model);
                     var client = new HttpClient();
                     var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
