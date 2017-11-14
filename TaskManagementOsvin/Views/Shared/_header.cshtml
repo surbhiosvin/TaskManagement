@@ -1,41 +1,15 @@
-﻿@using DomainModel.EntityModel;
-
-@{
-    var user = !object.Equals(Session["user"], null) ? (UserDetails)Session["user"] : null;
-    string userType = string.Empty;
-    if (user != null && user.UserId > 0)
-    {
-        userType = user.Role;
-    }
-    if (!string.IsNullOrWhiteSpace(userType))
-    {
-        if (userType == "Employee")
-        {
-            <div id='cssmenu'>
-                <ul>
-                    <li><a href='#'><span>Home</span></a></li>
-                    <li><a href='#'><span>Change Password</span></a></li>
-                    <li><a href='#'><span>Project List</span></a></li>
-                    <li><a href='#'><span>Add/Edit Status Report</span></a></li>
-                    <li><a href='#'><span>Daily Status Report</span></a></li>
-                    <li><a href='#'><span>Network and Hardware Issue</span></a></li>
-                    <li class='last'><a href='#'><span>Project Bug</span></a></li>
-                </ul>
-            </div>
-        }
-        else
-        {
-            <div id='cssmenu'>
-                <ul>
-                    <li><a href='#'><span>Home TL</span></a></li>
-                    <li><a href='#'><span>Change Password</span></a></li>
-                    <li><a href='#'><span>Project List</span></a></li>
-                    <li><a href='#'><span>Add/Edit Status Report</span></a></li>
-                    <li><a href='#'><span>Daily Status Report</span></a></li>
-                    <li><a href='#'><span>Network and Hardware Issue</span></a></li>
-                    <li class='last'><a href='#'><span>Project Bug</span></a></li>
-                </ul>
-            </div>
-        }
-    }
+﻿@using TaskManagementOsvin.Security;
+@if (UserManager.user.roleType == roleType.Employee)
+{
+    <div id='cssmenu'>
+        <ul>
+            <li><a href='#'><span>Home</span></a></li>
+            <li><a href='#'><span>Change Password</span></a></li>
+            <li><a href='#'><span>Project List</span></a></li>
+            <li><a href='#'><span>Add/Edit Status Report</span></a></li>
+            <li><a href='#'><span>Daily Status Report</span></a></li>
+            <li><a href='#'><span>Network and Hardware Issue</span></a></li>
+            <li class='last'><a href='#'><span>Project Bug</span></a></li>
+        </ul>
+    </div>
 }

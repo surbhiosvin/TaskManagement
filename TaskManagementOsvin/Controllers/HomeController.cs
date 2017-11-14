@@ -9,38 +9,38 @@ using TaskManagementOsvin.Models;
 using System.Text;
 using System.Net;
 using DomainModel.EntityModel;
+using TaskManagementOsvin.Security;
 
 namespace TaskManagementOsvin.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Login()
+        public ActionResult Login(string ReturnUrl = "")
         {
             ViewBag.Class = "display-hide";
+            ViewBag.ReturnUrl = ReturnUrl;
             return View();
         }
 
         [HttpPost]
-        public ActionResult Login(User model)
+        public ActionResult Login(User model, string ReturnUrl = "")
         {
             ViewBag.Class = "display-hide";
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var serialized = new JavaScriptSerializer().Serialize(model);
-                    var client = new HttpClient();
-                    var content = new StringContent(serialized, Encoding.UTF8, "application/json");
-                    client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                    var result = client.PostAsync("/api/Employee/AuthenticateUser", content).Result;
-                    if (result.StatusCode == HttpStatusCode.OK)
+                    model.url = new Uri(HttpContext.Request.Url.AbsoluteUri);
+                    var result = UserManager.validateuser(model);
+                    if (result == HttpStatusCode.OK)
                     {
-                        var contents = result.Content.ReadAsStringAsync().Result;
-                        var user = new JavaScriptSerializer().Deserialize<UserDetails>(contents);
-                        Session["user"] = user;
+                        if (ReturnUrl !="")
+                        {
+                            return Redirect(ReturnUrl);
+                        }
                         return RedirectToAction("Welcome", "Dashboard");
                     }
-                    else if (result.StatusCode == HttpStatusCode.NotFound)
+                    else if (result == HttpStatusCode.NotFound)
                     {
                         ViewBag.Class = null;
                         ModelState.AddModelError("CustomError", "Email/ Password is incorrect");

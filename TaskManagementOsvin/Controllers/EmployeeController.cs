@@ -8,6 +8,7 @@ using System.Web.Http;
 using TaskManagementOsvin.Models;
 using Providers.Providers.SP.Repositories;
 using DomainModel.EntityModel;
+using System.Text.RegularExpressions;
 
 namespace TaskManagementOsvin.Controllers
 {
@@ -28,6 +29,10 @@ namespace TaskManagementOsvin.Controllers
                     var Employee = EmployeeRepository.AuthenticateEmployees(user);
                     if (Employee != null)
                     {
+                        roleType GetRoleType;
+                        var roleType = Regex.Replace(Employee.Role, @"\s+", "");
+                        Enum.TryParse(roleType, out GetRoleType);
+                        Employee.roleType = GetRoleType;
                         Employee.isSuccess = true;
                         Employee.response = "Success";
                         httpResponse = Request.CreateResponse(HttpStatusCode.OK, Employee);
