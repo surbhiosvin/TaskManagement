@@ -27,5 +27,14 @@ namespace DomainModel.EntityModel
         public string PersonalEmailId { get; set; }
         public string Image { get; set; }
         public bool IsDeleted { get; set; }
+        public roleType roleType { get; set; }
+    }
+    public enum roleType
+    {
+        Admin = 1,
+        HR = 2,
+        ProjectManager = 3,
+        TeamLeader = 4,
+        Employee = 5
     }
 }
