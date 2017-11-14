@@ -60,7 +60,7 @@ namespace TaskManagementOsvin.Controllers
         }
         [HttpPost]
         [Route("~/api/Employee/ChangePassword")]
-        public HttpResponseMessage ChangePassword(ChangePasswordReqModel model)
+        public HttpResponseMessage ChangePassword(ChangePassword model)
         {
             try
             {

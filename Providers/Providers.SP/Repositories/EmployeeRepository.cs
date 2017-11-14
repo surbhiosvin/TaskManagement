@@ -82,7 +82,7 @@ namespace Providers.Providers.SP.Repositories
             }
             return info;
         }
-        public Response ChangePassword(ChangePasswordReqModel model)
+        public Response ChangePassword(ChangePassword model)
         {
             Response objRes = new Response();
             try

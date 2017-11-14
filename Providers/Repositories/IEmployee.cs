@@ -11,7 +11,7 @@ namespace Providers.Repositories
     {
         UserDetails AuthenticateEmployee(UserDetails model);
         UserDetails AuthenticateEmployees(UserDetails model);
-        Response ChangePassword(ChangePasswordReqModel model);
+        Response ChangePassword(ChangePassword model);
 
     }
 }
