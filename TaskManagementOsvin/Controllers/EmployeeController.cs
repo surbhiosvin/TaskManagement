@@ -53,5 +53,40 @@ namespace TaskManagementOsvin.Controllers
                 });
             }
         }
+        [HttpPost]
+        [Route("~/api/Employee/ChangePassword")]
+        public HttpResponseMessage ChangePassword(ChangePasswordReqModel model)
+        {
+            try
+            {
+                HttpResponseMessage httpResponse = new HttpResponseMessage();
+                if (model != null)
+                {                
+                    var Response = EmployeeRepository.ChangePassword(model);
+                    if (Response.isSuccess)
+                    {
+                        httpResponse = Request.CreateResponse(HttpStatusCode.OK, Response);
+                    }
+                    else
+                    {
+                        httpResponse = Request.CreateResponse(HttpStatusCode.Unauthorized, Response);
+                    }                
+                }
+                else
+                {
+                    httpResponse = Request.CreateErrorResponse(HttpStatusCode.NotFound, "Not Found");
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
     }
 }

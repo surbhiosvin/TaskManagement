@@ -5,12 +5,12 @@ D:\naveen\TaskManagementRepo\Providers\bin\Debug\Providers.dll
 D:\naveen\TaskManagementRepo\Providers\bin\Debug\Providers.pdb
 D:\naveen\TaskManagementRepo\Providers\bin\Debug\DomainModel.dll
 D:\naveen\TaskManagementRepo\Providers\bin\Debug\DomainModel.pdb
-F:\Kritika\TaskManagementOsvin\Providers\obj\Debug\Providers.csprojResolveAssemblyReference.cache
 F:\Kritika\TaskManagementOsvin\Providers\bin\Debug\Providers.dll
 F:\Kritika\TaskManagementOsvin\Providers\bin\Debug\Providers.pdb
 F:\Kritika\TaskManagementOsvin\Providers\bin\Debug\Dapper.dll
 F:\Kritika\TaskManagementOsvin\Providers\bin\Debug\DomainModel.dll
 F:\Kritika\TaskManagementOsvin\Providers\bin\Debug\Dapper.xml
 F:\Kritika\TaskManagementOsvin\Providers\bin\Debug\DomainModel.pdb
+F:\Kritika\TaskManagementOsvin\Providers\obj\Debug\Providers.csprojResolveAssemblyReference.cache
 F:\Kritika\TaskManagementOsvin\Providers\obj\Debug\Providers.dll
 F:\Kritika\TaskManagementOsvin\Providers\obj\Debug\Providers.pdb

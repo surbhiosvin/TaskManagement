@@ -14,6 +14,7 @@ namespace Providers.Providers.SP.Repositories
 {
     public class EmployeeRepository : IEmployee, IDisposable
     {
+        SqlHelper objHelper = new SqlHelper();
         public void Dispose()
         {
             GC.SuppressFinalize(this);
@@ -52,7 +53,6 @@ namespace Providers.Providers.SP.Repositories
         }
         public UserDetails AuthenticateEmployees(UserDetails model)
         {
-            SqlHelper objHelper = new SqlHelper();
             UserDetails user = new UserDetails();
             try
             {
@@ -72,7 +72,7 @@ namespace Providers.Providers.SP.Repositories
             }
             return user;
         }
-        public UserDetails GetCurrentUserProfile()
+        public static UserDetails GetCurrentUserProfile()
         {
             UserDetails info = null;
             if (!object.Equals(HttpContext.Current.Session["user"], null))
@@ -80,6 +80,48 @@ namespace Providers.Providers.SP.Repositories
                 info = (UserDetails)HttpContext.Current.Session["user"];
             }
             return info;
+        }
+        public Response ChangePassword(ChangePasswordReqModel model)
+        {
+            Response objRes = new Response();
+            try
+            {
+                var user = objHelper.Query<UserDetails>("GetEmployeeDataById", new { UserId = model.UserId }).FirstOrDefault();
+                if(user!=null && user.UserId>0)
+                {
+                    if(user.Password==model.OldPassword)
+                    {
+                        int res = objHelper.Execute("UpdateUserPassword", new { UserId = model.UserId, Password = model.NewPassword });
+                        if(res>0)
+                        {
+                            objRes.response = "Password changed successfully.";
+                            objRes.isSuccess = true;
+                        }
+                        else
+                        {
+                            objRes.response = "Something went wrong, Please try again.";
+                            objRes.isSuccess = false;
+                        }
+                    }
+                    else
+                    {
+                        objRes.response = "You have entered incorrect current password.";
+                        objRes.isSuccess = false;
+                    }
+                }
+                else
+                {
+                    objRes.response = "User does not exists.";
+                    objRes.isSuccess = false;
+                }
+            }
+            catch(Exception ex)
+            {
+                ErrorLog.LogError(ex);
+                objRes.response = "Something went wrong, Please try again.";
+                objRes.isSuccess = false;
+            }
+            return objRes;
         }
     }
 }

@@ -9,12 +9,12 @@
     }
     if (!string.IsNullOrWhiteSpace(userType))
     {
-        if (userType == "Employee")
+        if (userType.ToLower() == "employee")
         {
             <div id='cssmenu'>
                 <ul>
-                    <li><a href='#'><span>Home</span></a></li>
-                    <li><a href='#'><span>Change Password</span></a></li>
+                    <li><a href='~/Dashboard/Welcome'><span>Home</span></a></li>
+                    <li><a href='~/Dashboard/ChangePassword'><span>Change Password</span></a></li>
                     <li><a href='#'><span>Project List</span></a></li>
                     <li><a href='#'><span>Add/Edit Status Report</span></a></li>
                     <li><a href='#'><span>Daily Status Report</span></a></li>
@@ -23,7 +23,7 @@
                 </ul>
             </div>
         }
-        else
+        else if (userType.ToLower() == "team leader")
         {
             <div id='cssmenu'>
                 <ul>
@@ -37,5 +37,13 @@
                 </ul>
             </div>
         }
+    }
+    else
+    {
+        <div id='cssmenu'>
+            <ul>
+                <li><a href='~/Dashboard/Welcome'><span>Home</span></a></li>
+            </ul>
+        </div>
     }
 }
