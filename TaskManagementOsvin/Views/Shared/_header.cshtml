@@ -1,15 +1,47 @@
 ﻿@using TaskManagementOsvin.Security;
-@if (UserManager.user.roleType == roleType.Employee)
-{
-    <div id='cssmenu'>
-        <ul>
-            <li><a href='~/Dashboard/Welcome'><span>Home</span></a></li>
-            <li><a href='~/Dashboard/ChangePassword'><span>Change Password</span></a></li>
+<div id='cssmenu'>
+    <ul>
+        <li><a href='~/Dashboard/Welcome'><span>Home</span></a></li>
+        <li><a href='~/Dashboard/ChangePassword'><span>Change Password</span></a></li>
+        @if (UserManager.user.roleType == roleType.Employee)
+        {
             <li><a href='#'><span>Project List</span></a></li>
             <li><a href='#'><span>Add/Edit Status Report</span></a></li>
             <li><a href='#'><span>Daily Status Report</span></a></li>
             <li><a href='#'><span>Network and Hardware Issue</span></a></li>
             <li class='last'><a href='#'><span>Project Bug</span></a></li>
-        </ul>
-    </div>
-}
+        }
+        else if (UserManager.user.roleType == roleType.TeamLeader)
+        {
+            <li><a href='#'><span>Project List</span></a></li>
+                    <li><a href='#'><span>Add/Edit Status Report</span></a></li>
+                    <li><a href='#'><span>Daily Status Report</span></a></li>
+                    <li><a href='#'><span>Network and Hardware Issue</span></a></li>
+                    <li class='last'><a href='#'><span>Project Bug</span></a></li>
+        }
+        else if (UserManager.user.roleType == roleType.Admin)
+        {
+            <li><a href='#'><span>Project List</span></a></li>
+                    <li><a href='#'><span>Add/Edit Status Report</span></a></li>
+                    <li><a href='#'><span>Daily Status Report</span></a></li>
+                    <li><a href='#'><span>Network and Hardware Issue</span></a></li>
+                    <li class='last'><a href='#'><span>Project Bug</span></a></li>
+        }
+        else if (UserManager.user.roleType == roleType.ProjectManager)
+        {
+            <li><a href='#'><span>Project List</span></a></li>
+                    <li><a href='#'><span>Add/Edit Status Report</span></a></li>
+                    <li><a href='#'><span>Daily Status Report</span></a></li>
+                    <li><a href='#'><span>Network and Hardware Issue</span></a></li>
+                    <li class='last'><a href='#'><span>Project Bug</span></a></li>
+        }
+        else if (UserManager.user.roleType == roleType.HR)
+        {
+            <li><a href='#'><span>Project List</span></a></li>
+            <li><a href='#'><span>Add/Edit Status Report</span></a></li>
+            <li><a href='#'><span>Daily Status Report</span></a></li>
+            <li><a href='#'><span>Network and Hardware Issue</span></a></li>
+            <li class='last'><a href='#'><span>Project Bug</span></a></li>
+        }
+    </ul>
+</div>
