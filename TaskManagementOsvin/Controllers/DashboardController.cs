@@ -23,14 +23,12 @@ namespace TaskManagementOsvin.Controllers
             var username = User.Identity.Name;
             return View();
         }
-        [Authorize]
         [HttpGet]
         public ActionResult ChangePassword()
         {
             ViewBag.Class = "display-hide";
             return View();
         }
-        [Authorize]
         [HttpPost]
         public ActionResult ChangePassword(ChangePasswordReqModel model)
         {
@@ -84,6 +82,9 @@ namespace TaskManagementOsvin.Controllers
             }
             return View();
         }
-
+        public ActionResult AddUpdateUser()
+        {
+            return View();
+        }
     }
 }
