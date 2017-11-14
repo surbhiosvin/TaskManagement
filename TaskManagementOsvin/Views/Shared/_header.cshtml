@@ -2,46 +2,230 @@
 <div id='cssmenu'>
     <ul>
         <li><a href='~/Dashboard/Welcome'><span>Home</span></a></li>
-        <li><a href='~/Dashboard/ChangePassword'><span>Change Password</span></a></li>
         @if (UserManager.user.roleType == roleType.Employee)
         {
-            <li><a href='#'><span>Project List</span></a></li>
-            <li><a href='#'><span>Add/Edit Status Report</span></a></li>
-            <li><a href='#'><span>Daily Status Report</span></a></li>
-            <li><a href='#'><span>Network and Hardware Issue</span></a></li>
-            <li class='last'><a href='#'><span>Project Bug</span></a></li>
+            <li class="has-sub">
+                <a href="#">User</a>
+                <ul>
+                    <li><a href='~/Dashboard/ChangePassword'><span>Change Password</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="#">Manage Project</a>
+                <ul>
+                    <li><a href='#'><span>Project List</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href='#'><span>Status Report</span></a>
+                <ul>
+                    <li><a href='#'><span>Add/Edit Status Report</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href='#'><span>Daily Status Report</span></a>
+                <ul>
+                    <li><a href='#'><span>Daily Status Report By Employee</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href='#'><span>Network and Hardware Issue</span></a>
+                <ul>
+                    <li><a href='#'><span>Network and Hardware Issue</span></a></li>
+                </ul>
+            </li>
+            <li class='has-sub last'>
+                <a href='#'><span>Project Bug</span></a>
+                <ul>
+                    <li><a href='#'><span>Bugs List</span></a></li>
+                </ul>
+            </li>
         }
         else if (UserManager.user.roleType == roleType.TeamLeader)
         {
-            <li><a href='#'><span>Project List</span></a></li>
+            <li class="has-sub">
+                <a href="#">User</a>
+                <ul>
+                    <li><a href='#'><span>Add/Edit User</span></a></li>
+                    <li><a href='#'><span>Add/Edit Designation</span></a></li>
+                    <li><a href='~/Dashboard/ChangePassword'><span>Change Password</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="#">Manage Project</a>
+                <ul>
+                    <li><a href='#'><span>Project List</span></a></li>
+                    <li><a href='#'><span>Add/Edit Project</span></a></li>
+                    <li><a href='#'><span>Add/Edit Addendums</span></a></li>
+                    <li><a href='#'><span>Add Working Hour of Project Before PMS</span></a></li>
+                    <li><a href='#'><span>Add/Edit Project Task Category</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href='#'><span>Manage Client</span></a>
+                <ul>
+                    <li><a href='#'><span>Add/Edit Client</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="#">Manage Report</a>
+                <ul>
+                    <li><a href='#'><span>Project Report</span></a></li>
+                    <li><a href='#'><span>Employee Report</span></a></li>
                     <li><a href='#'><span>Add/Edit Status Report</span></a></li>
-                    <li><a href='#'><span>Daily Status Report</span></a></li>
+                    <li><a href='#'><span>Add Daily Status Report of Employee</span></a></li>
+                    <li><a href='#'><span>Employee Daily Status Report Filed by Team Leader</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href='#'><span>Network and Hardware Issue</span></a>
+                <ul>
                     <li><a href='#'><span>Network and Hardware Issue</span></a></li>
-                    <li class='last'><a href='#'><span>Project Bug</span></a></li>
+                </ul>
+            </li>
+            <li class='has-sub last'>
+                <a href='#'><span>Project Bug</span></a>
+                <ul>
+                    <li><a href='#'><span>Bugs List</span></a></li>
+                </ul>
+            </li>
         }
         else if (UserManager.user.roleType == roleType.Admin)
         {
-            <li><a href='#'><span>Project List</span></a></li>
-                    <li><a href='#'><span>Add/Edit Status Report</span></a></li>
-                    <li><a href='#'><span>Daily Status Report</span></a></li>
+            <li class="has-sub">
+                <a href="#">User</a>
+                <ul>
+                    <li><a href='#'><span>Add/Edit User</span></a></li>
+                    <li><a href='~/Dashboard/ChangePassword'><span>Change Password</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="#">Department & Designation</a>
+                <ul>
+                    <li><a href='#'><span>Add/Edit Department</span></a></li>
+                    <li><a href='#'><span>Add/Edit Designation</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="#">Manage Project</a>
+                <ul>
+                    <li><a href='#'><span>Project List</span></a></li>
+                    <li><a href='#'><span>Add/Edit Project</span></a></li>
+                    <li><a href='#'><span>Add/Edit Addendums</span></a></li>
+                    <li><a href='#'><span>Add Working Hour of Project Before PMS</span></a></li>
+                    <li><a href='#'><span>Add/Edit Project Task Category</span></a></li>
+                    <li><a href='#'><span>Merge Project</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href='#'><span>Manage Client</span></a>
+                <ul>
+                    <li><a href='#'><span>Add/Edit Client</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href='#'><span>Feedback</span></a>
+                <ul>
+                    <li><a href='#'><span>Add/Edit Feedback</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="#">Manage Report</a>
+                <ul>
+                    <li><a href='#'><span>Project Report</span></a></li>
+                    <li><a href='#'><span>Employee Report</span></a></li>
+                    <li><a href='#'><span>Search Report</span></a></li>
+                    <li><a href='#'><span>Employee Working Hours in Month</span></a></li>
+                    <li><a href='#'><span>Employee Daily Status Report Filed by Team Leader</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href='#'><span>Network and Hardware Issue</span></a>
+                <ul>
                     <li><a href='#'><span>Network and Hardware Issue</span></a></li>
-                    <li class='last'><a href='#'><span>Project Bug</span></a></li>
+                    <li><a href='#'><span>Network and Hardware Issue Graph</span></a></li>
+                </ul>
+            </li>
+            <li class='has-sub last'>
+                <a href='#'><span>Project Bug</span></a>
+                <ul>
+                    <li><a href='#'><span>Report Bugs</span></a></li>
+                    <li><a href='#'><span>Bugs List</span></a></li>
+                    <li><a href='#'><span>Bugs Graph</span></a></li>
+                </ul>
+            </li>
         }
         else if (UserManager.user.roleType == roleType.ProjectManager)
         {
-            <li><a href='#'><span>Project List</span></a></li>
-                    <li><a href='#'><span>Add/Edit Status Report</span></a></li>
-                    <li><a href='#'><span>Daily Status Report</span></a></li>
+            <li class="has-sub">
+                <a href="#">User</a>
+                <ul>
+                    <li><a href='#'><span>Add/Edit User</span></a></li>
+                    <li><a href='~/Dashboard/ChangePassword'><span>Change Password</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="#">Department & Designation</a>
+                <ul>
+                    <li><a href='#'><span>Add/Edit Department</span></a></li>
+                    <li><a href='#'><span>Add/Edit Designation</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="#">Manage Project</a>
+                <ul>
+                    <li><a href='#'><span>Project List</span></a></li>
+                    <li><a href='#'><span>Add/Edit Project</span></a></li>
+                    <li><a href='#'><span>Add/Edit Addendums</span></a></li>
+                    <li><a href='#'><span>Add Working Hour of Project Before PMS</span></a></li>
+                    <li><a href='#'><span>Add/Edit Project Task Category</span></a></li>
+                    <li><a href='#'><span>Merge Project</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href='#'><span>Manage Client</span></a>
+                <ul>
+                    <li><a href='#'><span>Add/Edit Client</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href='#'><span>Feedback</span></a>
+                <ul>
+                    <li><a href='#'><span>Add/Edit Feedback</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="#">Manage Report</a>
+                <ul>
+                    <li><a href='#'><span>Project Report</span></a></li>
+                    <li><a href='#'><span>Employee Report</span></a></li>
+                    <li><a href='#'><span>Search Report</span></a></li>
+                    <li><a href='#'><span>Employee Working Hours in Month</span></a></li>
+                    <li><a href='#'><span>Employee Daily Status Report Filed by Team Leader</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href='#'><span>Network and Hardware Issue</span></a>
+                <ul>
                     <li><a href='#'><span>Network and Hardware Issue</span></a></li>
-                    <li class='last'><a href='#'><span>Project Bug</span></a></li>
+                </ul>
+            </li>
+            <li class='has-sub last'>
+                <a href='#'><span>Project Bug</span></a>
+                <ul>
+                    <li><a href='#'><span>Report Bugs</span></a></li>
+                    <li><a href='#'><span>Bugs List</span></a></li>
+                    <li><a href='#'><span>Bugs Graph</span></a></li>
+                </ul>
+            </li>
         }
-        else if (UserManager.user.roleType == roleType.HR)
-        {
-            <li><a href='#'><span>Project List</span></a></li>
-            <li><a href='#'><span>Add/Edit Status Report</span></a></li>
-            <li><a href='#'><span>Daily Status Report</span></a></li>
-            <li><a href='#'><span>Network and Hardware Issue</span></a></li>
-            <li class='last'><a href='#'><span>Project Bug</span></a></li>
-        }
+        @*else if (UserManager.user.roleType == roleType.HR)
+            {
+                <li><a href='#'><span>Project List</span></a></li>
+                <li><a href='#'><span>Add/Edit Status Report</span></a></li>
+                <li><a href='#'><span>Daily Status Report</span></a></li>
+                <li><a href='#'><span>Network and Hardware Issue</span></a></li>
+                <li class='last'><a href='#'><span>Project Bug</span></a></li>
+            }*@
     </ul>
 </div>
