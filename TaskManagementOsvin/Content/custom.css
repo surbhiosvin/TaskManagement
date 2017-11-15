@@ -2,7 +2,17 @@
     .page-content-wrapper .page-content {
         margin-left: 45px !important;
     }
-    .page-header-fixed .page-container{
-        margin-top:0 !important;
+
+    .page-header-fixed .page-container {
+        margin-top: 0 !important;
     }
+}
+
+.actions-padding {
+    padding: 6px 0 14px;
+}
+
+.action-inline {
+    display: inline-block;
+    padding-right:10px;
 }

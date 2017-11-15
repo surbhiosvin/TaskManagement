@@ -47,7 +47,7 @@
             <li class="has-sub">
                 <a href="#">User</a>
                 <ul>
-                    <li><a href='#'><span>Add/Edit User</span></a></li>
+                    <li><a href='~/Management/AddUpdateUser'><span>Add/Edit User</span></a></li>
                     <li><a href='#'><span>Add/Edit Designation</span></a></li>
                     <li><a href='~/Dashboard/ChangePassword'><span>Change Password</span></a></li>
                 </ul>
@@ -91,12 +91,12 @@
                 </ul>
             </li>
         }
-        else if (UserManager.user.roleType == roleTypeModel.Admin)
+        else if (UserManager.user.roleType == roleType.Admin || UserManager.user.roleType==roleType.HR)
         {
             <li class="has-sub">
                 <a href="#">User</a>
                 <ul>
-                    <li><a href='#'><span>Add/Edit User</span></a></li>
+                    <li><a href='~/Management/AddUpdateUser'><span>Add/Edit User</span></a></li>
                     <li><a href='~/Dashboard/ChangePassword'><span>Change Password</span></a></li>
                 </ul>
             </li>
@@ -159,9 +159,9 @@
         else if (UserManager.user.roleType == roleTypeModel.ProjectManager)
         {
             <li class="has-sub">
-                <a href="#">User</a>
+                <a href="~/Management/AddUpdateUser">User</a>
                 <ul>
-                    <li><a href='#'><span>Add/Edit User</span></a></li>
+                    <li><a href='~/Management/AddUpdateUser'><span>Add/Edit User</span></a></li>
                     <li><a href='~/Dashboard/ChangePassword'><span>Change Password</span></a></li>
                 </ul>
             </li>
@@ -219,14 +219,6 @@
                     <li><a href='#'><span>Bugs Graph</span></a></li>
                 </ul>
             </li>
-        }
-        @*else if (UserManager.user.roleType == roleType.HR)
-            {
-                <li><a href='#'><span>Project List</span></a></li>
-                <li><a href='#'><span>Add/Edit Status Report</span></a></li>
-                <li><a href='#'><span>Daily Status Report</span></a></li>
-                <li><a href='#'><span>Network and Hardware Issue</span></a></li>
-                <li class='last'><a href='#'><span>Project Bug</span></a></li>
-            }*@
+        }      
     </ul>
 </div>
