@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DomainModel.EntityModel
 {
-    public class UserDetails : Response
+    public class UserDetailsDomainModel : ResponseDomainModel
     {
         public long UserId { get; set; }
         public int DepartmentId { get; set; }
@@ -27,9 +27,9 @@ namespace DomainModel.EntityModel
         public string PersonalEmailId { get; set; }
         public string Image { get; set; }
         public bool IsDeleted { get; set; }
-        public roleType roleType { get; set; }
+        public roleTypeDomainModel roleType { get; set; }
     }
-    public enum roleType
+    public enum roleTypeDomainModel
     {
         Admin = 1,
         HR = 2,

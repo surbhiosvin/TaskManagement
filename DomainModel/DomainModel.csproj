@@ -40,8 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EntityModel\Response.cs" />
-    <Compile Include="EntityModel\User.cs" />
+    <Compile Include="EntityModel\ChangePassword.cs" />
+    <Compile Include="EntityModel\GetSummaryDomainModel.cs" />
+    <Compile Include="EntityModel\ResponseDomainModel.cs" />
+    <Compile Include="EntityModel\SummaryOfWeekDetailsMain.cs" />
+    <Compile Include="EntityModel\UserDetailsDomainModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

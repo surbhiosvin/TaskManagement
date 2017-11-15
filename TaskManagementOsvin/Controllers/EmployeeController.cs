@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using TaskManagementOsvin.Models;
 using Providers.Providers.SP.Repositories;
 using DomainModel.EntityModel;
 using System.Text.RegularExpressions;
@@ -18,18 +17,17 @@ namespace TaskManagementOsvin.Controllers
         // GET api/<controller>
         [HttpPost]
         [Route("~/api/Employee/AuthenticateUser")]
-        public HttpResponseMessage AuthenticateUser(User model)
+        public HttpResponseMessage AuthenticateUser(UserDetailsDomainModel model)
         {
             try
             {
                 HttpResponseMessage httpResponse = new HttpResponseMessage();
                 if (model != null)
                 {
-                    UserDetails user = new UserDetails() { Email = model.email, Password = model.password };
-                    var Employee = EmployeeRepository.AuthenticateEmployees(user);
+                    var Employee = EmployeeRepository.AuthenticateEmployees(model);
                     if (Employee != null)
                     {
-                        roleType GetRoleType;
+                        roleTypeDomainModel GetRoleType;
                         var roleType = Regex.Replace(Employee.Role, @"\s+", "");
                         Enum.TryParse(roleType, out GetRoleType);
                         Employee.roleType = GetRoleType;
@@ -80,6 +78,42 @@ namespace TaskManagementOsvin.Controllers
                 else
                 {
                     httpResponse = Request.CreateErrorResponse(HttpStatusCode.NotFound, "Not Found");
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+
+        [HttpPost]
+        [Route("~/api/Employee/SummaryOfWeekDetails")]
+        public HttpResponseMessage SummaryOfWeekDetails(GetSummaryDomainModel model)
+        {
+            try
+            {
+                HttpResponseMessage httpResponse = new HttpResponseMessage();
+                if (model != null)
+                {
+                    var Summary = EmployeeRepository.SummaryOfWeekDetailsMain(model);
+                    if (Summary != null)
+                    {
+                        httpResponse = Request.CreateResponse(HttpStatusCode.OK, Summary);
+                    }
+                    else
+                    {
+                        httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error occurred");
+                    }
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.Unauthorized, "Not authorized");
                 }
                 return httpResponse;
             }

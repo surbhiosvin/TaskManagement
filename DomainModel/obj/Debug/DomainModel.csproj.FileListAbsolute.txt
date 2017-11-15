@@ -6,3 +6,4 @@ F:\Kritika\TaskManagementOsvin\DomainModel\bin\Debug\DomainModel.dll
 F:\Kritika\TaskManagementOsvin\DomainModel\bin\Debug\DomainModel.pdb
 F:\Kritika\TaskManagementOsvin\DomainModel\obj\Debug\DomainModel.dll
 F:\Kritika\TaskManagementOsvin\DomainModel\obj\Debug\DomainModel.pdb
+D:\naveen\TaskManagementRepo\DomainModel\obj\Debug\DomainModel.csprojResolveAssemblyReference.cache

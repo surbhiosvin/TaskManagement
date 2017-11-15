@@ -1,8 +1,9 @@
 ﻿@using TaskManagementOsvin.Security;
-<div id='cssmenu'>
+@using TaskManagementOsvin.Models;
+<div id='cssmenu' class="page-header navbar navbar-fixed-top">
     <ul>
         <li><a href='~/Dashboard/Welcome'><span>Home</span></a></li>
-        @if (UserManager.user.roleType == roleType.Employee)
+        @if (UserManager.user.roleType == roleTypeModel.Employee)
         {
             <li class="has-sub">
                 <a href="#">User</a>
@@ -41,7 +42,7 @@
                 </ul>
             </li>
         }
-        else if (UserManager.user.roleType == roleType.TeamLeader)
+        else if (UserManager.user.roleType == roleTypeModel.TeamLeader)
         {
             <li class="has-sub">
                 <a href="#">User</a>
@@ -90,7 +91,7 @@
                 </ul>
             </li>
         }
-        else if (UserManager.user.roleType == roleType.Admin)
+        else if (UserManager.user.roleType == roleTypeModel.Admin)
         {
             <li class="has-sub">
                 <a href="#">User</a>
@@ -155,7 +156,7 @@
                 </ul>
             </li>
         }
-        else if (UserManager.user.roleType == roleType.ProjectManager)
+        else if (UserManager.user.roleType == roleTypeModel.ProjectManager)
         {
             <li class="has-sub">
                 <a href="#">User</a>

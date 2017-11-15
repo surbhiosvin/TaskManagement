@@ -1,9 +1,9 @@
-﻿using DomainModel.EntityModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using System.Web;
+using TaskManagementOsvin.Models;
 
 namespace TaskManagementOsvin.Security
 {
@@ -20,6 +20,6 @@ namespace TaskManagementOsvin.Security
             this.Identity = new GenericIdentity(email);
         }
 
-        public UserDetails user { get; set; }
+        public UserDetailsModel user { get; set; }
     }
 }
