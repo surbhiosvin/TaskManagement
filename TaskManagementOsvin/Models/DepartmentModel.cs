@@ -5,7 +5,7 @@ using System.Web;
 
 namespace TaskManagementOsvin.Models
 {
-    public class Department
+    public class DepartmentModel
     {
         public long DepartmentId { get; set; }
         public string DepartmentName { get; set; }
