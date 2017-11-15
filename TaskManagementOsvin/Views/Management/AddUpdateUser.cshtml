@@ -1,0 +1,521 @@
+﻿
+@{
+    ViewBag.Title = "AddUpdateUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-content">
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="~/Dashboard/Welcome">Dashboard</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="#">Add/Update User</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            @*<li>
+                    <span>Page Layouts</span>
+                </li>*@
+        </ul>
+        <div class="page-toolbar">
+            <div class="btn-group pull-right">
+                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li>
+                        <a href="#">
+                            <i class="icon-bell"></i> Action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-shield"></i> Another action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-user"></i> Something else here
+                        </a>
+                    </li>
+                    <li class="divider"> </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-bag"></i> Separated link
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE BAR -->
+    <!-- BEGIN PAGE TITLE-->
+    <h1 class="page-title">
+        Add / Update User
+        @*<small>blank page layout</small>*@
+    </h1>
+    <!-- END PAGE TITLE-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN EXAMPLE TABLE PORTLET-->
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption font-dark">
+                        <i class="icon-settings font-dark"></i>
+                        <span class="caption-subject bold uppercase">User Details</span>                       
+                    </div>
+                    <div class="col-sm-offset-3 col-sm-6">
+                        <div class="actions actions-padding">
+                            <div class="action-inline">
+                                <label for="default" class="control-label">Name</label>
+                                <input id="default" type="text" class="form-control" placeholder="Enter Name">
+                            </div>
+                            <div class="action-inline">
+                                <label for="single" class="control-label">Employee Type</label>
+                                <select id="single" class="form-control select2">
+                                    <option value="1" selected>Non Archive</option>
+                                    <option value="2">Archive</option>
+                                </select>
+                            </div>                            
+                        </div>
+                    </div>    
+                    <button class="btn btn-sm green table-group-action-submit pull-right">
+                        <i class="fa fa-plus"></i> Add Employee
+                    </button>             
+                </div>
+                <div class="portlet-body">
+                    <table class="table table-striped table-bordered table-hover table-header-fixed" id="sample_1">
+                        <thead>
+                            <tr class="">
+                                <th> First Name </th>
+                                <th> Last Name </th>
+                                <th> Department </th>
+                                <th> Designation </th>
+                                <th> Email </th>
+                                <th> Password </th>
+                                <th> DOB </th>
+                                <th> Status </th>
+                                <th> Edit </th>
+                                <th> Delete </th>
+                                <th> Emp. Details </th>
+                                <th> Generate Salary Slip </th>
+                                <th> Archive </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                            <tr>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                                <td> 4 </td>
+                                <td> X </td>
+                                <td> Trident </td>
+                                <td> Internet Explorer 4.0 </td>
+                                <td> Win 95+ </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
