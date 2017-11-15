@@ -116,12 +116,12 @@ namespace Providers.Providers.SP.Repositories
             return objRes;
         }
 
-        public List<SummaryOfWeekDetailsMain> SummaryOfWeekDetailsMain(GetSummaryDomainModel model)
+        public List<SummaryOfWeekDetailsMainDomainModel> SummaryOfWeekDetailsMain(GetSummaryDomainModel model)
         {
             try
             {
                 SqlHelper objHelper = new SqlHelper();
-                var summary = objHelper.Query<SummaryOfWeekDetailsMain>("GET_SUMMARY_OF_WEEK_DETAILS_MAIN", new { startday = model.startday, endday = model.endday }).ToList();
+                var summary = objHelper.Query<SummaryOfWeekDetailsMainDomainModel>("GET_SUMMARY_OF_WEEK_DETAILS_MAIN", new { startday = model.startday, endday = model.endday }).ToList();
                 return summary;
             }
             catch (Exception ex)

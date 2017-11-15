@@ -12,6 +12,6 @@ namespace Providers.Repositories
         UserDetailsDomainModel AuthenticateEmployee(UserDetailsDomainModel model);
         UserDetailsDomainModel AuthenticateEmployees(UserDetailsDomainModel model);
         ResponseDomainModel ChangePassword(ChangePassword model);
-        List<SummaryOfWeekDetailsMain> SummaryOfWeekDetailsMain(GetSummaryDomainModel model);
+        List<SummaryOfWeekDetailsMainDomainModel> SummaryOfWeekDetailsMain(GetSummaryDomainModel model);
     }
 }

@@ -19,6 +19,8 @@ namespace TaskManagementOsvin.Controllers
         {
             var id = UserManager.user.UserId;
             var username = User.Identity.Name;
+            GetSummaryModel model = new GetSummaryModel() { startday = 0, endday = 0 };
+            var res = GetSummaryMain(model);
             return View();
         }
 
@@ -83,6 +85,19 @@ namespace TaskManagementOsvin.Controllers
             return View();
         }
 
-        //public List<GetSummaryModel> GetSummaryMain()
+        public List<SummaryOfWeekDetailsMainModel> GetSummaryMain(GetSummaryModel model)
+        {
+            var serialized = new JavaScriptSerializer().Serialize(model);
+            var client = new HttpClient();
+            var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
+            client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+            var result = client.PostAsync("/api/Employee/SummaryOfWeekDetails", content).Result;
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                var contents = result.Content.ReadAsStringAsync().Result;
+                //var Response = new JavaScriptSerializer().Deserialize<SummaryOfWeekDetailsMainModel>(contents);
+            }
+            return null;
+        }
     }
 }
