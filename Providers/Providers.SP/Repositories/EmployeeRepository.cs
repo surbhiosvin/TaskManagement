@@ -20,7 +20,7 @@ namespace Providers.Providers.SP.Repositories
             GC.SuppressFinalize(this);
         }
 
-        public UserDetails AuthenticateEmployee(UserDetails model)
+        public UserDetailsDomainModel AuthenticateEmployee(UserDetailsDomainModel model)
         {
             try
             {
@@ -33,9 +33,9 @@ namespace Providers.Providers.SP.Repositories
                 cmd.Parameters.Add(new SqlParameter("@email", SqlDbType.VarChar, 50)).Value = model.Email;
                 connection.Open();
                 IDataReader reader = cmd.ExecuteReader();
-                List<UserDetails> items = new List<UserDetails>();
+                List<UserDetailsDomainModel> items = new List<UserDetailsDomainModel>();
                 DataMapper Mapper = new DataMapper();
-                items = Mapper.MapData<UserDetails>(reader);
+                items = Mapper.MapData<UserDetailsDomainModel>(reader);
                 connection.Close();
                 if (items.Count() > 0)
                 {
@@ -51,13 +51,13 @@ namespace Providers.Providers.SP.Repositories
                 return null;
             }
         }
-        public UserDetails AuthenticateEmployees(UserDetails model)
+        public UserDetailsDomainModel AuthenticateEmployees(UserDetailsDomainModel model)
         {
             SqlHelper objHelper = new SqlHelper();
-            UserDetails user = new UserDetails();
+            UserDetailsDomainModel user = new UserDetailsDomainModel();
             try
             {
-                user = objHelper.Query<UserDetails>("GetEmployeeByEmail", new { email = model.Email }).FirstOrDefault();
+                user = objHelper.Query<UserDetailsDomainModel>("GetEmployeeByEmail", new { email = model.Email }).FirstOrDefault();
                 if (user != null && user.UserId > 0)
                 {
                     if (user.Password != model.Password)
@@ -73,21 +73,12 @@ namespace Providers.Providers.SP.Repositories
             }
             return user;
         }
-        public static UserDetails GetCurrentUserProfile()
+        public ResponseDomainModel ChangePassword(ChangePassword model)
         {
-            UserDetails info = null;
-            if (!object.Equals(HttpContext.Current.Session["user"], null))
-            {
-                info = (UserDetails)HttpContext.Current.Session["user"];
-            }
-            return info;
-        }
-        public Response ChangePassword(ChangePassword model)
-        {
-            Response objRes = new Response();
+            ResponseDomainModel objRes = new ResponseDomainModel();
             try
             {
-                var user = objHelper.Query<UserDetails>("GetEmployeeDataById", new { UserId = model.UserId }).FirstOrDefault();
+                var user = objHelper.Query<UserDetailsDomainModel>("GetEmployeeDataById", new { UserId = model.UserId }).FirstOrDefault();
                 if (user != null && user.UserId > 0)
                 {
                     if (user.Password == model.OldPassword)
@@ -112,7 +103,7 @@ namespace Providers.Providers.SP.Repositories
                 }
                 else
                 {
-                    objRes.response = "User does not exists.";
+                    objRes.response = "User does not exist.";
                     objRes.isSuccess = false;
                 }
             }
@@ -123,6 +114,20 @@ namespace Providers.Providers.SP.Repositories
                 objRes.isSuccess = false;
             }
             return objRes;
+        }
+
+        public List<SummaryOfWeekDetailsMain> SummaryOfWeekDetailsMain(GetSummaryDomainModel model)
+        {
+            try
+            {
+                SqlHelper objHelper = new SqlHelper();
+                var summary = objHelper.Query<SummaryOfWeekDetailsMain>("GET_SUMMARY_OF_WEEK_DETAILS_MAIN", new { startday = model.startday, endday = model.endday }).ToList();
+                return summary;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

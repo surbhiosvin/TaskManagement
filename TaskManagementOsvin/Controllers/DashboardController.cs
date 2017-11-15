@@ -1,6 +1,4 @@
-﻿using DomainModel.EntityModel;
-using Providers.Providers.SP.Repositories;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -23,12 +21,14 @@ namespace TaskManagementOsvin.Controllers
             var username = User.Identity.Name;
             return View();
         }
+
         [HttpGet]
         public ActionResult ChangePassword()
         {
             ViewBag.Class = "display-hide";
             return View();
         }
+
         [HttpPost]
         public ActionResult ChangePassword(ChangePasswordReqModel model)
         {
@@ -46,7 +46,7 @@ namespace TaskManagementOsvin.Controllers
                     if (result.StatusCode == HttpStatusCode.OK)
                     {
                         var contents = result.Content.ReadAsStringAsync().Result;
-                        var Response = new JavaScriptSerializer().Deserialize<Response>(contents);
+                        var Response = new JavaScriptSerializer().Deserialize<ResponseModel>(contents);
                         ModelState.Clear();
                         ModelState.AddModelError("CustomError", Response.response);
                         ViewBag.AlertType = "alert-success";
@@ -55,7 +55,7 @@ namespace TaskManagementOsvin.Controllers
                     else if (result.StatusCode == HttpStatusCode.Unauthorized)
                     {
                         var contents = result.Content.ReadAsStringAsync().Result;
-                        var Response = new JavaScriptSerializer().Deserialize<Response>(contents);
+                        var Response = new JavaScriptSerializer().Deserialize<ResponseModel>(contents);
                         ModelState.AddModelError("CustomError", Response.response);
                         ViewBag.Class = null;
                         ViewBag.AlertType = "alert-danger";
@@ -82,9 +82,7 @@ namespace TaskManagementOsvin.Controllers
             }
             return View();
         }
-        public ActionResult AddUpdateUser()
-        {
-            return View();
-        }
+
+        //public List<GetSummaryModel> GetSummaryMain()
     }
 }

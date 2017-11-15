@@ -9,9 +9,9 @@ namespace Providers.Repositories
 {
     public interface IEmployee
     {
-        UserDetails AuthenticateEmployee(UserDetails model);
-        UserDetails AuthenticateEmployees(UserDetails model);
-        Response ChangePassword(ChangePassword model);
-
+        UserDetailsDomainModel AuthenticateEmployee(UserDetailsDomainModel model);
+        UserDetailsDomainModel AuthenticateEmployees(UserDetailsDomainModel model);
+        ResponseDomainModel ChangePassword(ChangePassword model);
+        List<SummaryOfWeekDetailsMain> SummaryOfWeekDetailsMain(GetSummaryDomainModel model);
     }
 }

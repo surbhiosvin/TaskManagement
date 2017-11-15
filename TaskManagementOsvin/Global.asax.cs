@@ -1,5 +1,4 @@
-﻿using DomainModel.EntityModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,6 +9,7 @@ using System.Web.Routing;
 using System.Web.Script.Serialization;
 using System.Web.Security;
 using TaskManagementOsvin.Security;
+using TaskManagementOsvin.Models;
 
 namespace TaskManagementOsvin
 {
@@ -31,9 +31,9 @@ namespace TaskManagementOsvin
             {
                 FormsAuthenticationTicket authTicket = FormsAuthentication.Decrypt(authCookie.Value);
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
-                var DeserializeModel = serializer.Deserialize<UserDetails>(authTicket.UserData);
+                var DeserializeModel = serializer.Deserialize<UserDetailsModel>(authTicket.UserData);
                 CustomPrincipal newUser = new CustomPrincipal(authTicket.Name);
-                newUser.user = new UserDetails();
+                newUser.user = new UserDetailsModel();
                 newUser.user = DeserializeModel;
                 HttpContext.Current.User = newUser;
             }

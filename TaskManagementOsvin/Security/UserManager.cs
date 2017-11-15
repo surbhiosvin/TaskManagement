@@ -1,5 +1,4 @@
-﻿using DomainModel.EntityModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -16,14 +15,14 @@ namespace TaskManagementOsvin.Security
 {
     public class UserManager
     {
-        public static UserDetails user
+        public static UserDetailsModel user
         {
             get
             {
                 if (!HttpContext.Current.User.Identity.IsAuthenticated)
                 {
                     var a = HttpContext.Current.Session["CurrentUser"];
-                    return HttpContext.Current.Session["CurrentUser"] as UserDetails;
+                    return HttpContext.Current.Session["CurrentUser"] as UserDetailsModel;
                 }
                 return (HttpContext.Current.User as CustomPrincipal).user;
             }
@@ -41,7 +40,7 @@ namespace TaskManagementOsvin.Security
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;
-                    var getUser = new JavaScriptSerializer().Deserialize<UserDetails>(contents);
+                    var getUser = new JavaScriptSerializer().Deserialize<UserDetailsModel>(contents);
                     HttpContext.Current.Session["CurrentUser"] = getUser;
                     if (getUser != null)
                     {

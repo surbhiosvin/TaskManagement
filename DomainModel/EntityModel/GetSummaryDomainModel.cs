@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace DomainModel.EntityModel
 {
-    public class Response
+    public class GetSummaryDomainModel
     {
-        public string response { get; set; } = "Failure";
-        public bool isSuccess { get; set; }
+        public int startday { get; set; }
+        public int endday { get; set; }
     }
 }
