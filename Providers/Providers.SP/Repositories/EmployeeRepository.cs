@@ -62,7 +62,9 @@ namespace Providers.Providers.SP.Repositories
                 {
                     if (user.Password != model.Password)
                     {
-                        return null;
+                        model.isSuccess = false;
+                        model.response = "Pasword didn't match";
+                        return model;
                     }
                 }
             }
@@ -121,8 +123,19 @@ namespace Providers.Providers.SP.Repositories
             try
             {
                 SqlHelper objHelper = new SqlHelper();
-                var summary = objHelper.Query<SummaryOfWeekDetailsMainDomainModel>("GET_SUMMARY_OF_WEEK_DETAILS_MAIN", new { startday = model.startday, endday = model.endday }).ToList();
-                return summary;
+                var summaries = objHelper.Query<SummaryOfWeekDetailsMainDomainModel>("GET_SUMMARY_OF_WEEK_DETAILS_MAIN", new { startday = model.startday, endday = model.endday }).ToList();
+                if (summaries.Count() > 0 && summaries != null)
+                {
+                    var GetDistinctProjects = summaries.GroupBy(x => x.ProjectId).Select(g => new { ProjectId = g.Key });
+                    //get subdetails for each summary
+                    foreach (var item in GetDistinctProjects)
+                    {
+                        var summary = objHelper.Query<SummaryOfWeekSubDetailsMainDomainModel>("GET_SUMMARY_OF_WEEK_SUBDETAILS", new { projectId = item.ProjectId, startday = model.startday, endday = model.endday }).ToList();
+                        var GetProject = summaries.First(x => x.ProjectId == item.ProjectId);
+                        GetProject.subweeksummary = summary;
+                    }
+                }
+                return summaries;
             }
             catch (Exception ex)
             {

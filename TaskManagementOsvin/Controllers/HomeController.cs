@@ -40,7 +40,7 @@ namespace TaskManagementOsvin.Controllers
                         }
                         return RedirectToAction("Welcome", "Dashboard");
                     }
-                    else if (result == HttpStatusCode.NotFound)
+                    else if (result == HttpStatusCode.NotFound || result == HttpStatusCode.Unauthorized)
                     {
                         ViewBag.Class = null;
                         ModelState.AddModelError("CustomError", "Email/ Password is incorrect");
