@@ -3,6 +3,8 @@
     ViewBag.Title = "AddUpdateUser";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@using TaskManagementOsvin.Security;
+@using TaskManagementOsvin.Models;
 @model List<EmployeeDomainModel>
 <div class="page-content">
     <!-- BEGIN PAGE BAR -->
@@ -64,24 +66,27 @@
             <!-- BEGIN EXAMPLE TABLE PORTLET-->
             <div class="portlet light bordered">
                 <div class="portlet-title">
-                    <div class="caption font-dark">
-                        <i class="icon-settings font-dark"></i>
-                        <span class="caption-subject bold uppercase">User Details</span>
+                    <div class="caption font-green">
+                        <i class="icon-settings font-green"></i>
+                        <span class="caption-subject font-green bold uppercase">User Details</span>
                     </div>
-                    <div class="col-sm-offset-3 col-sm-6">
-                        <div class="actions actions-padding">
-                            <div class="action-inline">
-                                <label for="ddlArchived" class="control-label">Employee Type</label>
-                                <select id="ddlArchived" class="form-control">
-                                    <option value="false" selected>Non Archive</option>
-                                    <option value="true">Archive</option>
-                                </select>
+                    @if (UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType == roleTypeModel.HR)
+                    {
+                        <div class="col-sm-offset-3 col-sm-6">
+                            <div class="actions actions-padding">
+                                <div class="action-inline">
+                                    <label for="ddlArchived" class="control-label">Employee Type</label>
+                                    <select id="ddlArchived" class="form-control">
+                                        <option value="false" selected>Non Archive</option>
+                                        <option value="true">Archive</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <a class="btn btn-sm green table-group-action-submit pull-right" href="~/Management/AddEmployee">
-                        <i class="fa fa-plus"></i> Add Employee
-                    </a>
+                        <a class="btn btn-sm green table-group-action-submit pull-right" href="~/Management/AddEmployee">
+                            <i class="fa fa-plus"></i> Add Employee
+                        </a>
+                    }
                 </div>
                 <div class="portlet-body dv_UserTableContainer">
                     @Html.Action("_AddUpdateUser", "Management")
@@ -93,7 +98,7 @@
 
 <script type="text/javascript">
     jQuery(document).on('ready', function () {
-        $('#tbl_User').DataTable({         
+        $('#tbl_User').DataTable({
         });
         $(document).on('change', '#ddlArchived', function () {
             var _this = $(this);
