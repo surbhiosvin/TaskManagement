@@ -15,6 +15,7 @@ namespace TaskManagementOsvin.Models
 
         [Display(Name = "Password")]
         [Required(ErrorMessage = "Password is required")]
+        [StringLength(20, MinimumLength = 5)]
         public string password { get; set; }
         public Uri url { get; set; }
     }
