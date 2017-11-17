@@ -3,13 +3,13 @@
     ViewBag.Title = "AddUpdateUser";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@model List<EmployeeDomainModel>
 <div class="page-content">
     <!-- BEGIN PAGE BAR -->
     <div class="page-bar">
         <ul class="page-breadcrumb">
             <li>
-                <a href="~/Dashboard/Welcome">Dashboard</a>
+                <a href="~/Dashboard/Welcome">Home</a>
                 <i class="fa fa-circle"></i>
             </li>
             <li>
@@ -66,456 +66,109 @@
                 <div class="portlet-title">
                     <div class="caption font-dark">
                         <i class="icon-settings font-dark"></i>
-                        <span class="caption-subject bold uppercase">User Details</span>                       
+                        <span class="caption-subject bold uppercase">User Details</span>
                     </div>
                     <div class="col-sm-offset-3 col-sm-6">
                         <div class="actions actions-padding">
                             <div class="action-inline">
-                                <label for="default" class="control-label">Name</label>
-                                <input id="default" type="text" class="form-control" placeholder="Enter Name">
-                            </div>
-                            <div class="action-inline">
-                                <label for="single" class="control-label">Employee Type</label>
-                                <select id="single" class="form-control select2">
-                                    <option value="1" selected>Non Archive</option>
-                                    <option value="2">Archive</option>
+                                <label for="ddlArchived" class="control-label">Employee Type</label>
+                                <select id="ddlArchived" class="form-control">
+                                    <option value="false" selected>Non Archive</option>
+                                    <option value="true">Archive</option>
                                 </select>
-                            </div>                            
+                            </div>
                         </div>
-                    </div>    
-                    <button class="btn btn-sm green table-group-action-submit pull-right">
+                    </div>
+                    <a class="btn btn-sm green table-group-action-submit pull-right" href="~/Management/AddEmployee">
                         <i class="fa fa-plus"></i> Add Employee
-                    </button>             
+                    </a>
                 </div>
-                <div class="portlet-body">
-                    <table class="table table-striped table-bordered table-hover table-header-fixed" id="sample_1">
-                        <thead>
-                            <tr class="">
-                                <th> First Name </th>
-                                <th> Last Name </th>
-                                <th> Department </th>
-                                <th> Designation </th>
-                                <th> Email </th>
-                                <th> Password </th>
-                                <th> DOB </th>
-                                <th> Status </th>
-                                <th> Edit </th>
-                                <th> Delete </th>
-                                <th> Emp. Details </th>
-                                <th> Generate Salary Slip </th>
-                                <th> Archive </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                            <tr>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                                <td> 4 </td>
-                                <td> X </td>
-                                <td> Trident </td>
-                                <td> Internet Explorer 4.0 </td>
-                                <td> Win 95+ </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="portlet-body dv_UserTableContainer">
+                    @Html.Action("_AddUpdateUser", "Management")
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    jQuery(document).on('ready', function () {
+        $('#tbl_User').DataTable({         
+        });
+        $(document).on('change', '#ddlArchived', function () {
+            var _this = $(this);
+            var Archived = _this.val();
+            if (typeof Archived != 'undefined') {
+                $.ajax({
+                    type: "GET",
+                    url: "/Management/_AddUpdateUser?Archived=" + Archived,
+                    //data: { sortBy: sortByval },
+                    contentType: "application/text; charset=utf-8",
+                    dataType: "text",
+                    async: false,
+                    success: function (response) {
+                        $('.dv_UserTableContainer').html(response);
+                        $('#tbl_User').DataTable({
+                            "scrollX": false,
+                        });
+                    },
+                    failure: function (msg) {
+                        html = false;
+                    }
+                });
+            }
+        });
+    });
+    function ActivateDeactivateDepartment(UserId, IsActive) {
+        $.ajax({
+            type: "Get",
+            contentType: "application/json; charset=utf-8",
+            url: "/api/Management/ActivateDeactivateUser?UserId=" + UserId + "&IsActive=" + IsActive,
+            success: function (response) {
+                if (response.isSuccess == true) {
+                    if (IsActive == false) {
+                        $("#StatusActiveLink_" + UserId).remove();
+                        $("#StatusActive_" + UserId).append('<a id="StatusActiveLink_' + UserId + '" href="#" onclick="ActivateDeactivateDepartment(' + UserId + ', true)"><img alt="In Active" src="/assets/global/img/Guiimages/InActive.png" width="30px" height="30px"/></a>');
+                    }
+                    else {
+                        $("#StatusActiveLink_" + UserId).remove();
+                        $("#StatusActive_" + UserId).append('<a id="StatusActiveLink_' + UserId + '" href="#" onclick="ActivateDeactivateDepartment(' + UserId + ', false)"><img alt="Active" src="/assets/global/img/Guiimages/Active.png" width="30px" height="30px"/></a>');
+                    }
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+    function DeleteDepartment(param) {
+        $(".dvAlert").hide();
+        $("#lblMessage").html("");
+        var UserId = param;
+        $.ajax({
+            type: "Get",
+            contentType: "application/json; charset=utf-8",
+            url: "/api/Management/DeleteUserById?UserId=" + UserId,
+            beforeSend: function () {
+                $(".lblMessage").html("Please wait...");
+                $(".dvAlert").show();
+            },
+            success: function (response) {
+                if (response.isSuccess == true) {
+                    $("#row_" + UserId).remove();
+                    $("#lblMessage").html("User deleted successfully");
+                    $(".dvAlert").show();
+                }
+                else {
+                    $("#lblMessage").html(response.response);
+                    $(".dvAlert").show();
+                }
+            },
+            error: function (error) {
+                $("#lblMessage").html("Something went wrong, please try again");
+                $(".dvAlert").show();
+                console.log(error);
+            }
+        });
+    }
+</script>

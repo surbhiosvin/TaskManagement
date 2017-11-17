@@ -1,0 +1,287 @@
+﻿
+@{
+    ViewBag.Title = "EmployeeDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using TaskManagementOsvin.Models
+@model EmployeeModel
+<link href="/assets/pages/css/profile-2.min.css" rel="stylesheet" />
+<style>
+    .profile-userpic img {
+        width: 150px !important;
+        height: 150px !important;
+    }
+</style>
+<div class="page-content">
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="~/Dashboard/Welcome">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="#">Employee Details</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            @*<li>
+                    <span>Page Layouts</span>
+                </li>*@
+        </ul>
+        <div class="page-toolbar">
+            <div class="btn-group pull-right">
+                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li>
+                        <a href="#">
+                            <i class="icon-bell"></i> Action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-shield"></i> Another action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-user"></i> Something else here
+                        </a>
+                    </li>
+                    <li class="divider"> </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-bag"></i> Separated link
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE BAR -->
+    <!-- BEGIN PAGE TITLE-->
+    <h1 class="page-title">
+        Employee Details
+        @*<small>blank page layout</small>*@
+    </h1>
+    <!-- END PAGE TITLE-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN PROFILE SIDEBAR -->
+            <div class="profile-sidebar">
+                <!-- PORTLET MAIN -->
+                <div class="portlet light profile-sidebar-portlet ">
+                    <!-- SIDEBAR USERPIC -->
+                    <div class="profile-userpic">
+                        @if (string.IsNullOrWhiteSpace(Model.Image))
+                        {
+                            <img src="~/Images/UserImages/defaulticon.png" class="img-responsive" alt="">
+                        }
+                        else
+                        {
+                            <img src="/Images/UserImages/@Model.Image" class="img-responsive" alt="">
+                        }
+                    </div>
+                    <!-- END SIDEBAR USERPIC -->
+                    <!-- SIDEBAR USER TITLE -->
+                    <div class="profile-usertitle">
+                        <div class="profile-usertitle-name"> @Model.FirstName @Model.LastName </div>
+                        <div class="profile-usertitle-job"> @Model.DesignationName </div>
+                        <div class="profile-usertitle-name"> @Model.DepartmentName </div>
+                    </div>
+                </div>
+                <!-- END PORTLET MAIN -->
+            </div>
+            <!-- END BEGIN PROFILE SIDEBAR -->
+            <!-- BEGIN PROFILE CONTENT -->
+            <div class="profile-content">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="portlet light ">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="portlet sale-summary">
+                                        <div class="portlet-title">
+                                            <div class="caption font-red sbold"> @Model.FirstName @Model.LastName </div>
+                                            <div class="tools">
+                                                @*<a class="reload" href="javascript:;"> </a>*@
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body">
+                                            <ul class="list-unstyled">
+                                                <li>
+                                                    <span class="sale-info">
+                                                        Osvin EmailID
+                                                        <i class="fa fa-img-up"></i>
+                                                    </span>
+                                                    <span class="sale-num"> @(string.IsNullOrWhiteSpace(Model.Email) ? "N/A" : Model.Email) </span>
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info">
+                                                        Date Of Birth
+                                                        <i class="fa fa-img-down"></i>
+                                                    </span>
+                                                    <span class="sale-num">@(string.IsNullOrWhiteSpace(Model.DOB) ? "N/A" : Model.DOB) </span>
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info"> Date of Joining </span>
+                                                    <span class="sale-num"> @(string.IsNullOrWhiteSpace(Model.DateOfJoining) ? "N/A" : Model.DateOfJoining) </span>
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info"> Father Name </span>
+                                                    <span class="sale-num"> @(string.IsNullOrWhiteSpace(Model.FatherName) ? "N/A" : Model.FatherName) </span>
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info"> Spouse Name </span>
+                                                    <span class="sale-num"> @(string.IsNullOrWhiteSpace(Model.SpouseName) ? "N/A" : Model.SpouseName) </span>
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info"> Current Address </span>
+                                                    <span class="sale-num"> @(string.IsNullOrWhiteSpace(Model.CurrentAddress) ? "N/A" : Model.CurrentAddress) </span>
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info"> Permanent Address </span>
+                                                    <span class="sale-num"> @(string.IsNullOrWhiteSpace(Model.PermanentAddress) ? "N/A" : Model.PermanentAddress) </span>
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info"> Phone Number </span>
+                                                    <span class="sale-num"> @(string.IsNullOrWhiteSpace(Model.PhoneNumber) ? "N/A" : Model.PhoneNumber) </span>
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info"> Alternate Phone Number </span>
+                                                    <span class="sale-num">@(string.IsNullOrWhiteSpace(Model.AlternatePhoneNumber) ? "N/A" : Model.AlternatePhoneNumber) </span>
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info"> Personal EmailId </span>
+                                                    <span class="sale-num"> @(string.IsNullOrWhiteSpace(Model.PersonalEmailId) ? "N/A" : Model.PersonalEmailId) </span>
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info"> Last Company Name </span>
+                                                    <span class="sale-num"> @(string.IsNullOrWhiteSpace(Model.LastCompanyName) ? "N/A" : Model.LastCompanyName) </span>
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info"> Last Company Designation </span>
+                                                    <span class="sale-num"> @(string.IsNullOrWhiteSpace(Model.LastCompanyDesigantion) ? "N/A" : Model.LastCompanyDesigantion)</span>
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info"> Last Company Salary </span>
+                                                    <span class="sale-num"> @(string.IsNullOrWhiteSpace(Model.LastCompanySalary) ? "N/A" : Model.LastCompanySalary) </span>
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info"> Date Of Joining In First Company </span>
+                                                    <span class="sale-num">@(string.IsNullOrWhiteSpace(Model.DateOfJoiningInFirstCompany) ? "N/A" : Model.DateOfJoiningInFirstCompany) </span>
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info"> Qualification </span>
+                                                    <span class="sale-num"> @(string.IsNullOrWhiteSpace(Model.Qualification) ? "N/A" : Model.Qualification) </span>
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info"> File No. </span>
+                                                    <span class="sale-num"> @(string.IsNullOrWhiteSpace(Model.FileNo) ? "N/A" : Model.FileNo) </span>
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info"> Date Of Anniversary </span>
+                                                    <span class="sale-num"> @(string.IsNullOrWhiteSpace(Model.DateOfAnniversary) ? "N/A" : Model.DateOfAnniversary)</span>
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info"> Date Of Leaving </span>
+                                                    <span class="sale-num"> @(string.IsNullOrWhiteSpace(Model.DateOfLeaving) ? "N/A" : Model.DateOfLeaving) </span>
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info"> Reason Of Leaving </span>
+                                                    <span class="sale-num"> @(string.IsNullOrWhiteSpace(Model.ReasonOfLeaving) ? "N/A" : Model.ReasonOfLeaving) </span>
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info"> ID Card First  </span>
+                                                    @if (!string.IsNullOrWhiteSpace(Model.IDCardFirst))
+                                                    {
+                                                        <a class="sale-num" href="~/UploadDocuments/@Model.IDCardFirst" download> Download </a>
+                                                        @*<span class="sale-num"> @Model.IDCardFirst </span>*@
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="sale-num"> N/A </span>
+                                                    }
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info"> ID Card Second </span>
+                                                    @if (!string.IsNullOrWhiteSpace(Model.IDCardSecond_AddressProof_))
+                                                    {
+                                                        <a class="sale-num" href="~/UploadDocuments/@Model.IDCardSecond_AddressProof_" download> Download </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="sale-num"> N/A </span>
+                                                    }
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info"> CV </span>
+                                                    @if (!string.IsNullOrWhiteSpace(Model.CV))
+                                                    {
+                                                        <a class="sale-num" href="~/UploadDocuments/@Model.CV" download> Download </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="sale-num"> N/A </span>
+                                                    }
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info"> Experience Certificate </span>
+                                                    @if (!string.IsNullOrWhiteSpace(Model.ExperienceCertificate))
+                                                    {
+                                                        <a class="sale-num" href="~/UploadDocuments/@Model.ExperienceCertificate" download> Download </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="sale-num"> N/A </span>
+                                                    }
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info"> Appointment Letter </span>
+                                                    @if (!string.IsNullOrWhiteSpace(Model.AppointementLetter))
+                                                    {
+                                                        <a class="sale-num" href="~/UploadDocuments/@Model.AppointementLetter" download> Download </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="sale-num"> N/A </span>
+                                                    }
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info"> Aggrement Document </span>
+                                                    @if (!string.IsNullOrWhiteSpace(Model.AggrementDocument))
+                                                    {
+                                                        <a class="sale-num" href="~/UploadDocuments/@Model.AggrementDocument" download> Download </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="sale-num"> N/A </span>
+                                                    }
+                                                </li>
+                                                <li>
+                                                    <span class="sale-info"> Other Document </span>
+                                                    @if (!string.IsNullOrWhiteSpace(Model.OtherDocument))
+                                                    {
+                                                        <a class="sale-num" href="~/UploadDocuments/@Model.OtherDocument" download> Download </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="sale-num"> N/A </span>
+                                                    }
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end col-md-4-->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END PROFILE CONTENT -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

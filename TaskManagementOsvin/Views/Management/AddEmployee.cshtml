@@ -1,0 +1,467 @@
+﻿@{
+    ViewBag.Title = "AddEmployee";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model TaskManagementOsvin.Models.EmployeeModel
+
+<div class="page-content">
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="~/Dashboard/Welcome">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="#">Add Employee</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            @*<li>
+                    <span>Page Layouts</span>
+                </li>*@
+        </ul>
+        <div class="page-toolbar">
+            <div class="btn-group pull-right">
+                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li>
+                        <a href="#">
+                            <i class="icon-bell"></i> Action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-shield"></i> Another action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-user"></i> Something else here
+                        </a>
+                    </li>
+                    <li class="divider"> </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-bag"></i> Separated link
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE BAR -->
+    <h1 class="page-title">
+        Add Employee
+        <small></small>
+    </h1>
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN VALIDATION STATES-->
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-layers font-green"></i>
+                        <span class="caption-subject font-green sbold uppercase">Add Employee</span>
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    <!-- BEGIN FORM-->
+                    @using (Html.BeginForm("AddEmployee", "Management", FormMethod.Post, new { enctype = "multipart/form-data", @id = "frmChangePassword", @class = "form-horizontal" }))
+                    {
+                        @Html.HiddenFor(model => model.UserId)
+                        <div class="form-body">
+                            <div class="alert @ViewBag.AlertType @ViewBag.Class">
+                                @*<button type="button" class="close" data-close="alert"></button>*@
+                                <a class="close" onclick="$('.alert').hide()">×</a>
+                                <span> @Html.ValidationMessage("CustomError") </span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Department</label>
+                                <div class="col-md-6">
+                                    @Html.DropDownListFor(m => m.DepartmentId, new SelectList(Model.listDepartment, "DepartmentId", "DepartmentName"), "Please Select", new { @class = "form-control ddlDept" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.DepartmentId)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Designation</label>
+                                <div class="col-md-6">
+                                    @if (Model.listDesignation == null || Model.listDesignation.Count <= 0)
+                                    {
+                                        <select class="form-control ddlDesignation" id="DesignationId" name="DesignationId">
+                                            <option value="">Please Select</option>
+                                        </select>
+                                    }
+                                    else
+                                    {
+                                        @Html.DropDownListFor(m => m.DesignationId, new SelectList(Model.listDesignation, "DesignationId", "DesignationName"), "Please Select", new { @class = "form-control ddlDesignation" })
+                                    }
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.DesignationId)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">First Name</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "Enter First Name" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.FirstName)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Last Name</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Enter Last Name" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.LastName)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Father Name</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.FatherName, new { @class = "form-control", @placeholder = "Enter Father Name" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.FatherName)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Spouse Name (If Married)</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.SpouseName, new { @class = "form-control", @placeholder = "Enter Spouse Name" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.SpouseName)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Osvin Email Id</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.Email, new { @type = "email", @class = "form-control", @placeholder = "Enter Email Address" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.Email)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Password</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.Password, new { @type = "password", @class = "form-control", @placeholder = "Enter Password" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.Password)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Date Of Birth</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.DOB, new { @class = "form-control datepicker", @placeholder = "Enter Date Of Birth" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.DOB)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Role</label>
+                                <div class="col-md-6">
+                                    @Html.DropDownListFor(m => m.Role, new SelectList(ViewData["ddlRole"] as List<SelectListItem>, "Value", "Text", Model.Role), "Please Select", new { @class = "form-control" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.Role)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Date Of Joining</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.DateOfJoining, new { @class = "form-control datepicker", @placeholder = "Enter Date Of Joining" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.DateOfJoining)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Permanent Address</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.PermanentAddress, new { @class = "form-control", @placeholder = "Enter Permanent Address" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.PermanentAddress)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Current Address</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.CurrentAddress, new { @class = "form-control", @placeholder = "Enter Current Address" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.CurrentAddress)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Phone Number</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", @placeholder = "Enter Phone Number" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.PhoneNumber)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Alternate Phone Number</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.AlternatePhoneNumber, new { @class = "form-control", @placeholder = "Enter Alternate Phone Number" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.AlternatePhoneNumber)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Personal EmailId</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.PersonalEmailId, new { @type = "email", @class = "form-control", @placeholder = "Enter Personal Email Address" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.PersonalEmailId)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Last Company Name</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.LastCompanyName, new { @class = "form-control", @placeholder = "Enter Last Company Name" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.LastCompanyName)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Last Company Designation</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.LastCompanyDesigantion, new { @class = "form-control", @placeholder = "Enter Last Company Designation" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.LastCompanyDesigantion)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Last Company salary</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.LastCompanySalary, new { @class = "form-control", @placeholder = "Enter Last Company Salary" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.LastCompanySalary)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Date Of Joining In First Company </label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.DateOfJoiningInFirstCompany, new { @class = "form-control datepicker", @placeholder = "Enter Date" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.DateOfJoiningInFirstCompany)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Qualification</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.Qualification, new { @class = "form-control", @placeholder = "Enter Qualification" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.Qualification)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">File No.</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.FileNo, new { @class = "form-control", @placeholder = "Enter File No." })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.FileNo)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Date Of Anniversary</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.DateOfAnniversary, new { @class = "form-control datepicker", @placeholder = "Enter Date" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.DateOfAnniversary)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Date Of Leaving</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.DateOfLeaving, new { @class = "form-control datepicker", @placeholder = "Enter Date" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.DateOfLeaving)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Reason Of Leaving</label>
+                                <div class="col-md-6">
+                                    @Html.TextAreaFor(m => m.ReasonOfLeaving, new { @class = "form-control", @placeholder = "Enter Reason of Leaving" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.ReasonOfLeaving)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Image</label>
+                                <div class="col-md-5">
+                                    @Html.TextBoxFor(m => m.ImageFile, new { type = "file", @class = "form-control", @accept = "image/x-png,image/gif,image/jpeg" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.ImageFile)
+                                        @Html.HiddenFor(m => m.Image)
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-danger">Clear</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Ist ID Proof</label>
+                                <div class="col-md-5">
+                                    @Html.TextBoxFor(m => m.IDCardFirst_File, new { type = "file", @class = "form-control" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.IDCardFirst_File)
+                                        @Html.HiddenFor(m => m.IDCardFirst)
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-danger">Clear</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">IInd ID Proof (Addess Proof)</label>
+                                <div class="col-md-5">
+                                    @Html.TextBoxFor(m => m.IDCardSecond_AddressProof_File, new { type = "file", @class = "form-control" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.IDCardSecond_AddressProof_File)
+                                        @Html.HiddenFor(m => m.IDCardSecond_AddressProof_)
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-danger">Clear</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">CV</label>
+                                <div class="col-md-5">
+                                    @Html.TextBoxFor(m => m.CV_File, new { type = "file", @class = "form-control" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.CV_File)
+                                        @Html.HiddenFor(m => m.CV)
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-danger">Clear</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Experience Certificate</label>
+                                <div class="col-md-5">
+                                    @Html.TextBoxFor(m => m.ExperienceCertificate_File, new { type = "file", @class = "form-control" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.ExperienceCertificate_File)
+                                        @Html.HiddenFor(m => m.ExperienceCertificate)
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-danger">Clear</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Appointment Letter</label>
+                                <div class="col-md-5">
+                                    @Html.TextBoxFor(m => m.AppointementLetter_File, new { type = "file", @class = "form-control" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.AppointementLetter_File)
+                                        @Html.HiddenFor(m => m.AppointementLetter)
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-danger">Clear</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Aggrement Document</label>
+                                <div class="col-md-5">
+                                    @Html.TextBoxFor(m => m.AggrementDocument_File, new { type = "file", @class = "form-control" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.AggrementDocument_File)
+                                        @Html.HiddenFor(m => m.AggrementDocument)
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-danger">Clear</button>
+                                </div>
+                            </div>
+                            <div class="form-group last">
+                                <label class="col-md-3 control-label">Other Document</label>
+                                <div class="col-md-5">
+                                    @Html.TextBoxFor(m => m.OtherDocument_File, new { type = "file", @class = "form-control" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.OtherDocument_File)
+                                        @Html.HiddenFor(m => m.OtherDocument)
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-danger">Clear</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions text-center">
+                            <div class="btn-set">
+                                <button type="submit" class="btn green">Submit</button>
+                                <button type="button" class="btn red">Cancel</button>
+                                <a href="~/Management/AddUpdateUser" class="btn blue">Back</a>
+                            </div>
+                        </div>
+                    }
+                    <!-- END FORM-->
+                </div>
+            </div>
+        </div>
+        <!-- END VALIDATION STATES-->
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+        });
+    });
+    $(document).on('change', '.ddlDept', function (e) {
+        //debugger
+        var DepartmentId = $(".ddlDept").val();
+        if (typeof DepartmentId != 'undefined') {
+            var url = "/api/Management/GetDesignationByDeptId?DepartmentId=" + DepartmentId
+            $.ajax({
+                type: "GET",
+                url: url,
+                contentType: "application/json; charset=utf-8",
+                dataType: "text",
+                success: function (response) {
+                    var response = JSON.parse(response);
+                    var listDesignations = response.listDesignations;
+                    var ddlDesignation = $(".ddlDesignation");
+                    $(".ddlDesignation > option").remove();
+                    ddlDesignation.append("<option value=''>Please Select</option>")
+                    for (var i = 0; i < listDesignations.length; i++) {
+                        ddlDesignation.append($("<option />").val(listDesignations[i].DesignationId).text(listDesignations[i].DesignationName));
+                    }
+                },
+                failure: function (msg) {
+                    console.log(error);
+                }
+            });
+        }
+    });
+</script>
