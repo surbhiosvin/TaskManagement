@@ -13,12 +13,15 @@
             <th class="text-center"> Email </th>
             <th class="text-center"> Password </th>
             <th class="text-center"> DOB </th>
-            <th class="text-center"> Status </th>
-            <th class="text-center"> Edit </th>
-            <th class="text-center"> Delete </th>
-            <th class="text-center"> Emp. Details </th>
-            <th class="text-center"> Generate Salary Slip </th>
-            <th class="text-center"> Archive </th>
+            @if (UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType == roleTypeModel.HR)
+            {
+                <th class="text-center"> Status </th>
+                <th class="text-center"> Edit </th>
+                <th class="text-center"> Delete </th>
+                <th class="text-center"> Emp. Details </th>
+                <th class="text-center"> Generate Salary Slip </th>
+                <th class="text-center"> Archive </th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -57,4 +60,3 @@
         }
     </tbody>
 </table>
-
