@@ -11,10 +11,12 @@ namespace DomainModel.EntityModel
         public DesignationDomainModel()
         {
             listDesignations = new List<DesignationDomainModel>();
+            listDepartments = new List<DepartmentDomainModel>();
         }
         public long DesignationId { get; set; }
         public long DepartmentId { get; set; }
         public string DesignationName { get; set; }
+        public string DepartmentName { get; set; }
         public string ShortDescription { get; set; }
         public string FullDescription { get; set; }
         public bool IsActive { get; set; }
@@ -22,6 +24,7 @@ namespace DomainModel.EntityModel
         public DateTime UpdatedDate { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime DeletedDate { get; set; }
+        public List<DepartmentDomainModel> listDepartments { get; set; }
         public List<DesignationDomainModel> listDesignations { get; set; }
     }
 }

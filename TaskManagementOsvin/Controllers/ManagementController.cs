@@ -270,9 +270,17 @@ namespace TaskManagementOsvin.Controllers
         public ActionResult Designations()
         {
             ViewBag.Class = "display-hide";
-            List<DesignationDomainModel> listDesignations = new List<DesignationDomainModel>();
-            listDesignations = GetDesignations();
-            return View(listDepartments);
+            DesignationDomainModel model = new DesignationDomainModel();
+            if (UserManager.user.roleType == roleTypeModel.TeamLeader)
+            {
+                model.listDesignations = GetDesignationsBasedOnRole(UserManager.user.DepartmentId);
+            }
+            else
+            {
+                model.listDesignations = GetDesignationsBasedOnRole(0);
+            }
+            model.listDepartments = GetDepartments();       
+            return View(model);
         }
         #region User Defined Functions
         public List<DepartmentDomainModel> GetDepartments()
@@ -295,6 +303,20 @@ namespace TaskManagementOsvin.Controllers
             var client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
             var result = client.GetAsync("/api/Management/GetDesignationByDeptId?DepartmentId=" + DepartmentId).Result;
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                var contents = result.Content.ReadAsStringAsync().Result;
+                var Response = new JavaScriptSerializer().Deserialize<DesignationDomainModel>(contents);
+                listDesignaton = Response.listDesignations;
+            }
+            return listDesignaton;
+        }
+        public List<DesignationDomainModel> GetDesignationsBasedOnRole(long DepartmentId)
+        {
+            List<DesignationDomainModel> listDesignaton = new List<DesignationDomainModel>();
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+            var result = client.GetAsync("/api/Management/GetDesignationsBasedOnRole?DepartmentId=" + DepartmentId).Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;
