@@ -153,7 +153,12 @@ namespace Providers.Providers.SP.Repositories
                 if (res > 0)
                 {
                     objRes.isSuccess = true;
-                    objRes.response = "sucsess";
+                    objRes.response = "Department deleted successfully.";
+                }
+                else
+                {
+                    objRes.isSuccess = true;
+                    objRes.response = "You are not allowed to delete this department.";
                 }
             }
             catch (Exception ex)
@@ -277,18 +282,18 @@ namespace Providers.Providers.SP.Repositories
             }
             return objRes;
         }
-        public List<DesignationDomainModel> GetDesignationBasedOnRole(long DepartmentId, string Role)
+        public List<DesignationDomainModel> GetDesignationsBasedOnRole(long DepartmentId=0)
         {
             List<DesignationDomainModel> listDesignation = new List<DesignationDomainModel>();
             try
             {
-                if(Role=="Team Leader")
+                if(DepartmentId>0)
                 {
                     listDesignation = objHelper.Query<DesignationDomainModel>("GET_DESIGNATION_BY_TEAMLEADER_DEPARTMENT_ID", new {DepartmentId=DepartmentId }).ToList();
                 }
                 else
                 {
-                    listDesignation = objHelper.Query<DesignationDomainModel>("GET_DESIGNATION_BY_TEAMLEADER_DEPARTMENT_ID", new { DepartmentId = DepartmentId }).ToList();
+                    listDesignation = objHelper.Query<DesignationDomainModel>("GetAllDesignations",null).ToList();
                 }
             }
             catch (Exception ex)
