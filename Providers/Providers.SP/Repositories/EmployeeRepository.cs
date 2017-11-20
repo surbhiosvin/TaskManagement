@@ -62,10 +62,15 @@ namespace Providers.Providers.SP.Repositories
                 {
                     if (user.Password != model.Password)
                     {
-                        model.isSuccess = false;
-                        model.response = "Pasword didn't match";
-                        return model;
+                        user.isSuccess = false;
+                        user.response = "Pasword didn't match";
                     }
+                    else
+                    {
+                        user.isSuccess = true;
+                        user.response = "Success";
+                    }
+                    return user;
                 }
             }
             catch(Exception ex)
