@@ -154,16 +154,39 @@ namespace Providers.Providers.SP.Repositories
                 {
                     objRes.isSuccess = true;
                     objRes.response = "Department deleted successfully.";
-                }
-                else
+                }                
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError(ex);
+                if (ex.Message.Contains("The DELETE statement conflicted with the REFERENCE constraint"))
                 {
                     objRes.isSuccess = true;
                     objRes.response = "You are not allowed to delete this department.";
                 }
             }
+            return objRes;
+        }
+        public ResponseDomainModel DeleteDesignationById(long DesignationId)
+        {
+            ResponseDomainModel objRes = new ResponseDomainModel();
+            try
+            {
+                var res = objHelper.Execute("DeleteDesignationById", new { DesignationId = DesignationId });
+                if (res > 0)
+                {
+                    objRes.isSuccess = true;
+                    objRes.response = "Designation deleted successfully.";
+                }               
+            }
             catch (Exception ex)
             {
                 ErrorLog.LogError(ex);
+                if (ex.Message.Contains("The DELETE statement conflicted with the REFERENCE constraint"))
+                {
+                    objRes.isSuccess = true;
+                    objRes.response = "You are not allowed to delete this designation.";
+                }
             }
             return objRes;
         }
@@ -203,6 +226,24 @@ namespace Providers.Providers.SP.Repositories
             }
             return objRes;
         }
+        public ResponseDomainModel ActivateDeactivateDesignation(long DesignationId, bool IsActive)
+        {
+            ResponseDomainModel objRes = new ResponseDomainModel();
+            try
+            {
+                var res = objHelper.Execute("ActivateDeactivateDesignation", new { DesignationId = DesignationId, IsActive = IsActive });
+                if (res > 0)
+                {
+                    objRes.isSuccess = true;
+                    objRes.response = "sucsess";
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError(ex);
+            }
+            return objRes;
+        }
         public ResponseDomainModel AddUpdateDepartment(DepartmentDomainModel model)
         {
 
@@ -225,6 +266,44 @@ namespace Providers.Providers.SP.Repositories
                 {
                     objRes.isSuccess = true;
                     objRes.response = "Department added successfully.";
+                }
+                else
+                {
+                    objRes.isSuccess = false;
+                    objRes.response = "Something went wrong, please try again.";
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError(ex);
+                objRes.isSuccess = false;
+                objRes.response = ex.Message;
+            }
+            return objRes;
+        }
+        public ResponseDomainModel AddUpdateDesignation(DesignationDomainModel model)
+        {
+
+            ResponseDomainModel objRes = new ResponseDomainModel();
+            try
+            {
+                int DesignationId = objHelper.ExecuteScalar("AddUpdateDesignation", new
+                {
+                    DesignationId=model.DesignationId,
+                    DepartmentId = model.DepartmentId,
+                    DesignationName = model.DesignationName,
+                    IsActive = true,
+                    CreatedDate = DateTime.Now
+                });
+                if (model.DesignationId > 0)
+                {
+                    objRes.isSuccess = true;
+                    objRes.response = "Designation updated successfully.";
+                }
+                else if (DesignationId > 0)
+                {
+                    objRes.isSuccess = true;
+                    objRes.response = "Designation added successfully.";
                 }
                 else
                 {

@@ -49,10 +49,10 @@
                             <td id="StatusActive_@Emp.UserId"><a id="StatusActiveLink_@Emp.UserId" href="#" onclick="ActivateDeactivateDepartment(@Emp.UserId, true)"><img alt='In Active Slip' src='~/assets/global/img/Guiimages/InActive.png' width='30px' height='30px' /></a></td>
                             @*<td class="text-center"><a href="~/Management/ActivateDeactivateUser?UserId=@Emp.UserId"><img alt='In Active Slip' src='~/assets/global/img/Guiimages/InActive.png' width='30px' height='30px' /></a></td>*@
                         }
-                        <td class="text-center"><a class="btn blue" href="~/Management/AddEmployee?UserId=@Emp.UserId"><i class="fa fa-edit"</a> </td>
-                        <td class="text-center"><a class="btn red" href="#" onclick="DeleteDepartment(@Emp.UserId)"><i class="fa fa-trash"></i></a></td>
-                        <td class="text-center"><a href="~/Management/EmployeeDetails?UserId=@Emp.UserId"><img alt="View Full Details" src="~/assets/global/img/Guiimages/View_Details.png" width="30px" height="30px" /></a></td>
-                        <td class="text-center"><a href="~/Management/GenerateSalarySlip?UserId=@Emp.UserId"><img alt="Generate Salary Slip" src="~/assets/global/img/Guiimages/Payslip_icon.png" width="30px" height="30px" /></a> </td>
+                        <td class="text-center"><a title="Edit" class="btn blue" href="~/Management/AddEmployee?UserId=@Emp.UserId"><i class="fa fa-edit"></i></a> </td>
+                        <td class="text-center"><a title="Delete" class="btn red" href="#" onclick="DeleteUser(@Emp.UserId)"><i class="fa fa-trash"></i></a></td>
+                        <td class="text-center"><a title="View Employee Details" href="~/Management/EmployeeDetails?UserId=@Emp.UserId"><img alt="View Full Details" src="~/assets/global/img/Guiimages/View_Details.png" width="30px" height="30px" /></a></td>
+                        <td class="text-center"><a title="Generate Salary slip" href="~/Management/GenerateSalarySlip?UserId=@Emp.UserId"><img alt="Generate Salary Slip" src="~/assets/global/img/Guiimages/Payslip_icon.png" width="30px" height="30px" /></a> </td>
                         <td class="text-center"><a href="~/Management/ArchiveEmployee?UserId=@Emp.UserId"><img alt="Archive/NonArchive" src="~/assets/global/img/Guiimages/archive-image.png" width="30px" height="30px" /></a> </td>
                     }
                 </tr>

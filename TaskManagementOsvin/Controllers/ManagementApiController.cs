@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using TaskManagementOsvin.Models;
+using TaskManagementOsvin.Security;
 
 namespace TaskManagementOsvin.Controllers
 {
@@ -201,6 +202,34 @@ namespace TaskManagementOsvin.Controllers
             }
         }
         [HttpGet]
+        [Route("~/api/Management/DeleteDesignationById")]
+        public HttpResponseMessage DeleteDesignationById(long DesignationId)
+        {
+            try
+            {
+                HttpResponseMessage httpResponse = new HttpResponseMessage();
+                var objRes = managementRepository.DeleteDesignationById(DesignationId);
+                if (objRes != null && objRes.isSuccess)
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, objRes);
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.Unauthorized, objRes);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+        [HttpGet]
         [Route("~/api/Management/ActivateDeactivateDepartment")]
         public HttpResponseMessage ActivateDeactivateDepartment(long DepartmentId, bool IsActive)
         {
@@ -208,6 +237,34 @@ namespace TaskManagementOsvin.Controllers
             {
                 HttpResponseMessage httpResponse = new HttpResponseMessage();
                 var objRes = managementRepository.ActivateDeactivateDepartment(DepartmentId, IsActive);
+                if (objRes != null && objRes.isSuccess)
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, objRes);
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.Unauthorized, objRes);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+        [HttpGet]
+        [Route("~/api/Management/ActivateDeactivateDesignation")]
+        public HttpResponseMessage ActivateDeactivateDesignation(long DesignationId, bool IsActive)
+        {
+            try
+            {
+                HttpResponseMessage httpResponse = new HttpResponseMessage();
+                var objRes = managementRepository.ActivateDeactivateDesignation(DesignationId, IsActive);
                 if (objRes != null && objRes.isSuccess)
                 {
                     httpResponse = Request.CreateResponse(HttpStatusCode.OK, objRes);
@@ -252,6 +309,49 @@ namespace TaskManagementOsvin.Controllers
                 {
                     res.isSuccess = false;
                     res.response = "Please enter department name";
+                    httpResponse = Request.CreateResponse(HttpStatusCode.Unauthorized, res);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError(ex);
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+        [HttpPost]
+        [Route("~/api/Management/AddupdateDesignation")]
+        public HttpResponseMessage AddupdateDesignation(DesignationDomainModel model)
+        {
+            try
+            {
+                HttpResponseMessage httpResponse = new HttpResponseMessage();
+                ResponseDomainModel res = new ResponseDomainModel();
+                if (model != null && !string.IsNullOrWhiteSpace(model.DesignationName))
+                {
+                    if(UserManager.user.roleType==roleTypeModel.TeamLeader)
+                    {
+                        model.DepartmentId = UserManager.user.DepartmentId;
+                    }
+                    res = managementRepository.AddUpdateDesignation(model);
+                    if (res != null && res.isSuccess)
+                    {
+                        httpResponse = Request.CreateResponse(HttpStatusCode.OK, res);
+                    }
+                    else
+                    {
+                        httpResponse = Request.CreateResponse(HttpStatusCode.Unauthorized, res);
+                    }
+                }
+                else
+                {
+                    res.isSuccess = false;
+                    res.response = "Please enter designation name";
                     httpResponse = Request.CreateResponse(HttpStatusCode.Unauthorized, res);
                 }
                 return httpResponse;
@@ -333,6 +433,37 @@ namespace TaskManagementOsvin.Controllers
                 var objRes = managementRepository.UpdateEmployeeArchive(UserId);
                 if (objRes != null && objRes.isSuccess)
                 {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, objRes);
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.Unauthorized, objRes);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+        [HttpGet]
+        [Route("~/api/Management/GetDesignationsBasedOnRole")]
+        public HttpResponseMessage GetDesignationsBasedOnRole(long DepartmentId)
+        {
+            try
+            {
+                HttpResponseMessage httpResponse = new HttpResponseMessage();
+                DesignationDomainModel objRes = new DesignationDomainModel();
+                objRes.listDesignations = managementRepository.GetDesignationsBasedOnRole(DepartmentId);
+                if (objRes.listDesignations != null)
+                {
+                    objRes.isSuccess = true;
+                    objRes.response = "Success";
                     httpResponse = Request.CreateResponse(HttpStatusCode.OK, objRes);
                 }
                 else
