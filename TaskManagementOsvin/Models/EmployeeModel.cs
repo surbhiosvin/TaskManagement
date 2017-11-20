@@ -34,6 +34,7 @@ namespace TaskManagementOsvin.Models
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public String Email { get; set; }
         [Required(ErrorMessage = "This field is required.")]
+        [StringLength(20, MinimumLength = 5)]
         public string Password { get; set; }
         [Display(Name = "Date Of Birth")]
         [Required(ErrorMessage = "This field is required.")]

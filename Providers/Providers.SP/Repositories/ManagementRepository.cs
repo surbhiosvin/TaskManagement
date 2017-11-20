@@ -277,6 +277,25 @@ namespace Providers.Providers.SP.Repositories
             }
             return objRes;
         }
-
+        public List<DesignationDomainModel> GetDesignationBasedOnRole(long DepartmentId, string Role)
+        {
+            List<DesignationDomainModel> listDesignation = new List<DesignationDomainModel>();
+            try
+            {
+                if(Role=="Team Leader")
+                {
+                    listDesignation = objHelper.Query<DesignationDomainModel>("GET_DESIGNATION_BY_TEAMLEADER_DEPARTMENT_ID", new {DepartmentId=DepartmentId }).ToList();
+                }
+                else
+                {
+                    listDesignation = objHelper.Query<DesignationDomainModel>("GET_DESIGNATION_BY_TEAMLEADER_DEPARTMENT_ID", new { DepartmentId = DepartmentId }).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError(ex);
+            }
+            return listDesignation;
+        }
     }
 }

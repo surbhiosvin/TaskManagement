@@ -265,6 +265,15 @@ namespace TaskManagementOsvin.Controllers
             }
             return RedirectToAction("AddUpdateUser");
         }
+
+        [HttpGet]
+        public ActionResult Designations()
+        {
+            ViewBag.Class = "display-hide";
+            List<DesignationDomainModel> listDesignations = new List<DesignationDomainModel>();
+            listDesignations = GetDesignations();
+            return View(listDepartments);
+        }
         #region User Defined Functions
         public List<DepartmentDomainModel> GetDepartments()
         {
