@@ -13,5 +13,6 @@ namespace Providers.Repositories
         UserDetailsDomainModel AuthenticateEmployees(UserDetailsDomainModel model);
         ResponseDomainModel ChangePassword(ChangePassword model);
         List<SummaryOfWeekDetailsMainDomainModel> SummaryOfWeekDetailsMain(GetSummaryDomainModel model);
+        List<EmployeesDomainModel> GetEmployees();
     }
 }
