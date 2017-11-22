@@ -9,8 +9,12 @@ using System.Threading.Tasks;
 
 namespace Providers.Providers.SP.Repositories
 {
-    public class ManagementRepository : IManagement
+    public class ManagementRepository : IManagement, IDisposable
     {
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+        }
         SqlHelper objHelper = new SqlHelper();
         public ResponseDomainModel AddUpdateEmployee(EmployeeDomainModel model)
         {

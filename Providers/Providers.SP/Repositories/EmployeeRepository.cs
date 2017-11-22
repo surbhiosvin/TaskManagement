@@ -147,5 +147,19 @@ namespace Providers.Providers.SP.Repositories
                 return null;
             }
         }
+
+        public List<EmployeesDomainModel> GetEmployees()
+        {
+            try
+            {
+                SqlHelper objHelper = new SqlHelper();
+                var employees = objHelper.Query<EmployeesDomainModel>("GetEmployeeList", null).ToList();
+                return employees;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }

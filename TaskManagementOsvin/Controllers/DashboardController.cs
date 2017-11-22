@@ -19,8 +19,8 @@ namespace TaskManagementOsvin.Controllers
         {
             var id = UserManager.user.UserId;
             var username = User.Identity.Name;
-            GetSummaryModel model = new GetSummaryModel() { startday = 0, endday = 0 };
-            var res = GetSummaryMain(model);
+            GetSummaryModel model = new GetSummaryModel() { startday = 0, endday = 4 };
+            ViewBag.GetSummaryMain = GetSummaryMain(model);
             return View();
         }
 
@@ -95,9 +95,12 @@ namespace TaskManagementOsvin.Controllers
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;
-                //var Response = new JavaScriptSerializer().Deserialize<SummaryOfWeekDetailsMainModel>(contents);
+                var Response = new JavaScriptSerializer().Deserialize<List<SummaryOfWeekDetailsMainModel>>(contents);
+                return Response;
             }
             return null;
         }
+
+       
     }
 }

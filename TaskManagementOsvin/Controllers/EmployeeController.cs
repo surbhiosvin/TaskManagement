@@ -32,8 +32,6 @@ namespace TaskManagementOsvin.Controllers
                         var roleType = Regex.Replace(Employee.Role, @"\s+", "");
                         Enum.TryParse(roleType, out GetRoleType);
                         Employee.roleType = GetRoleType;
-                        Employee.isSuccess = true;
-                        Employee.response = "Success";
                         httpResponse = Request.CreateResponse(HttpStatusCode.OK, Employee);
                     }
                     else if (Employee.isSuccess == false)
@@ -57,6 +55,35 @@ namespace TaskManagementOsvin.Controllers
                 });
             }
         }
+        
+        [Route("~/api/Employee/GetEmployees")]
+        public HttpResponseMessage GetEmployees()
+        {
+            try
+            {
+                HttpResponseMessage httpResponse = new HttpResponseMessage();
+                var response = EmployeeRepository.GetEmployees();
+                if (response == null)
+                {
+                    httpResponse = Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occurred");
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, response);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+
         [HttpPost]
         [Route("~/api/Employee/ChangePassword")]
         public HttpResponseMessage ChangePassword(ChangePassword model)
