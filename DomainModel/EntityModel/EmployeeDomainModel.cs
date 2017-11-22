@@ -13,6 +13,7 @@ namespace DomainModel.EntityModel
         public string DepartmentName { get; set; }
         public long DesignationId { get; set; }
         public string DesignationName { get; set; }
+        public string EmployeeName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string FatherName { get; set; }
