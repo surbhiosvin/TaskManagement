@@ -1,4 +1,7 @@
 ﻿using DomainModel.EntityModel;
+using iTextSharp.text;
+using iTextSharp.text.html.simpleparser;
+using iTextSharp.text.pdf;
 using Providers.Helper;
 using Providers.Providers.SP.Repositories;
 using Providers.Repositories;
@@ -9,9 +12,11 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using System.Web.UI;
 using TaskManagementOsvin.Models;
 using TaskManagementOsvin.Security;
 
@@ -141,7 +146,7 @@ namespace TaskManagementOsvin.Controllers
                         model.OtherDocument_File = null;
                     }
                     if (!string.IsNullOrWhiteSpace(model.DOB))
-                       model.DateOfBirth= DateTime.ParseExact(model.DOB, "dd/MM/yyyy", null);
+                        model.DateOfBirth = DateTime.ParseExact(model.DOB, "dd/MM/yyyy", null);
                     //model.DateOfBirth = Convert.ToDateTime(model.DOB);
                     var serialized = new JavaScriptSerializer().Serialize(model);
                     var client = new HttpClient();
@@ -230,7 +235,7 @@ namespace TaskManagementOsvin.Controllers
             List<DepartmentDomainModel> listDepartments = new List<DepartmentDomainModel>();
             listDepartments = GetDepartments();
             return View(listDepartments);
-        }        
+        }
         [HttpGet]
         public ActionResult EmployeeDetails(long UserId)
         {
@@ -256,7 +261,7 @@ namespace TaskManagementOsvin.Controllers
             ResponseDomainModel objRes = new ResponseDomainModel();
             var client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var result = client.GetAsync("/api/Management/UpdateEmployeeArchive?UserId="+UserId).Result;
+            var result = client.GetAsync("/api/Management/UpdateEmployeeArchive?UserId=" + UserId).Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;
@@ -279,9 +284,134 @@ namespace TaskManagementOsvin.Controllers
             {
                 model.listDesignations = GetDesignationsBasedOnRole(0);
             }
-            model.listDepartments = GetDepartments();       
+            model.listDepartments = GetDepartments();
             return View(model);
         }
+        [HttpGet]
+        public ActionResult GenerateSalarySlip(long UserId = 0)
+        {
+            PaySlipModel model = new PaySlipModel();
+            if (UserId > 0)
+            {
+                model = (PaySlipModel)Session["PaySlip"];
+                if (model == null)
+                {
+                    model = new PaySlipModel();
+                    var client = new HttpClient();
+                    client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+                    var result = client.GetAsync("/api/Management/GetEmployeeDataById?UserId=" + UserId).Result;
+                    if (result.StatusCode == HttpStatusCode.OK)
+                    {
+                        var contents = result.Content.ReadAsStringAsync().Result;
+                        var Response = new JavaScriptSerializer().Deserialize<EmployeeModel>(contents);
+                        model.EmployeeID = Response.UserId;
+                        model.DateOfJoining = Response.DateOfJoining;
+                        model.DepartmentId = Response.DepartmentId;
+                        model.DesignationId = Response.DesignationId;
+                    }
+                }
+            }
+            model.listEmployees = GetEmployeeList();
+            model.listDepartments = GetDepartments();
+            if (model.DepartmentId > 0)
+            {
+                model.listDesignations = GetDesignations(model.DepartmentId);
+            }
+            ViewBag.Class = "display-hide";
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult GenerateSalarySlip(PaySlipModel model)
+        {
+            ViewBag.Class = "display-hide";
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    model.CreatedBy = UserManager.user.UserId;
+                    string month = model.PaySlipMonth.Substring(0, 2);
+                    model.PaySlipMonthName = DateTimeFormatInfo.CurrentInfo.GetMonthName(Convert.ToInt32(month));
+                    model.PaySlipYear = model.PaySlipMonth.Substring(3, 4);
+                    model.PaySlipMonth = model.PaySlipMonthName + " " + model.PaySlipYear;
+                    //model.DateOfBirth = Convert.ToDateTime(model.DOB);
+                    var serialized = new JavaScriptSerializer().Serialize(model);
+                    var client = new HttpClient();
+                    var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
+                    client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+                    var result = client.PostAsync("/api/Management/AddUpdateEmployeePaySlip", content).Result;
+                    if (result.StatusCode == HttpStatusCode.OK)
+                    {
+                        var contents = result.Content.ReadAsStringAsync().Result;
+                        var Response = new JavaScriptSerializer().Deserialize<PaySlipModel>(contents);
+                        //ModelState.Clear();
+                        //ModelState.AddModelError("CustomError", Response.response);
+                        //ViewBag.AlertType = "alert-success";
+                        //ViewBag.Class = null;
+                        //model = new PaySlipModel();                     
+                        Session["PaySlip"] = Response;
+                        return View("PaySlip", Response);
+                    }
+                    else if (result.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        var contents = result.Content.ReadAsStringAsync().Result;
+                        var Response = new JavaScriptSerializer().Deserialize<PaySlipModel>(contents);
+                        ModelState.AddModelError("CustomError", Response.response);
+                        ViewBag.Class = null;
+                        ViewBag.AlertType = "alert-danger";
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("CustomError", "Error occurred");
+                        ViewBag.Class = null;
+                        ViewBag.AlertType = "alert-danger";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Class = null;
+                ModelState.AddModelError("CustomError", ex.Message);
+                ViewBag.AlertType = "alert-danger";
+            }
+            model.listEmployees = GetEmployeeList();
+            model.listDepartments = GetDepartments();
+            model.listDepartments = model.listDepartments.Where(s => s.IsActive == true).ToList();
+            if (model.DepartmentId > 0)
+            {
+                model.listDesignations = GetDesignations(model.DepartmentId);
+            }
+            return View(model);
+        }
+        [HttpGet]
+        public void GeneratePaySlipPdf()
+        {
+            var model = (PaySlipModel)Session["PaySlip"];
+            string HTMLContent = ConvertViewToString("_PaySlip", model);
+            Response.ContentType = "application/pdf";
+            Response.AddHeader("content-disposition", "attachment;filename=Panel.pdf");
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            StringBuilder sb = new StringBuilder();
+            sb.Append(HTMLContent);
+            StringWriter sw = new StringWriter(sb);
+            HtmlTextWriter hw = new HtmlTextWriter(sw);
+            StringReader sr = new StringReader(sw.ToString());
+            Document pdfDoc = new Document(PageSize.A4, 5f, 10f, 10f, 0f);
+            HTMLWorker htmlparser = new HTMLWorker(pdfDoc);
+            PdfWriter.GetInstance(pdfDoc, Response.OutputStream);
+            pdfDoc.Open();
+            htmlparser.Parse(sr);
+            pdfDoc.Close();
+            Response.Write(pdfDoc);
+            Response.End();
+        }  
+        public ActionResult EmailPaySlipToEmployee()
+        {
+            var model = (PaySlipModel)Session["PaySlip"];
+            string body = ConvertViewToString("_PaySlip", model);
+            bool res = Email.SendEmail(model.Email, body,"Pay Slip");
+            return View("PaySlip", model);
+        }
+
         #region User Defined Functions
         public List<DepartmentDomainModel> GetDepartments()
         {
@@ -325,6 +455,31 @@ namespace TaskManagementOsvin.Controllers
             }
             return listDesignaton;
         }
+        public List<EmployeeDomainModel> GetEmployeeList()
+        {
+            List<EmployeeDomainModel> listEmployees = new List<EmployeeDomainModel>();
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+            var result = client.GetAsync("/api/Management/GetEmployeeList").Result;
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                var contents = result.Content.ReadAsStringAsync().Result;
+                var Response = new JavaScriptSerializer().Deserialize<PaySlipDomainModel>(contents);
+                listEmployees = Response.listEmployees;
+            }
+            return listEmployees;
+        }
+        public string ConvertViewToString(string viewName, object model)
+        {
+            ViewData.Model = model;
+            using (StringWriter writer = new StringWriter())
+            {
+                ViewEngineResult vResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
+                ViewContext vContext = new ViewContext(this.ControllerContext, vResult.View, ViewData, new TempDataDictionary(), writer);
+                vResult.View.Render(vContext, writer);
+                return writer.ToString();
+            }
+        }              
         #endregion
     }
 }

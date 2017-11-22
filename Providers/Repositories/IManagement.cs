@@ -25,5 +25,7 @@ namespace Providers.Repositories
         List<DesignationDomainModel> GetDesignationsBasedOnRole(long DepartmentId=0);
         ResponseDomainModel ActivateDeactivateDesignation(long DesignationId, bool IsActive);
         ResponseDomainModel AddUpdateDesignation(DesignationDomainModel model);
+        PaySlipDomainModel AddUpdateEmployeePaySlip(PaySlipDomainModel model);
+        List<EmployeeDomainModel> GetEmployeeList();
     }
 }

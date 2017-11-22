@@ -1,0 +1,149 @@
+﻿
+@using TaskManagementOsvin.Models;
+@model PaySlipModel
+@if (Model != null)
+{
+    <table id="panel" cellspacing="2" cellpadding="2" border="0" align="center" width="100%" style="border-color:transparent">
+        <tr>
+            <td>
+                <table cellspacing="1" cellpadding="0" align="center" width="100%">
+                    <tr>
+                        <td style="width:70%; padding:10px;">
+                            <img id="osvinlogo" alt="Osvin Logo" src="http://localhost:56687/assets/global/img/Guiimages/logo.jpg"/>
+                        </td>
+                        <td style="width:30%; padding:10px; font-size:13px;">
+                            <p>
+                                <strong> OSVIN WEB SOLUTIONS </strong><br />
+                                J-7, Rajiv Gandhi Information
+                                and Technology Park,<br />
+                                Chandigarh, 160101<br />
+                                Ph:    +91-172-467-6258<br />
+                                Email: info@osvin.com
+                            </p>
+                        </td>
+                    </tr>
+                    <tr style="height:1px; background-color:#ccc;">
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr id="section3"><td></td></tr>
+        <tr id="section4">
+            <td>
+                        <table width="100%">
+                            <tr>
+                                <td colspan="4" style="font-weight:bold;text-align:center;">EMPLOYEE PAY SLIP OF MONTH &nbsp; @Model.PaySlipMonth</td>
+                            </tr>
+                            <tr style="height:15px; margin-top:10px; padding-top:10px;">
+                                <td style="height:15px; color:white;font-size:2px;">.</td>
+                                <td style="height:15px;"></td>
+                                <td style="height:15px;"></td>
+                                <td style="height:15px;"></td>
+                            </tr>
+                            <tr style="height:15px; margin-top:10px; padding-top:10px;">
+                                <td style="height:15px; color:white;font-size:2px;">.</td>
+                                <td style="height:15px;"></td>
+                                <td style="height:15px;"></td>
+                                <td style="height:15px;"></td>
+                            </tr>
+                            <tr style="background-color:#ededed;">
+                                <td align="right" style="width:30%;font-size:12px;color:#600012;font-weight:bold;"><label style="color:#600012">Name Of Employee : </label>&nbsp;&nbsp;&nbsp;</td>
+                                <td align="left" style="width:15%;font-size:12px;">&nbsp;&nbsp;&nbsp;@Model.EmployeeName</td>
+                                <td align="right" style="width:30%;font-size:12px;color:#600012;font-weight:bold;"><label style="color:#600012">Employee Code : </label>&nbsp;&nbsp;&nbsp;</td>
+                                <td align="left" style="width:15%;font-size:12px">&nbsp;&nbsp;&nbsp;@Model.EmployeeCode</td>
+                            </tr>
+                            <tr>
+                                <td align="right" style="width:30%;font-size:12px;color:#600012;font-weight:bold;"><label style="color:#600012">Department : </label>&nbsp;&nbsp;&nbsp;</td>
+                                <td align="left" style="width:15%;font-size:12px">&nbsp;&nbsp;&nbsp;@Model.DepartmentName</td>
+                                <td align="right" style="width:30%;font-size:12px;color:#600012;font-weight:bold;"><label style="color:#600012">Designation : </label>&nbsp;&nbsp;&nbsp;</td>
+                                <td align="left" style="width:15%;font-size:12px">&nbsp;&nbsp;&nbsp;@Model.DesignationName</td>
+                            </tr>
+                            <tr style="background-color:#ededed;">
+                                <td align="right" style="width:30%;font-size:12px;color:#600012;font-weight:bold;"><label style="color:#600012">Bank Account Number : </label>&nbsp;&nbsp;&nbsp;</td>
+                                <td align="left" style="width:15%;font-size:12px;">&nbsp;&nbsp;&nbsp;@Model.BankAccountNumber</td>
+                                <td align="right" style="width:30%;font-size:12px;color:#600012;font-weight:bold;"><label style="color:#600012">Pan Card No. : </label>&nbsp;&nbsp;&nbsp;</td>
+                                <td align="left" style="width:15%;font-size:12px;">&nbsp;&nbsp;&nbsp;@Model.PanCardNumber</td>
+                            </tr>
+                            <tr>
+                                <td align="right" style="width:30%;font-size:12px;color:#600012;font-weight:bold;"><label style="color:#600012">Date Of Joining : </label>&nbsp;&nbsp;&nbsp;</td>
+                                <td align="left" style="width:15%;font-size:12px;">&nbsp;&nbsp;&nbsp;@Model.DateOfJoining</td>
+                                <td align="right" style="width:30%;font-size:12px;color:#600012;font-weight:bold;"><label style="color:#600012">No. of Days in Current Month : </label>&nbsp;&nbsp;&nbsp;</td>
+                                <td align="left" style="width:15%;font-size:12px;">&nbsp;&nbsp;&nbsp;@Model.NumberOfDaysInCurrentMonth</td>
+                            </tr>
+                            <tr style="background-color:#ededed;">
+                                <td align="right" style="width:30%;font-size:12px;color:#600012;font-weight:bold;"><label style="color:#600012">Number Of Days Worked : </label>&nbsp;&nbsp;&nbsp;</td>
+                                <td align="left" style="width:15%;font-size:12px;">&nbsp;&nbsp;&nbsp;@Model.NumberOfDaysWorked</td>
+                                <td align="right" style="width:30%;font-size:12px;"><label style="color:#600012"></label>&nbsp;&nbsp;&nbsp;</td>
+                                <td align="left" style="width:15%;font-size:12px;">&nbsp;&nbsp;&nbsp;</td>
+                            </tr>
+
+                            <tr>
+                                <th colspan="4" style="font-weight:bold; text-align:center;">SALARY STRUCTURE</th>
+                            </tr>
+                            <tr style="height:15px; margin-top:10px; padding-top:10px;">
+                                <td style="height:15px; color:white;font-size:2px;">.</td>
+                                <td style="height:15px;"></td>
+                                <td style="height:15px;"></td>
+                                <td style="height:15px;"></td>
+                            </tr>
+                            <tr style="height:15px; margin-top:10px; padding-top:10px;">
+                                <td style="height:15px; color:white;font-size:2px;">.</td>
+                                <td style="height:15px;"></td>
+                                <td style="height:15px;"></td>
+                                <td style="height:15px;"></td>
+                            </tr>
+                            <tr style="background-color:#ededed;">
+                                <td align="right" style="width:30%;font-size:12px;color:#600012;font-weight:bold;"><label style="color:#600012">Basic Salary : </label>&nbsp;&nbsp;&nbsp;</td>
+                                <td align="left" style="width:15%;font-size:12px">&nbsp;&nbsp;&nbsp;@Model.BasicSalary</td>
+                                <td align="right" style="width:30%;font-size:12px;color:#600012;font-weight:bold;"><label style="color:#600012">Amount Of Leave Deduction : </label>&nbsp;&nbsp;&nbsp;</td>
+                                <td align="left" style="width:15%;font-size:12px;">&nbsp;&nbsp;&nbsp;@Model.AmountForLeaveDeduction</td>
+                            </tr>
+                            <tr>
+                                <td align="right" style="width:30%;font-size:12px;color:#600012;font-weight:bold;"><label style="color:#600012">House Rent Allowance : </label>&nbsp;&nbsp;&nbsp;</td>
+                                <td align="left" style="width:15%;font-size:12px;">&nbsp;&nbsp;&nbsp;@Model.HouseRentAllowance</td>
+                                <td align="right" style="width:30%;font-size:12px;color:#600012;font-weight:bold;"><label style="color:#600012">TDS : </label>&nbsp;&nbsp;&nbsp;</td>
+                                <td align="left" style="width:15%;font-size:12px;">&nbsp;&nbsp;&nbsp;@Model.TDS</td>
+                            </tr>
+                            <tr style="background-color:#ededed;">
+                                <td align="right" style="width:30%;font-size:12px;color:#600012;font-weight:bold;"><label style="color:#600012">Medical Allowance : </label>&nbsp;&nbsp;&nbsp;</td>
+                                <td align="left" style="width:15%;font-size:12px;">&nbsp;&nbsp;&nbsp;@Model.MedicalAllowance</td>
+                                <td align="right" style="width:30%;font-size:12px;">&nbsp;&nbsp;&nbsp;</td>
+                                <td align="left" style="width:15%;font-size:12px;">&nbsp;&nbsp;&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" style="width:30%;font-size:12px;color:#600012;font-weight:bold;"><label style="color:#600012">Conveyance Allowance : </label>&nbsp;&nbsp;&nbsp;</td>
+                                <td align="left" style="width:15%;font-size:12px">&nbsp;&nbsp;&nbsp;@Model.ConveyanceAllowance</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr style="background-color:#ededed;">
+                                <td align="right" style="width:30%;font-size:12px;color:#600012;font-weight:bold;"><label style="color:#600012">Other Allowance : </label>&nbsp;&nbsp;&nbsp;</td>
+                                <td align="left" style="width:15%;font-size:12px;">&nbsp;&nbsp;&nbsp;@Model.OtherAllowance</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td align="right" style="width:30%;font-size:12px;color:#600012;font-weight:bold;"><label style="color:#600012">Gross Salary : </label>&nbsp;&nbsp;&nbsp;</td>
+                                <td align="left" style="width:15%;font-size:12px;">&nbsp;&nbsp;&nbsp;Rs. &nbsp;@Model.GrossSalary</td>
+                                <td align="right" style="width:30%;font-size:12px;color:#600012;font-weight:bold;"><label style="color:#600012">Take Home Salary : </label>&nbsp;&nbsp;&nbsp;</td>
+                                <td align="left" style="width:15%;font-size:12px;">&nbsp;&nbsp;&nbsp;Rs. &nbsp;@Model.TakeHomeSalary</td>
+                            </tr>
+                        </table>
+            </td>
+        </tr>
+
+        <tr id="lastdiv">
+            <td>
+                <table border="1" width="100%" style="border:solid 1px #000;" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td>
+                            <div style="width:100%;border:solid 2px black;text-align:center;color:black;padding:0;font-size:13px">This is a computer generated pay slip and does not require any signature and stamp.</div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+}

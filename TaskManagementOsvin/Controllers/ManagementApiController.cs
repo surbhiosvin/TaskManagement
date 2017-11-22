@@ -482,5 +482,65 @@ namespace TaskManagementOsvin.Controllers
                 });
             }
         }
+        [HttpPost]
+        [Route("~/api/Management/AddUpdateEmployeePaySlip")]
+        public HttpResponseMessage AddUpdateEmployeePaySlip(PaySlipDomainModel model)
+        {
+            try
+            {
+                HttpResponseMessage httpResponse = new HttpResponseMessage();
+                var res = managementRepository.AddUpdateEmployeePaySlip(model);
+                if (res != null && res.isSuccess)
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, res);
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.Unauthorized, res);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError(ex);
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+        [HttpGet]
+        [Route("~/api/Management/GetEmployeeList")]
+        public HttpResponseMessage GetEmployeeList()
+        {
+            try
+            {
+                HttpResponseMessage httpResponse = new HttpResponseMessage();
+                PaySlipDomainModel objRes = new PaySlipDomainModel();
+                objRes.listEmployees = managementRepository.GetEmployeeList();
+                if (objRes.listEmployees != null)
+                {
+                    objRes.isSuccess = true;
+                    objRes.response = "Success";
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, objRes);
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.Unauthorized, objRes);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
     }
 }

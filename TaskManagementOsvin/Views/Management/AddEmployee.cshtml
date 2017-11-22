@@ -312,72 +312,254 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Image</label>
-                                <div class="col-md-5">
-                                    @Html.TextBoxFor(m => m.ImageFile, new { type = "file", @class = "form-control", @accept = "image/x-png,image/gif,image/jpeg" })
-                                    <div class="text-danger">
-                                        @Html.ValidationMessageFor(m => m.ImageFile)
-                                        @Html.HiddenFor(m => m.Image)
+                            <div class="form-group ">
+                                <label class="control-label col-md-3">Image</label>
+                                <div class="col-md-6">
+                                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                                        <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 200px; height: 150px;"> </div>
+                                        <div>
+                                            <span class="btn red btn-outline btn-file">
+                                                <span class="fileinput-new"> Select image </span>
+                                                <span class="fileinput-exists"> Change </span>
+                                                @*<input type="file" name="...">*@
+                                                @*<input accept="image/x-png,image/gif,image/jpeg" id="ImageFile" name="ImageFile" type="file" value="">*@
+                                                @Html.TextBoxFor(m => m.ImageFile, new { type = "file", @accept = "image/x-png,image/gif,image/jpeg" })
+                                            </span>
+                                            <a href="javascript:;" class="btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-1">
-                                    <button class="btn btn-danger">Clear</button>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Ist ID Proof</label>
-                                <div class="col-md-5">
-                                    @Html.TextBoxFor(m => m.IDCardFirst_File, new { type = "file", @class = "form-control" })
-                                    <div class="text-danger">
-                                        @Html.ValidationMessageFor(m => m.IDCardFirst_File)
-                                        @Html.HiddenFor(m => m.IDCardFirst)
+                                <label class="control-label col-md-3">Ist ID Proof</label>
+                                <div class="col-md-6">
+                                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                                        <div class="input-group input-large">
+                                            <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+                                                <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                                <span class="fileinput-filename"> </span>
+                                            </div>
+                                            <span class="input-group-addon btn default btn-file">
+                                                <span class="fileinput-new"> Select file </span>
+                                                <span class="fileinput-exists"> Change </span>
+                                                @*<input type="file" name="...">*@
+                                                @Html.TextBoxFor(m => m.IDCardFirst_File, new { type = "file" })
+                                                <div class="text-danger">
+                                                    @Html.ValidationMessageFor(m => m.IDCardFirst_File)
+                                                    @Html.HiddenFor(m => m.IDCardFirst)
+                                                </div>
+                                            </span>
+                                            <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-1">
-                                    <button class="btn btn-danger">Clear</button>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">IInd ID Proof (Addess Proof)</label>
-                                <div class="col-md-5">
-                                    @Html.TextBoxFor(m => m.IDCardSecond_AddressProof_File, new { type = "file", @class = "form-control" })
-                                    <div class="text-danger">
-                                        @Html.ValidationMessageFor(m => m.IDCardSecond_AddressProof_File)
-                                        @Html.HiddenFor(m => m.IDCardSecond_AddressProof_)
+                                <label class="control-label col-md-3">IInd ID Proof (Addess Proof)</label>
+                                <div class="col-md-6">
+                                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                                        <div class="input-group input-large">
+                                            <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+                                                <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                                <span class="fileinput-filename"> </span>
+                                            </div>
+                                            <span class="input-group-addon btn default btn-file">
+                                                <span class="fileinput-new"> Select file </span>
+                                                <span class="fileinput-exists"> Change </span>
+                                                @*<input type="file" name="...">*@
+                                                @Html.TextBoxFor(m => m.IDCardSecond_AddressProof_File, new { type = "file" })
+                                                <div class="text-danger">
+                                                    @Html.ValidationMessageFor(m => m.IDCardSecond_AddressProof_File)
+                                                    @Html.HiddenFor(m => m.IDCardSecond_AddressProof_)
+                                                </div>
+                                            </span>
+                                            <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-1">
-                                    <button class="btn btn-danger">Clear</button>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">CV</label>
-                                <div class="col-md-5">
-                                    @Html.TextBoxFor(m => m.CV_File, new { type = "file", @class = "form-control" })
-                                    <div class="text-danger">
-                                        @Html.ValidationMessageFor(m => m.CV_File)
-                                        @Html.HiddenFor(m => m.CV)
+                                <label class="control-label col-md-3">CV</label>
+                                <div class="col-md-6">
+                                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                                        <div class="input-group input-large">
+                                            <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+                                                <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                                <span class="fileinput-filename"> </span>
+                                            </div>
+                                            <span class="input-group-addon btn default btn-file">
+                                                <span class="fileinput-new"> Select file </span>
+                                                <span class="fileinput-exists"> Change </span>
+                                                @*<input type="file" name="...">*@
+                                                @Html.TextBoxFor(m => m.CV_File, new { type = "file"})
+                                                <div class="text-danger">
+                                                    @Html.ValidationMessageFor(m => m.CV_File)
+                                                    @Html.HiddenFor(m => m.CV)
+                                                </div>
+                                            </span>
+                                            <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-1">
-                                    <button class="btn btn-danger">Clear</button>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Experience Certificate</label>
-                                <div class="col-md-5">
-                                    @Html.TextBoxFor(m => m.ExperienceCertificate_File, new { type = "file", @class = "form-control" })
-                                    <div class="text-danger">
-                                        @Html.ValidationMessageFor(m => m.ExperienceCertificate_File)
-                                        @Html.HiddenFor(m => m.ExperienceCertificate)
+                                <label class="control-label col-md-3">Experience Certificate</label>
+                                <div class="col-md-6">
+                                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                                        <div class="input-group input-large">
+                                            <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+                                                <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                                <span class="fileinput-filename"> </span>
+                                            </div>
+                                            <span class="input-group-addon btn default btn-file">
+                                                <span class="fileinput-new"> Select file </span>
+                                                <span class="fileinput-exists"> Change </span>
+                                                @Html.TextBoxFor(m => m.ExperienceCertificate_File, new { type = "file"})
+                                                <div class="text-danger">
+                                                    @Html.ValidationMessageFor(m => m.ExperienceCertificate_File)
+                                                    @Html.HiddenFor(m => m.ExperienceCertificate)
+                                                </div>
+                                            </span>
+                                            <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-1">
-                                    <button class="btn btn-danger">Clear</button>
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label class="control-label col-md-3">Appointement Letter</label>
+                                <div class="col-md-6">
+                                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                                        <div class="input-group input-large">
+                                            <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+                                                <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                                <span class="fileinput-filename"> </span>
+                                            </div>
+                                            <span class="input-group-addon btn default btn-file">
+                                                <span class="fileinput-new"> Select file </span>
+                                                <span class="fileinput-exists"> Change </span>
+                                                @Html.TextBoxFor(m => m.AppointementLetter_File, new { type = "file" })
+                                                <div class="text-danger">
+                                                    @Html.ValidationMessageFor(m => m.AppointementLetter_File)
+                                                    @Html.HiddenFor(m => m.AppointementLetter)
+                                                </div>
+                                            </span>
+                                            <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Aggrement Document</label>
+                                <div class="col-md-6">
+                                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                                        <div class="input-group input-large">
+                                            <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+                                                <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                                <span class="fileinput-filename"> </span>
+                                            </div>
+                                            <span class="input-group-addon btn default btn-file">
+                                                <span class="fileinput-new"> Select file </span>
+                                                <span class="fileinput-exists"> Change </span>
+                                                @Html.TextBoxFor(m => m.AggrementDocument_File, new { type = "file" })
+                                                <div class="text-danger">
+                                                    @Html.ValidationMessageFor(m => m.AggrementDocument_File)
+                                                    @Html.HiddenFor(m => m.AggrementDocument)
+                                                </div>
+                                            </span>
+                                            <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Other Document</label>
+                                <div class="col-md-6">
+                                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                                        <div class="input-group input-large">
+                                            <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+                                                <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                                <span class="fileinput-filename"> </span>
+                                            </div>
+                                            <span class="input-group-addon btn default btn-file">
+                                                <span class="fileinput-new"> Select file </span>
+                                                <span class="fileinput-exists"> Change </span>
+                                                @Html.TextBoxFor(m => m.OtherDocument_File, new { type = "file" })
+                                                <div class="text-danger">
+                                                    @Html.ValidationMessageFor(m => m.OtherDocument_File)
+                                                    @Html.HiddenFor(m => m.OtherDocument)
+                                                </div>
+                                            </span>
+                                            <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div class="form-group">
+                                    <label class="col-md-3 control-label">Image</label>
+                                    <div class="col-md-5">
+                                        @Html.TextBoxFor(m => m.ImageFile, new { type = "file", @class = "form-control", @accept = "image/x-png,image/gif,image/jpeg" })
+                                        <div class="text-danger">
+                                            @Html.ValidationMessageFor(m => m.ImageFile)
+                                            @Html.HiddenFor(m => m.Image)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button class="btn btn-danger">Clear</button>
+                                    </div>
+                                </div>*@
+                            @*<div class="form-group">
+                                    <label class="col-md-3 control-label">Ist ID Proof</label>
+                                    <div class="col-md-5">
+                                        @Html.TextBoxFor(m => m.IDCardFirst_File, new { type = "file", @class = "form-control" })
+                                        <div class="text-danger">
+                                            @Html.ValidationMessageFor(m => m.IDCardFirst_File)
+                                            @Html.HiddenFor(m => m.IDCardFirst)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button class="btn btn-danger">Clear</button>
+                                    </div>
+                                </div>*@
+                            @*<div class="form-group">
+                                    <label class="col-md-3 control-label">IInd ID Proof (Addess Proof)</label>
+                                    <div class="col-md-5">
+                                        @Html.TextBoxFor(m => m.IDCardSecond_AddressProof_File, new { type = "file", @class = "form-control" })
+                                        <div class="text-danger">
+                                            @Html.ValidationMessageFor(m => m.IDCardSecond_AddressProof_File)
+                                            @Html.HiddenFor(m => m.IDCardSecond_AddressProof_)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button class="btn btn-danger">Clear</button>
+                                    </div>
+                                </div>*@
+                            @*<div class="form-group">
+                                    <label class="col-md-3 control-label">CV</label>
+                                    <div class="col-md-5">
+                                        @Html.TextBoxFor(m => m.CV_File, new { type = "file", @class = "form-control" })
+                                        <div class="text-danger">
+                                            @Html.ValidationMessageFor(m => m.CV_File)
+                                            @Html.HiddenFor(m => m.CV)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button class="btn btn-danger">Clear</button>
+                                    </div>
+                                </div>*@
+                            @*<div class="form-group">
+                                    <label class="col-md-3 control-label">Experience Certificate</label>
+                                    <div class="col-md-5">
+                                        @Html.TextBoxFor(m => m.ExperienceCertificate_File, new { type = "file", @class = "form-control" })
+                                        <div class="text-danger">
+                                            @Html.ValidationMessageFor(m => m.ExperienceCertificate_File)
+                                            @Html.HiddenFor(m => m.ExperienceCertificate)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button class="btn btn-danger">Clear</button>
+                                    </div>
+                                </div>*@
+                            @*<div class="form-group">
                                 <label class="col-md-3 control-label">Appointment Letter</label>
                                 <div class="col-md-5">
                                     @Html.TextBoxFor(m => m.AppointementLetter_File, new { type = "file", @class = "form-control" })
@@ -389,8 +571,8 @@
                                 <div class="col-md-1">
                                     <button class="btn btn-danger">Clear</button>
                                 </div>
-                            </div>
-                            <div class="form-group">
+                            </div>*@
+                            @*<div class="form-group">
                                 <label class="col-md-3 control-label">Aggrement Document</label>
                                 <div class="col-md-5">
                                     @Html.TextBoxFor(m => m.AggrementDocument_File, new { type = "file", @class = "form-control" })
@@ -402,8 +584,8 @@
                                 <div class="col-md-1">
                                     <button class="btn btn-danger">Clear</button>
                                 </div>
-                            </div>
-                            <div class="form-group last">
+                            </div>*@
+                            @*<div class="form-group last">
                                 <label class="col-md-3 control-label">Other Document</label>
                                 <div class="col-md-5">
                                     @Html.TextBoxFor(m => m.OtherDocument_File, new { type = "file", @class = "form-control" })
@@ -415,7 +597,7 @@
                                 <div class="col-md-1">
                                     <button class="btn btn-danger">Clear</button>
                                 </div>
-                            </div>
+                            </div>*@
                         </div>
                         <div class="form-actions text-center">
                             <div class="btn-set">

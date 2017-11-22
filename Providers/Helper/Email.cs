@@ -24,7 +24,7 @@ namespace Providers.Helper
                 Smtp.Host = Host;
                 Smtp.Port = Port;
                 Smtp.Credentials = new System.Net.NetworkCredential(FromEmail, FromPassword);
-                Smtp.EnableSsl = true;
+                Smtp.EnableSsl = false;
                 Smtp.Send(mail);
                 return true;
             }
