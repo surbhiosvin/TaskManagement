@@ -238,7 +238,6 @@
 <script>
     $(document).ready(function () {
         var items = [];
-        $('.datepicker').datepicker();
         @foreach (var item in employees)
         {
             @:items.push({name:@item.EmployeeName,value:@item.UserId})
