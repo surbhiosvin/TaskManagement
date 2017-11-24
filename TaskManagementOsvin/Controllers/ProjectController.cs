@@ -8,6 +8,7 @@ using TaskManagementOsvin.Models;
 using System.Net.Http;
 using System.Net;
 using System.Web.Script.Serialization;
+using DomainModel.EntityModel;
 
 namespace TaskManagementOsvin.Controllers
 {
@@ -63,5 +64,58 @@ namespace TaskManagementOsvin.Controllers
                 return View();
             }
         }
+        [HttpGet]
+        public ActionResult ProjectFullDetails(long ProjectId)
+        {
+            ViewBag.ProjectId = ProjectId;    
+            return View();
+        }
+        [HttpGet]
+        public ActionResult _ProjectFullDetail(long ProjectId)
+        {
+            ProjectFullDetailsDomainModel model = new ProjectFullDetailsDomainModel();
+            if (ProjectId > 0)
+            {
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+                var Clientresult = client.GetAsync("/api/Project/GetProjectFullDetails?ProjectId=" + ProjectId).Result;
+                if (Clientresult.StatusCode == HttpStatusCode.OK)
+                {
+                    var contents = Clientresult.Content.ReadAsStringAsync().Result;
+                    var response = Newtonsoft.Json.JsonConvert.DeserializeObject<ProjectFullDetailsDomainModel>(contents);
+                    model = response;
+                }
+            }
+            return PartialView(model);
+        }
+        [HttpGet]
+        public ActionResult _ProjectAddendumDetails(long ProjectId)
+        {
+            List<AddendumDomainModel> listAddendums = new List<AddendumDomainModel>();
+            if (ProjectId > 0)
+            {
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+                var Clientresult = client.GetAsync("/api/Project/GetProjectAddendumDetails?ProjectId=" + ProjectId).Result;
+                if (Clientresult.StatusCode == HttpStatusCode.OK)
+                {
+                    var contents = Clientresult.Content.ReadAsStringAsync().Result;
+                    var response = Newtonsoft.Json.JsonConvert.DeserializeObject<List<AddendumDomainModel>>(contents);
+                    listAddendums = response;
+                }
+            }
+            return PartialView(listAddendums);
+        }
+        [HttpGet]
+        public ActionResult _ProjectFeedBackDetails(long ProjectId)
+        {
+            return PartialView();
+        }
+        [HttpGet]
+        public ActionResult _EmployeeWorkedonProject()
+        {
+            return PartialView();
+        }
+
     }
 }

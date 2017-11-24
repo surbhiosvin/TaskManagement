@@ -1,45 +1,52 @@
 ﻿using DomainModel.EntityModel;
-using Providers.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Web.Http;
-using Providers.Providers.SP.Repositories;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace TaskManagementOsvin.Controllers
 {
-    public class ClientController : ApiController
+    public class ClientController : Controller
     {
-        static readonly IClient ClientRepository = new ClientRepository();
-        // GET api/<controller>
-        [Route("~/api/Client/GetClients")]
-        public HttpResponseMessage GetClients()
+        [HttpGet]
+        public ActionResult Clients()
         {
-            HttpResponseMessage httpResponse = new HttpResponseMessage();
-            try
+            ViewBag.Class = "display-hide";
+            return View();
+        }
+        [HttpGet]
+        public ActionResult _Clients(bool Archived = false)
+        {            
+            var client = new HttpClient();
+            List<ClientDomainModel> listClients = new List<ClientDomainModel>();
+            client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+            var Clientresult = client.GetAsync("/api/Client/GetAllClients?Archived="+ (Archived == true ? "Archive" : "NonArchive")).Result;
+            if (Clientresult.StatusCode == HttpStatusCode.OK)
             {
-                var clients = ClientRepository.GetClients();
-                if (clients == null)
-                {
-                    httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
-                }
-                else
-                {
-                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, clients);
-                }
-                return httpResponse;
+                var contents = Clientresult.Content.ReadAsStringAsync().Result;
+                var response = new JavaScriptSerializer().Deserialize<List<ClientDomainModel>>(contents);
+                listClients = response;
             }
-            catch (Exception ex)
+            return PartialView(listClients);
+        }
+        [HttpGet]
+        public ActionResult ArchiveClient(long ClientId,bool Archived = false)
+        {
+            ResponseDomainModel objRes = new ResponseDomainModel();
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+            var result = client.GetAsync("/api/Client/UpdateClientArchive?ClientId=" + ClientId).Result;
+            if (result.StatusCode == HttpStatusCode.OK)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
-                {
-                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
-                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
+                var contents = result.Content.ReadAsStringAsync().Result;
+                var Response = new JavaScriptSerializer().Deserialize<ResponseDomainModel>(contents);
+                objRes = Response;
             }
+            return RedirectToAction("_Clients", new {Archived=Archived });
         }
     }
 }

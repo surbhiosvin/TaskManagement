@@ -10,5 +10,7 @@ namespace Providers.Repositories
     public interface IProject
     {
         List<ProjectTypeDomainModel> GetProjectType();
+        ProjectFullDetailsDomainModel GetProjectFullDetails(long ProjectId);
+        List<AddendumDomainModel> GetProjectAddendumDetails(long ProjectId);
     }
 }

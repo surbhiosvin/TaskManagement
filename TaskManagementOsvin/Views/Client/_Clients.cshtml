@@ -1,0 +1,54 @@
+﻿@using TaskManagementOsvin.Security;
+@using TaskManagementOsvin.Models;
+@model List<ClientDomainModel>
+
+<table class="table table-striped table-bordered table-hover table-header-fixed" id="tbl_Client">
+    <thead>
+        <tr class="">
+            <th class="text-center"> Client Name </th>
+            <th class="text-center"> Project Title </th>
+            <th class="text-center"> Email </th>
+            <th class="text-center"> Skype Id </th>
+            <th class="text-center"> Whats App Number </th>
+            <th class="text-center"> Phone No. </th>
+            <th class="text-center"> Client Location </th>
+            @*<th class="text-center"> Time </th>*@
+            <th class="text-center"> Edit </th>
+            @if (UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType == roleTypeModel.HR)
+            {
+                <th class="text-center"> Archive </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var client in @Model)
+            {
+                <tr id="row_@client.ClientId">
+                    <td class="text-center"> @client.FirstName @client.LastName</td>
+                    <td class="text-center"><a href="~/Project/ProjectFullDetails?ProjectId=@client.ProjectId">@client.ProjectTitle</a></td>
+                    <td class="text-center"> @client.Email</td>
+                    <td class="text-center"> @client.Skype</td>
+                    <td class="text-center"> @client.Whatsapp</td>
+                    <td class="text-center"> @client.PhoneNumber</td>
+                    <td class="text-center"> @client.Location</td>
+                    @*<td class="text-center"> @client.TimeZone</td>*@
+                    @*@if (client.IsActive)
+                        {
+                            <td class="text-center" id="StatusActive_@client.DepartmentId"><a title="Active" id="StatusActiveLink_@client.DepartmentId" href="#" onclick="ActivateDeactivateDepartment(@Dept.DepartmentId, false)"><img alt='Active' src='~/assets/global/img/Guiimages/Active.png' width='30px' height='30px' /></a></td>
+                        }
+                        else
+                        {
+                            <td class="text-center" id="StatusActive_@client.DepartmentId"><a title="InActive" id="StatusActiveLink_@client.DepartmentId" href="#" onclick="ActivateDeactivateDepartment(@Dept.DepartmentId, true)"><img alt='In Active Slip' src='~/assets/global/img/Guiimages/InActive.png' width='30px' height='30px' /></a></td>
+                        }*@
+                    <td class="text-center"><a class="btn green-dark" href="#" onclick="EditDepartment(@Json.Encode(client))"><i class="fa fa-edit"></i></a> </td>
+                    @if (UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType == roleTypeModel.HR)
+                    {
+                        <td class="text-center"><a class="red" href="#" onclick="ArchiveClient(@client.ClientId)"><img alt="Archive/NonArchive" src="~/assets/global/img/Guiimages/archive-image.png" width="30px" height="30px" /></a> </td>
+                    }
+                </tr>
+            }
+        }
+    </tbody>
+</table>

@@ -212,6 +212,7 @@ namespace TaskManagementOsvin.Controllers
         [HttpGet]
         public ActionResult _AddUpdateUser(bool Archived = false)
         {
+            ViewBag.Class = "display-hide";
             UserListSearchModel model = new UserListSearchModel() { UserId = UserManager.user.UserId, Role = UserManager.user.Role, Name = "", Archived = Archived == true ? "Archive" : "NonArchive" };
             List<EmployeeDomainModel> listusers = new List<EmployeeDomainModel>();
             var serialized = new JavaScriptSerializer().Serialize(model);
@@ -256,7 +257,7 @@ namespace TaskManagementOsvin.Controllers
             return View(employee);
         }
         [HttpGet]
-        public ActionResult ArchiveEmployee(long UserId)
+        public ActionResult ArchiveEmployee(long UserId, bool Archived = false)
         {
             ResponseDomainModel objRes = new ResponseDomainModel();
             var client = new HttpClient();
@@ -268,7 +269,7 @@ namespace TaskManagementOsvin.Controllers
                 var Response = new JavaScriptSerializer().Deserialize<ResponseDomainModel>(contents);
                 objRes = Response;
             }
-            return RedirectToAction("AddUpdateUser");
+            return RedirectToAction("_AddUpdateUser", new { Archived = Archived });
         }
 
         [HttpGet]
@@ -403,12 +404,12 @@ namespace TaskManagementOsvin.Controllers
             pdfDoc.Close();
             Response.Write(pdfDoc);
             Response.End();
-        }  
+        }
         public ActionResult EmailPaySlipToEmployee()
         {
             var model = (PaySlipModel)Session["PaySlip"];
             string body = ConvertViewToString("_PaySlip", model);
-            bool res = Email.SendEmail(model.Email, body,"Pay Slip");
+            bool res = Email.SendEmail(model.Email, body, "Pay Slip");
             return View("PaySlip", model);
         }
 
@@ -479,7 +480,7 @@ namespace TaskManagementOsvin.Controllers
                 vResult.View.Render(vContext, writer);
                 return writer.ToString();
             }
-        }              
+        }
         #endregion
     }
 }

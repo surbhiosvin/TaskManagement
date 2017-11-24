@@ -88,7 +88,7 @@
                         </a>
                     }
                 </div>
-                <div class="portlet-body dv_UserTableContainer">
+                <div class="portlet-body dv_UserTableContainer">                   
                     @Html.Action("_AddUpdateUser", "Management")
                 </div>
             </div>
@@ -110,7 +110,6 @@
                     //data: { sortBy: sortByval },
                     contentType: "application/text; charset=utf-8",
                     dataType: "text",
-                    async: false,
                     success: function (response) {
                         $('.dv_UserTableContainer').html(response);
                         $('#tbl_User').DataTable({
@@ -124,6 +123,32 @@
             }
         });
     });
+    function ArchiveEmployee(UserId) {
+        var Archived = $("#ddlArchived").val();
+        $.ajax({
+            type: "Get",
+            contentType: "application/json; charset=utf-8",
+            url: "/Management/ArchiveEmployee?UserId=" + UserId + "&Archived=" + Archived,
+            success: function (response) {
+                $('.dv_UserTableContainer').html(response);
+                $('#tbl_User').DataTable({
+                    "scrollX": false,
+                });
+                if (Archived) {
+                    $("#lblMessage").html("User has removed from archive.");
+                }
+                else {
+                    $("#lblMessage").html("User has archived.");
+                }
+                $(".dvAlert").show();
+            },
+            error: function (error) {
+                $("#lblMessage").html("Something went wrong, please try again.");
+                $(".dvAlert").show();
+                console.log(error);
+            }
+        });
+    }
     function ActivateDeactivateDepartment(UserId, IsActive) {
         $.ajax({
             type: "Get",
