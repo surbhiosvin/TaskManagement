@@ -10,5 +10,8 @@ namespace Providers.Repositories
     public interface IClient
     {
         List<ClientDomainModel> GetClients();
+        List<ClientDomainModel> GetAllClients(string Archived);
+        ResponseDomainModel UpdateClientArchive(long ClientId);
+        ResponseDomainModel AddUpdateClient(ClientDomainModel model);
     }
 }

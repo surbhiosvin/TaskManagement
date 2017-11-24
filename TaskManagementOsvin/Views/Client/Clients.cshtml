@@ -1,0 +1,603 @@
+﻿
+@{
+    ViewBag.Title = "Clients";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using TaskManagementOsvin.Security;
+@using TaskManagementOsvin.Models;
+@model ClientModel
+<div class="page-content">
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="~/Dashboard/Welcome">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="#">Clients</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            @*<li>
+                    <span>Page Layouts</span>
+                </li>*@
+        </ul>
+        <div class="page-toolbar">
+            <div class="btn-group pull-right">
+                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li>
+                        <a href="#">
+                            <i class="icon-bell"></i> Action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-shield"></i> Another action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-user"></i> Something else here
+                        </a>
+                    </li>
+                    <li class="divider"> </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-bag"></i> Separated link
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE BAR -->
+    <!-- BEGIN PAGE TITLE-->
+    <h1 class="page-title">
+        Add / Update Clients
+        @*<small>blank page layout</small>*@
+    </h1>
+    <!-- END PAGE TITLE-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN EXAMPLE TABLE PORTLET-->
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption font-green">
+                        <i class="icon-layers font-green"></i>
+                        <span class="caption-subject font-green bold uppercase">Client Details</span>
+                    </div>
+                    @if (UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType == roleTypeModel.HR || UserManager.user.roleType == roleTypeModel.ProjectManager)
+                    {
+                        <div class="col-sm-offset-3 col-sm-6">
+                            <div class="actions actions-padding">
+                                <div class="action-inline">
+                                    <label for="ddlArchived" class="control-label">Client Type</label>
+                                    <select id="ddlArchived" class="form-control">
+                                        <option value="false" selected>Non Archive</option>
+                                        <option value="true">Archive</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <a class="btn btn-sm green table-group-action-submit pull-right" href="#" id="btnAddClient">
+                        <i class="fa fa-plus"></i> Add Client
+                    </a>
+                </div>
+                <div class="portlet-body">
+                    <div class="alert alert-success dvAlert @ViewBag.Class">
+                        <a class="close" onclick="$('.alert').hide()">×</a>
+                        <span id="lblMessage"> @ViewBag.Message </span>
+                    </div>
+                    <div class="row" id="dvAddClient" style="display:none">
+                        <div class="col-md-12">
+                            <form class="form-horizontal">
+                                <div class="form-body">
+                                    @*<div class="text-danger">
+                                            <label id="lblmsg"></label>
+                                        </div>*@
+                                    <div class="form-group">
+                                        <input type="hidden" id="hdnClientId" />
+                                        <div class="col-md-offset-2 col-md-4">
+                                            <label class="control-label">
+                                                First Name
+                                                <span class="required"> * </span>
+                                            </label>
+                                            <input tye="text" class="form-control" id="txtFirstName" placeholder="Enter First Name" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label">
+                                                Last Name
+                                            </label>
+                                            <input tye="text" class="form-control" id="txtLastName" placeholder="Enter Last Name" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-4">
+                                            <label class="control-label">
+                                                Client Location
+                                                <span class="required"> * </span>
+                                            </label>
+                                            <input tye="text" class="form-control" id="txtClientLocation" placeholder="Enter Client Location" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label">
+                                                Communication Time
+                                                <span class="required"> * </span>
+                                            </label>
+                                            <select id="ddlCommTime" class="mt-multiselect btn btn-default" multiple="multiple" data-label="left" data-select-all="true" data-width="100%" data-filter="true" data-action-onchange="true">
+                                                <option Value="09:00 AM - 10:00 AM">09:00 AM - 10:00 AM</option>
+                                                <option Value="10:00 AM - 11:00 AM">10:00 AM - 11:00 AM</option>
+                                                <option Value="11:00 AM - 12:00 PM">11:00 AM - 12:00 PM</option>
+                                                <option Value="12:00 PM - 01:00 PM">12:00 PM - 01:00 PM</option>
+                                                <option Value="01:00 PM - 02:00 PM">01:00 PM - 02:00 PM</option>
+                                                <option Value="02:00 PM - 03:00 PM">02:00 PM - 03:00 PM</option>
+                                                <option Value="03:00 PM - 04:00 PM">03:00 PM - 04:00 PM</option>
+                                                <option Value="04:00 PM - 05:00 PM">04:00 PM - 05:00 PM</option>
+                                                <option value="05:00 PM - 06:00 PM">05:00 PM - 06:00 PM</option>
+                                                <option value="06:00 PM - 07:00 PM">06:00 PM - 07:00 PM</option>
+                                                <option value="07:00 PM - 08:00 PM">07:00 PM - 08:00 PM</option>
+                                                <option value="08:00 PM - 09:00 PM">08:00 PM - 09:00 PM</option>
+                                                <option value="09:00 PM - 10:00 PM">09:00 PM - 10:00 PM</option>
+                                                <option value="10:00 PM - 11:00 AM">10:00 PM - 11:00 PM</option>
+                                                <option value="11:00 PM - 00:00 AM">11:00 PM - 12:00 AM</option>
+                                                <option value="00:00 AM - 01:00 AM">12:00 AM - 01:00 AM</option>
+                                                <option value="01:00 AM - 02:00 AM">01:00 AM - 02:00 AM</option>
+                                                <option value="02:00 AM - 03:00 AM">02:00 AM - 03:00 AM</option>
+                                                <option value="03:00 AM - 04:00 AM">03:00 AM - 04:00 AM</option>
+                                                <option value="04:00 AM - 05:00 AM">04:00 AM - 05:00 AM</option>
+                                                <option value="05:00 AM - 06:00 AM">05:00 AM - 06:00 AM</option>
+                                                <option value="06:00 AM - 07:00 AM">06:00 AM - 07:00 AM</option>
+                                                <option value="07:00 AM - 08:00 AM">07:00 AM - 08:00 AM</option>
+                                                <option value="08:00 AM - 09:00 AM">08:00 AM - 09:00 AM</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-8">
+                                            <label class="control-label">
+                                                Communication Client ID
+                                                <span class="required"> * </span>
+                                            </label>
+                                            <div class="form-group">
+                                                <div class="col-md-1">
+                                                    <input type="checkbox" id="chkEmail" />
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <label>Email</label>
+                                                </div>
+                                                <div class="col-md-4 hide" id="dvEmail">
+                                                    <input tye="email" class="form-control" id="txtEmail" placeholder="Enter Email" />
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <input type="checkbox" id="chkSkype" />
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <label>Skype</label>
+                                                </div>
+                                                <div class="col-md-4 hide" id="dvSkype">
+                                                    <input tye="text" class="form-control" id="txtSkype" placeholder="Enter Skype Id" />
+                                                </div>
+                                            </div>
+                                            <div class=form-group>
+                                                <div class="col-md-1">
+                                                    <input type="checkbox" id="chkWhtsApp" />
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <label>WhatsApp</label>
+                                                </div>
+                                                <div class="col-md-4 hide" id="dvWhtsApp">
+                                                    <input tye="text" class="form-control" id="txtWhtsApp" placeholder="Enter WhtsApp Number" />
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <input type="checkbox" id="chkPhoneNo" />
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <label>Phone Number</label>
+                                                </div>
+                                                <div class="col-md-4 hide" id="dvPhoneNo">
+                                                    <input tye="text" class="form-control" id="txtPhoneNumber" placeholder="Enter Phone Number" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="text-center">
+                                            <button type="button" class="btn green" id="btnAdd">Add</button>
+                                            <button type="button" class="btn green" id="btnUpdate" style="display:none">Update</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row" id="dvClientDetails">
+                        @Html.Action("_Clients", "Client")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .multiselect-container {
+        height: 250px;
+        overflow: scroll;
+    }
+
+    .dropdown-menu > li > a {
+        padding: 8px 30px !important;
+    }
+</style>
+<!--AddUpdate modal -->
+<script type="text/javascript">
+    jQuery(document).on('ready', function () {
+        $('#tbl_Client').DataTable({
+        });
+        $(document).on('change', '#ddlArchived', function () {
+            var _this = $(this);
+            var Archived = _this.val();
+            if (typeof Archived != 'undefined') {
+                $.ajax({
+                    type: "GET",
+                    url: "/Client/_Clients?Archived=" + Archived,
+                    //data: { sortBy: sortByval },
+                    contentType: "application/text; charset=utf-8",
+                    dataType: "text",
+                    async: false,
+                    success: function (response) {
+                        $('#dvClientDetails').html(response);
+                        $('#tbl_Client').DataTable({
+                            "scrollX": false,
+                        });
+                    },
+                    failure: function (msg) {
+                        html = false;
+                    }
+                });
+            }
+        });
+    });
+    function ArchiveClient(ClientId) {
+        var Archived = $("#ddlArchived").val();
+        $.ajax({
+            type: "Get",
+            contentType: "application/json; charset=utf-8",
+            url: "/Client/ArchiveClient?ClientId=" + ClientId + "&Archived=" + Archived,
+            success: function (response) {
+                $('#dvClientDetails').html(response);
+                $('#tbl_Client').DataTable({
+                    "scrollX": false,
+                });
+                if (Archived) {
+                    $("#lblMessage").html("Client has removed from archive.");
+                }
+                else {
+                    $("#lblMessage").html("Client has archived.");
+                }
+                $(".dvAlert").show();
+            },
+            error: function (error) {
+                $("#lblMessage").html("Something went wrong, please try again.");
+                $(".dvAlert").show();
+                console.log(error);
+            }
+        });
+    }
+
+    $("#btnAdd").click(function () {
+        $("#lblMessage").html("");
+        $(".dvAlert").hide();
+        var IsValid = true;
+        var FirstName = $("#txtFirstName").val();
+        var LastName = $("#txtLastName").val();
+        var ClientLocation = $("#txtClientLocation").val();
+        var EmailIsChecked = $('#chkEmail:checked').val();
+        var SkypeIsChecked = $('#chkSkype:checked').val();
+        var WhtsAppIsChecked = $('#chkWhtsApp:checked').val();
+        var PhoneNoIsChecked = $('#chkPhoneNo:checked').val();
+        var Email = $("#txtEmail").val();
+        var Skype = $("#txtSkype").val();
+        var WhtsApp = $("#txtWhtsApp").val();
+        var PhoneNo = $("#txtPhoneNumber").val();
+        if (FirstName == null || FirstName == "") {
+            $('#txtFirstName').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#txtFirstName').css('border-color', '');
+        }
+        if (ClientLocation == null || ClientLocation == "") {
+            $('#txtClientLocation').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#txtClientLocation').css('border-color', '');
+        }
+        if (EmailIsChecked == "on" && (Email == null || Email == "" || !isEmail(Email))) {
+            $('#txtEmail').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#txtEmail').css('border-color', '');
+        }
+        if (SkypeIsChecked == "on" && (Skype == null || Skype == "")) {
+            $('#txtSkype').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#txtSkype').css('border-color', '');
+        }
+        if (WhtsAppIsChecked == "on" && (WhtsApp == null || WhtsApp == "")) {
+            $('#txtWhtsApp').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#txtWhtsApp').css('border-color', '');
+        }
+        if (PhoneNoIsChecked == "on" && (PhoneNo == null || PhoneNo == "")) {
+            $('#txtPhoneNumber').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#txtPhoneNumber').css('border-color', '');
+        }
+        if (IsValid == false) {
+            return false;
+        }
+        var CommTime = "";
+        $('#ddlCommTime :selected').each(function () {
+            CommTime += $(this).val() + ",";
+        });
+        CommTime = CommTime.substring(0, CommTime.length - 1);
+        var model = {
+            FirstName: FirstName,
+            LastName: LastName,
+            Location: ClientLocation,
+            Email: Email,
+            Skype: Skype,
+            Whatsapp: WhtsApp,
+            PhoneNumber: PhoneNo,
+            TimeZone: CommTime
+        }
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "/api/Client/AddUpdateClient",
+            data: JSON.stringify(model),
+            beforeSend: function () {
+                $("#lblMessage").html("Please wait...");
+                $(".dvAlert").show();
+            },
+            success: function (response) {
+                if (response.isSuccess == true) {
+                    $("#lblMessage").html("Client added successfully");
+                    $(".dvAlert").show();
+                    setTimeout(function () {
+                        window.location.href = "/Client/Clients";
+                    }, 1700);
+                }
+                else {
+                    $("#lblMessage").html(response.response);
+                    $(".dvAlert").show();
+                }
+            },
+            error: function (error) {
+                $("#lblMessage").html("Something went wrong, please try again");
+                $(".dvAlert").show();
+                console.log(error);
+            }
+        });
+    });
+    function EditDepartment(Client) {
+        $("#lblMessage").html("");
+        $(".dvAlert").hide();
+        $("#dvAddClient").show();
+        $("#hdnClientId").val(Client.ClientId);
+        $("#txtFirstName").val(Client.FirstName);
+        $("#txtLastName").val(Client.LastName);
+        $("#txtClientLocation").val(Client.Location);
+        var selectedOptions = Client.TimeZone.split(',');
+        //i = 0, size = valArr.length;
+        //for (i; i < size; i++) {
+        //    $("#ddlCommTime").multiselect("widget").find(":checkbox[value='" + valArr[i] + "']").attr("checked", "checked");
+        //    $("#ddlCommTime option[value='" + valArr[i] + "']").attr("selected", 1);
+        //    $("#ddlCommTime").multiselect("refresh");
+        //}
+        $('#ddlCommTime').val(selectedOptions);
+        $("#ddlCommTime").multiselect("refresh");
+        if (Client.Email != null && Client.Email != "") {
+            $('#chkEmail').prop('checked', true);
+            $("#dvEmail").removeClass("hide");
+            $("#txtEmail").val(Client.Email);
+        }
+        else {
+            $('#chkEmail').prop('checked', false);
+            $("#dvEmail").addClass("hide");
+        }
+        if (Client.Skype != null && Client.Skype != "") {
+            $('#chkSkype').prop('checked', true);
+            $("#dvSkype").removeClass("hide");
+            $("#txtSkype").val(Client.Skype);
+        }
+        else {
+            $('#chkSkype').prop('checked', false);
+            $("#dvSkype").addClass("hide");
+        }
+        if (Client.Whatsapp != null && Client.Whatsapp != "") {
+            $('#chkWhtsApp').prop('checked', true);
+            $("#dvWhtsApp").removeClass("hide");
+            $("#txtWhtsApp").val(Client.Whatsapp);
+        }
+        else {
+            $('#chkWhtsApp').prop('checked', false);
+            $("#dvWhtsApp").addClass("hide");
+        }
+        if (Client.PhoneNumber != null && Client.PhoneNumber != "") {
+            $('#chkPhoneNo').prop('checked', true);
+            $("#dvPhoneNo").removeClass("hide");
+            $("#txtPhoneNumber").val(Client.PhoneNumber);
+        }
+        else {
+            $('#chkPhoneNo').prop('checked', false);
+            $("#dvPhoneNo").addClass("hide");
+        }
+        $("#btnAdd").hide();
+        $("#btnUpdate").show();
+    }
+    $("#btnUpdate").click(function () {
+        $("#lblMessage").html("");
+        $(".dvAlert").hide();
+        var IsValid = true;
+        var FirstName = $("#txtFirstName").val();
+        var LastName = $("#txtLastName").val();
+        var ClientLocation = $("#txtClientLocation").val();
+        var CommTime = $("#ddlComTime").val();
+        var EmailIsChecked = $('#chkEmail:checked').val();
+        var SkypeIsChecked = $('#chkSkype:checked').val();
+        var WhtsAppIsChecked = $('#chkWhtsApp:checked').val();
+        var PhoneNoIsChecked = $('#chkPhoneNo:checked').val();
+        var Email = $("#txtEmail").val();
+        var Skype = $("#txtSkype").val();
+        var WhtsApp = $("#txtWhtsApp").val();
+        var PhoneNo = $("#txtPhoneNumber").val();
+        if (FirstName == null || FirstName == "") {
+            $('#txtFirstName').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#txtFirstName').css('border-color', '');
+        }
+        if (ClientLocation == null || ClientLocation == "") {
+            $('#txtClientLocation').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#txtClientLocation').css('border-color', '');
+        }
+        if (EmailIsChecked == "on" && (Email == null || Email == "" || !isEmail(Email))) {
+            $('#txtEmail').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#txtEmail').css('border-color', '');
+        }
+        if (SkypeIsChecked == "on" && (Skype == null || Skype == "")) {
+            $('#txtSkype').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#txtSkype').css('border-color', '');
+        }
+        if (WhtsAppIsChecked == "on" && (WhtsApp == null || WhtsApp == "")) {
+            $('#txtWhtsApp').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#txtWhtsApp').css('border-color', '');
+        }
+        if (PhoneNoIsChecked == "on" && (PhoneNo == null || PhoneNo == "")) {
+            $('#txtPhoneNumber').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#txtPhoneNumber').css('border-color', '');
+        }
+        if (IsValid == false) {
+            return false;
+        }
+        var CommTime = "";
+        $('#ddlCommTime :selected').each(function () {
+            CommTime += $(this).val() + ",";
+        });
+        CommTime = CommTime.substring(0, CommTime.length - 1);
+        var model = {
+            ClientId: $("#hdnClientId").val(),
+            FirstName: FirstName,
+            LastName: LastName,
+            Location: ClientLocation,
+            Email: Email,
+            Skype: Skype,
+            Whatsapp: WhtsApp,
+            PhoneNumber: PhoneNo,
+            TimeZone: CommTime
+        }
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "/api/Client/AddupdateClient",
+            data: JSON.stringify(model),
+            beforeSend: function () {
+                $("#lblMessage").html("Please wait...");
+                $(".dvAlert").show();
+            },
+            success: function (response) {
+                if (response.isSuccess == true) {
+                    $("#lblMessage").html("Client Updated successully");
+                    $(".dvAlert").show();
+                    //$("#txtDepartmentName").val("");
+                    $("#btnUpdate").hide();
+                    $("#btnAdd").show();
+                    setTimeout(function () {
+                        window.location.href = "/Client/Clients";
+                    }, 1700);
+                }
+                else {
+                    $("#lblMessage").html(response.response);
+                    $(".dvAlert").show();
+                }
+            },
+            error: function (error) {
+                $("#lblMessage").html("Something went wrong, please try again");
+                $(".dvAlert").show();
+                console.log(error);
+            }
+        });
+    });
+    $("#btnAddClient").click(function () {
+        $("#dvAddClient").show();
+        $("#btnAdd").show();
+        $("#btnUpdate").hide();
+    });
+
+    $("#chkEmail").on('change', function () {
+        if (!$(this).is(':checked')) {
+            $("#dvEmail").addClass("hide");
+            $('#txtEmail').val("");
+        }
+        else
+            $("#dvEmail").removeClass("hide");
+    });
+    $("#chkSkype").on('change', function () {
+        if (!$(this).is(':checked')) {
+            $("#dvSkype").addClass("hide");
+            $('#txtSkype').val("");
+        }
+        else
+            $("#dvSkype").removeClass("hide");
+    });
+    $("#chkWhtsApp").on('change', function () {
+        if (!$(this).is(':checked')) {
+            $("#dvWhtsApp").addClass("hide");
+            $('#txtWhtsApp').val("");
+        }
+        else
+            $("#dvWhtsApp").removeClass("hide");
+    });
+    $("#chkPhoneNo").on('change', function () {
+        if (!$(this).is(':checked')) {
+            $("#dvPhoneNo").addClass("hide");
+            $('#txtPhoneNumber').val("");
+        }
+        else
+            $("#dvPhoneNo").removeClass("hide");
+    });
+    function isEmail(email) {
+        var regex = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        return regex.test(email);
+    }
+</script>

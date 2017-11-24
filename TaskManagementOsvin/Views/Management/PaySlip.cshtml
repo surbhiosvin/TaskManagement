@@ -1,0 +1,88 @@
+﻿
+@{
+    ViewBag.Title = "PaySlip";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@model TaskManagementOsvin.Models.PaySlipModel
+<div class="page-content">
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="~/Dashboard/Welcome">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="#">Employee Salary Slip</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            @*<li>
+                    <span>Page Layouts</span>
+                </li>*@
+        </ul>
+        <div class="page-toolbar">
+            <div class="btn-group pull-right">
+                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li>
+                        <a href="#">
+                            <i class="icon-bell"></i> Action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-shield"></i> Another action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-user"></i> Something else here
+                        </a>
+                    </li>
+                    <li class="divider"> </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-bag"></i> Separated link
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE BAR -->
+    <h1 class="page-title">
+        Employee Salary Slip
+        <small></small>
+    </h1>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-layers font-green"></i>
+                        <span class="caption-subject font-green sbold uppercase">Employee Salary Slip</span>
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    @{ Html.RenderPartial("_PaySlip", Model);}
+                </div>
+                <div class="form-actions text-center">
+                    <div class="btn-set">
+                        <a href="~/Management/GenerateSalarySlip?UserId=235" class="btn green">Edit</a>
+                        <a href="~/Management/EmailPaySlipToEmployee" class="btn red">Send Mail To Employee</a>
+                        <a href="~/Management/GeneratePaySlipPdf" class="btn purple">Generate PDF</a>
+                        <a href="~/Management/GenerateSalarySlip" class="btn blue">New Salary Slip</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END VALIDATION STATES-->
+    </div>
+
+</div>
+

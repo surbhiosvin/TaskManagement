@@ -1,0 +1,377 @@
+﻿
+@{
+    ViewBag.Title = "GenerateSalarySlip";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model TaskManagementOsvin.Models.PaySlipModel
+<div class="page-content">
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="~/Dashboard/Welcome">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="#">Employee Salary Slip</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            @*<li>
+                    <span>Page Layouts</span>
+                </li>*@
+        </ul>
+        <div class="page-toolbar">
+            <div class="btn-group pull-right">
+                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li>
+                        <a href="#">
+                            <i class="icon-bell"></i> Action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-shield"></i> Another action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-user"></i> Something else here
+                        </a>
+                    </li>
+                    <li class="divider"> </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-bag"></i> Separated link
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE BAR -->
+    <h1 class="page-title">
+        Make Salary Slip
+        <small></small>
+    </h1>
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN VALIDATION STATES-->
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-layers font-green"></i>
+                        <span class="caption-subject font-green sbold uppercase">Make Salary Slip</span>
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    <!-- BEGIN FORM-->
+                    @using (Html.BeginForm("GenerateSalarySlip", "Management", FormMethod.Post, new { enctype = "multipart/form-data", @id = "frmMakeSalarySlip", @class = "form-horizontal" }))
+                    {
+                        @Html.HiddenFor(model => model.PaySlipID)
+                        <div class="form-body">
+                            <div class="alert @ViewBag.AlertType @ViewBag.Class">
+                                @*<button type="button" class="close" data-close="alert"></button>*@
+                                <a class="close" onclick="$('.alert').hide()">×</a>
+                                <span> @Html.ValidationMessage("CustomError") </span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">EMPLOYEE PAY SLIP OF MONTH</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.PaySlipMonth, new { @class = "form-control monthpicker", @placeholder = "Select Pay Slip Month" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.DateOfJoining)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Employee Name</label>
+                                <div class="col-md-6">
+                                    @Html.DropDownListFor(m => m.EmployeeID, new SelectList(Model.listEmployees, "UserId", "EmployeeName"), "Please Select", new { @class = "form-control ddlEmp" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.EmployeeID)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Employee Code</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.EmployeeCode, new { @class = "form-control", @placeholder = "Enter Employee Code" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.EmployeeCode)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Department</label>
+                                <div class="col-md-6">
+                                    @Html.DropDownListFor(m => m.DepartmentId, new SelectList(Model.listDepartments, "DepartmentId", "DepartmentName"), "Please Select", new { @class = "form-control ddlDept" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.DepartmentId)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Designation</label>
+                                <div class="col-md-6">
+                                    @if (Model.listDesignations == null || Model.listDesignations.Count <= 0)
+                                    {
+                                        <select class="form-control ddlDesignation" id="DesignationId" name="DesignationId">
+                                            <option value="">Please Select</option>
+                                        </select>
+                                    }
+                                    else
+                                    {
+                                        @Html.DropDownListFor(m => m.DesignationId, new SelectList(Model.listDesignations, "DesignationId", "DesignationName"), "Please Select", new { @class = "form-control ddlDesignation" })
+                                    }
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.DesignationId)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Bank Account Number</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.BankAccountNumber, new { @class = "form-control", @placeholder = "Enter Bank Account Number" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.BankAccountNumber)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Pan Card No</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.PanCardNumber, new { @class = "form-control", @placeholder = "Enter PanCard Number" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.PanCardNumber)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Date Of Joining</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.DateOfJoining, new { @class = "form-control datepicker", @placeholder = "Select Date" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.DateOfJoining)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">No. of Days in Current Month</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.NumberOfDaysInCurrentMonth, new { @class = "form-control", @placeholder = "Enter Days In Current Month" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.NumberOfDaysInCurrentMonth)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Number Of Days Worked</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.NumberOfDaysWorked, new { @class = "form-control", @placeholder = "Enter Number Of Days Worked" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.NumberOfDaysWorked)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Basic Salary</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.BasicSalary, new { @class = "form-control amount", @placeholder = "Enter Basic Salary" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.BasicSalary)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Medical Allowance</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.MedicalAllowance, new { @class = "form-control amount", @placeholder = "Enter Medical Allowance" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.MedicalAllowance)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">House Rent Allowance</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.HouseRentAllowance, new { @class = "form-control amount", @placeholder = "Enter House Rent Allowance" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.HouseRentAllowance)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Conveyance Allowance</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.ConveyanceAllowance, new { @class = "form-control amount", @placeholder = "Enter Conveyance Allowance" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.ConveyanceAllowance)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Other Allowance</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.OtherAllowance, new { @class = "form-control amount", @placeholder = "Enter Other Allowance" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.OtherAllowance)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Gross Salary</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.GrossSalary, new { @class = "form-control disabled", @readonly = true})
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.GrossSalary)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">TDS</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.TDS, new { @class = "form-control amount", @placeholder = "Enter TDS" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.TDS)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Amount Of Leave Deduction</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.AmountForLeaveDeduction, new { @class = "form-control amount", @placeholder = "Enter Amount Of Deduction" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.AmountForLeaveDeduction)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Take Home Salary</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(m => m.TakeHomeSalary, new { @class = "form-control disabled", @readonly = "true" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.TakeHomeSalary)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions text-center">
+                            <div class="btn-set">
+                                <button type="submit" class="btn green">Submit</button>
+                                <button type="button" class="btn red">Cancel</button>
+                                @*<a href="~/Management/AddUpdateUser" class="btn blue">Back</a>*@
+                            </div>
+                        </div>
+                    }
+                    <!-- END FORM-->
+                </div>
+            </div>
+        </div>
+        <!-- END VALIDATION STATES-->
+    </div>
+
+</div>
+<style>
+    .disabled {
+        background-color: lightgray;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.monthpicker').datepicker({
+            format: "mm-yyyy",
+            viewMode: "months",
+            minViewMode: "months"
+        });
+        CalculateAmount();
+        CalculateTakeHomeSalary
+    });
+    $(document).on('change', '.ddlDept', function (e) {
+        //debugger
+        var DepartmentId = $(".ddlDept").val();
+        if (typeof DepartmentId != 'undefined') {
+            var url = "/api/Management/GetDesignationByDeptId?DepartmentId=" + DepartmentId
+            $.ajax({
+                type: "GET",
+                url: url,
+                contentType: "application/json; charset=utf-8",
+                dataType: "text",
+                success: function (response) {
+                    var response = JSON.parse(response);
+                    var listDesignations = response.listDesignations;
+                    var ddlDesignation = $(".ddlDesignation");
+                    $(".ddlDesignation > option").remove();
+                    ddlDesignation.append("<option value=''>Please Select</option>")
+                    for (var i = 0; i < listDesignations.length; i++) {
+                        ddlDesignation.append($("<option />").val(listDesignations[i].DesignationId).text(listDesignations[i].DesignationName));
+                    }
+                },
+                failure: function (msg) {
+                    console.log(error);
+                }
+            });
+        }
+    });
+    $(".amount").on("keydown keyup", function () {
+        CalculateAmount();
+    });
+    function CalculateAmount() {
+        debugger;
+        var BasicSalary = $("#BasicSalary").val();
+        var MedicalAllowance = $("#MedicalAllowance").val();
+        var HouseRentAllowance = $("#HouseRentAllowance").val();
+        var ConveyanceAllowance = $("#ConveyanceAllowance").val();
+        var OtherAllowance = $("#OtherAllowance").val();
+        if (BasicSalary == "")
+            BasicSalary = 0;
+        if (MedicalAllowance == "")
+            MedicalAllowance = 0;
+        if (HouseRentAllowance == "")
+            HouseRentAllowance = 0;
+        if (ConveyanceAllowance == "")
+            ConveyanceAllowance = 0;
+        if (OtherAllowance == "")
+            OtherAllowance = 0;
+
+
+        var GrossSalary = (parseInt(BasicSalary) + parseInt(MedicalAllowance) + parseInt(HouseRentAllowance) + parseInt(ConveyanceAllowance) + parseInt(OtherAllowance));
+        if (!isNaN(GrossSalary)) {
+            $('#GrossSalary').val(GrossSalary);
+        }
+        var TDS = $("#TDS").val();
+        var AmountOfLeaveDeduction = $("#AmountForLeaveDeduction").val();
+        if (TDS == "")
+            TDS = 0;
+        if (AmountOfLeaveDeduction == "")
+            AmountOfLeaveDeduction = 0;
+
+        var TakeHomeSalary = (parseInt(GrossSalary) - (parseInt(TDS) + parseInt(AmountOfLeaveDeduction)));
+
+        if (!isNaN(GrossSalary)) {
+            $('#TakeHomeSalary').val(TakeHomeSalary);
+        }
+    }
+
+
+    function CalculateTakeHomeSalary() {
+        var GrossSalary = $('#GrossSalary').val();
+        var TDS = $('#TDS').val();
+        var AmountOfLeaveDeduction = $('#TDS').val();
+        if (GrossSalary == "")
+            GrossSalary = 0;
+        if (TDS == "")
+            TDS = 0;
+        if (AmountOfLeaveDeduction == "")
+            AmountOfLeaveDeduction = 0;
+
+        var TakeHomeSalary = (parseInt(GrossSalary) - (parseInt(TDS) + parseInt(AmountOfLeaveDeduction)));
+        if (!isNaN(TakeHomeSalary)) {
+            $('#TakeHomeSalary').val(TakeHomeSalary);
+        }
+    }
+</script>

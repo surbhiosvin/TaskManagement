@@ -145,6 +145,10 @@
 
 <!--AddUpdate modal -->
 <script type="text/javascript"> 
+    jQuery(document).on('ready', function () {
+        $('#tbl_Dept').DataTable({
+        });      
+    });
     function DeleteDepartment(param) {
         $(".dvAlert").hide();
         $("#lblMessage").html("");

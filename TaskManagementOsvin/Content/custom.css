@@ -33,3 +33,7 @@
 .page-content {
     background: #eef1f5;
 }
+.oddColumn{
+    /*float:right;*/
+    font-weight:bold;
+}

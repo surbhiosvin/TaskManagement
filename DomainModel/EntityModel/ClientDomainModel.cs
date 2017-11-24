@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace DomainModel.EntityModel
 {
     public class ClientDomainModel
-    {
+    {     
         public long ClientId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -22,5 +22,7 @@ namespace DomainModel.EntityModel
         public string Whatsapp { get; set; }
         public string PhoneNumber { get; set; }
         public string Archived { get; set; }
+        public string ProjectTitle { get; set; }
+        public int ProjectId { get; set; }
     }
 }

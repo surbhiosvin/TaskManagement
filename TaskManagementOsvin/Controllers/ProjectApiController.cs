@@ -40,5 +40,60 @@ namespace TaskManagementOsvin.Controllers
                 });
             }
         }
+        [Route("~/api/Project/GetProjectFullDetails")]
+        public HttpResponseMessage GetProjectFullDetails(long ProjectId)
+        {
+            HttpResponseMessage httpResponse = new HttpResponseMessage();
+            try
+            {
+                var ProjectType = ProjectRepository.GetProjectFullDetails(ProjectId);
+                if (ProjectType == null)
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, ProjectType);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+        // GET api/<controller>
+        [Route("~/api/Project/GetProjectAddendumDetails")]
+        public HttpResponseMessage GetProjectAddendumDetails(long ProjectId)
+        {
+            HttpResponseMessage httpResponse = new HttpResponseMessage();
+            try
+            {
+                var listAddendums = ProjectRepository.GetProjectAddendumDetails(ProjectId);
+                if (listAddendums == null)
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, listAddendums);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
     }
 }

@@ -158,7 +158,7 @@ namespace Providers.Providers.SP.Repositories
                 {
                     objRes.isSuccess = true;
                     objRes.response = "Department deleted successfully.";
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -181,7 +181,7 @@ namespace Providers.Providers.SP.Repositories
                 {
                     objRes.isSuccess = true;
                     objRes.response = "Designation deleted successfully.";
-                }               
+                }
             }
             catch (Exception ex)
             {
@@ -293,7 +293,7 @@ namespace Providers.Providers.SP.Repositories
             {
                 int DesignationId = objHelper.ExecuteScalar("AddUpdateDesignation", new
                 {
-                    DesignationId=model.DesignationId,
+                    DesignationId = model.DesignationId,
                     DepartmentId = model.DepartmentId,
                     DesignationName = model.DesignationName,
                     IsActive = true,
@@ -365,18 +365,18 @@ namespace Providers.Providers.SP.Repositories
             }
             return objRes;
         }
-        public List<DesignationDomainModel> GetDesignationsBasedOnRole(long DepartmentId=0)
+        public List<DesignationDomainModel> GetDesignationsBasedOnRole(long DepartmentId = 0)
         {
             List<DesignationDomainModel> listDesignation = new List<DesignationDomainModel>();
             try
             {
-                if(DepartmentId>0)
+                if (DepartmentId > 0)
                 {
-                    listDesignation = objHelper.Query<DesignationDomainModel>("GET_DESIGNATION_BY_TEAMLEADER_DEPARTMENT_ID", new {DepartmentId=DepartmentId }).ToList();
+                    listDesignation = objHelper.Query<DesignationDomainModel>("GET_DESIGNATION_BY_TEAMLEADER_DEPARTMENT_ID", new { DepartmentId = DepartmentId }).ToList();
                 }
                 else
                 {
-                    listDesignation = objHelper.Query<DesignationDomainModel>("GetAllDesignations",null).ToList();
+                    listDesignation = objHelper.Query<DesignationDomainModel>("GetAllDesignations", null).ToList();
                 }
             }
             catch (Exception ex)
@@ -384,6 +384,67 @@ namespace Providers.Providers.SP.Repositories
                 ErrorLog.LogError(ex);
             }
             return listDesignation;
+        }
+        public PaySlipDomainModel AddUpdateEmployeePaySlip(PaySlipDomainModel model)
+        {
+            PaySlipDomainModel PaySlip = new PaySlipDomainModel();
+            try
+            {
+                PaySlip = objHelper.Query<PaySlipDomainModel>("AddEmployeePaySlip", new
+                {
+                    PaySlipId = model.PaySlipID,
+                    EmployeeId = model.EmployeeID,
+                    DepartmentId = model.DepartmentId,
+                    DesignationId = model.DesignationId,
+                    EmployeeCode = model.EmployeeCode,
+                    BankAccountNumber = model.BankAccountNumber,
+                    PanCardNo = model.PanCardNumber,
+                    DateOfJoining = model.DateOfJoining,
+                    PaySlipMonth = model.PaySlipMonth,
+                    NumberOfDaysInCurrentMonth = model.NumberOfDaysInCurrentMonth,
+                    NumberOfDaysWorked = model.NumberOfDaysWorked,
+                    BasicSalary = model.BasicSalary,
+                    MedicalAllowance = model.MedicalAllowance,
+                    OtherAllowance = model.OtherAllowance,
+                    HouseRentAllowance = model.HouseRentAllowance,
+                    ConveyanceAllowance = model.ConveyanceAllowance,
+                    GrossSalary = model.GrossSalary,
+                    TDS = model.TDS,
+                    AmountForLeaveDeducation = model.AmountForLeaveDeduction,
+                    TakeHomeSalary = model.TakeHomeSalary,
+                    CreatedBy = model.CreatedBy
+                }).FirstOrDefault();
+                if (PaySlip != null && PaySlip.PaySlipID > 0)
+                {
+                    PaySlip.isSuccess = true;
+                    PaySlip.response = "Success";
+                }
+                else
+                {
+                    PaySlip.isSuccess = false;
+                    PaySlip.response = "Something went wrong, please try again.";
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError(ex);
+                PaySlip.isSuccess = false;
+                PaySlip.response = ex.Message;
+            }
+            return PaySlip;
+        }
+        public List<EmployeeDomainModel> GetEmployeeList()
+        {
+            List<EmployeeDomainModel> listEmployees = new List<EmployeeDomainModel>();
+            try
+            {
+                listEmployees = objHelper.Query<EmployeeDomainModel>("GetEmployeeList", null).ToList();
+            }
+            catch(Exception ex)
+            {
+                ErrorLog.LogError(ex);
+            }
+            return listEmployees;
         }
     }
 }
