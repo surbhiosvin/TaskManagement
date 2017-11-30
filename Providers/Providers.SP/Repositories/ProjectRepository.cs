@@ -37,7 +37,7 @@ namespace Providers.Providers.SP.Repositories
             {
                 objRes = objHelper.Query<ProjectFullDetailsDomainModel>("GET_PROJECT_FULL_DETAILS_MAIN_NEW_MVC", new { ProjectId = ProjectId }).FirstOrDefault();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ErrorLog.LogError(ex);
             }
@@ -55,6 +55,219 @@ namespace Providers.Providers.SP.Repositories
                 ErrorLog.LogError(ex);
             }
             return listAddendums;
+        }
+        public List<ProjectAssignToUserTotalWorkingHoursDomainModel> GetProjectAssignToUserWithTotalWorkingHours(long ProjectId = 0, long DepartmentId = 0, string Status = "")
+        {
+            List<ProjectAssignToUserTotalWorkingHoursDomainModel> listEmployeeHours = new List<ProjectAssignToUserTotalWorkingHoursDomainModel>();
+            try
+            {
+                listEmployeeHours = objHelper.Query<ProjectAssignToUserTotalWorkingHoursDomainModel>("GET_PROJECT_ASSIGN_TO_USER_WITH_TOTAL_WORKING_HOURS_NEW", new
+                {
+                    projectid = ProjectId,
+                    DepartmentId = DepartmentId,
+                    Status = Status
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError(ex);
+            }
+            return listEmployeeHours;
+        }
+        public List<ProjectDomainModel> GetProjectList()
+        {
+            List<ProjectDomainModel> listProjects = new List<ProjectDomainModel>();
+            try
+            {
+                listProjects = objHelper.Query<ProjectDomainModel>("GetProjectList", null).ToList();
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError(ex);
+            }
+            return listProjects;
+        }
+        public ResponseDomainModel AddProjectWorkingHoursBeforePms(ProjectWorkingHoursBeforePMSDomainModel model)
+        {
+            ResponseDomainModel objRes = new ResponseDomainModel();
+            try
+            {
+                var add = objHelper.Query<string>("ADD_PROJECT_WORKING_HOURS_BEFORE_PMS", new { projectid = model.ProjectId, Workinghours = model.WorkinghHours, createddate = model.CreatedDate, createdby = model.CreatedBy }).FirstOrDefault();
+                if (add == "Insert")
+                {
+                    objRes.isSuccess = true;
+                    objRes.response = "Working Hours saved Successfully.";
+                }
+                else if (add == "Update")
+                {
+                    objRes.isSuccess = true;
+                    objRes.response = "Working Hours updated Successfully.";
+                }
+                else
+                {
+                    objRes.isSuccess = false;
+                    objRes.response = "Working Hours not saved.";
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError(ex);
+                objRes.isSuccess = false;
+                objRes.response = "Something went wrong, please try again.";
+            }
+            return objRes;
+        }
+        public ResponseDomainModel AddUpdateReportCategory(ProjectReportCategoryDomainModel model)
+        {
+            ResponseDomainModel objRes = new ResponseDomainModel();
+            try
+            {
+                var CategoryId = objHelper.ExecuteScalar("AddUpdateReportCategory", new
+                {
+                    CategoryId = model.CategoryId,
+                    DepartmentId = model.DepartmentId,
+                    CategoryName = model.CategoryName,
+                    IsActive = model.IsActive,
+                    CreatedDate = model.CreatedDate,
+                    CreatedBy = model.CreatedBy
+                });
+                if (model.CategoryId > 0)
+                {
+                    objRes.isSuccess = true;
+                    objRes.response = "Category updated successfully.";
+                }
+                else if (CategoryId > 0)
+                {
+                    objRes.isSuccess = true;
+                    objRes.response = "Category added successfully.";
+                }
+                else
+                {
+                    objRes.isSuccess = false;
+                    objRes.response = "Something went wrong, please try again.";
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError(ex);
+                objRes.isSuccess = false;
+                objRes.response = "Something went wrong, please try again.";
+            }
+            return objRes;
+        }
+        public ResponseDomainModel ActivateDeactivateProjectReportCategory(long CategoryId, bool IsActive)
+        {
+            ResponseDomainModel objRes = new ResponseDomainModel();
+            try
+            {
+                var res = objHelper.Execute("ActivateDeactivateProjectReportCategory", new { CategoryId = CategoryId, IsActive = IsActive });
+                if (res > 0)
+                {
+                    objRes.isSuccess = true;
+                    objRes.response = "sucsess";
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError(ex);
+            }
+            return objRes;
+        }
+        public ResponseDomainModel DeleteProjectReportCategory(long CategoryId)
+        {
+            ResponseDomainModel objRes = new ResponseDomainModel();
+            try
+            {
+                var res = objHelper.Execute("DeleteProjectReportCategory", new { CategoryId = CategoryId });
+                if (res > 0)
+                {
+                    objRes.isSuccess = true;
+                    objRes.response = "sucsess";
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError(ex);
+            }
+            return objRes;
+        }
+        public List<ProjectReportCategoryDomainModel> GetProjectReportCategories()
+        {
+            List<ProjectReportCategoryDomainModel> listProjectReportCategories = new List<ProjectReportCategoryDomainModel>();
+            try
+            {
+                listProjectReportCategories = objHelper.Query<ProjectReportCategoryDomainModel>("GetProjectReportCategories", null).ToList();
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError(ex);
+            }
+            return listProjectReportCategories;
+        }
+        public ResponseDomainModel AddProjectTimeEstimation(AddendumDomainModel model)
+        {
+            ResponseDomainModel objRes = new ResponseDomainModel();
+            try
+            {
+                int ProjectTimeEstimation = objHelper.ExecuteScalar("AddProjectTimeEstimation", new
+                {
+                    @ProjectId = model.ProjectId,
+                    EstimateHours = model.EstimateHours,
+                    AssignHours = model.AssignHours,
+                    UploadDocument = model.UploadDocument,
+                    DeveloperCodingHours = model.DeveloperCodingHours,
+                    WebServiceHours = model.WebServiceHours,
+                    DesignHours = model.DesignHours,
+                    QAHours = model.QAHours,
+                    IsApprove = model.IsApprove,
+                    HourlyRate = model.HourlyRate,
+                    CreatedDate = model.CreatedDate
+                });
+                if (ProjectTimeEstimation > 0)
+                {
+                    objRes.isSuccess = true;
+                    objRes.response = "Project Time Estimation saved successfully";
+                }
+                else
+                {
+                    objRes.isSuccess = false;
+                    objRes.response = "Something went wrong, please try again.";
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError(ex);
+                objRes.isSuccess = false;
+                objRes.response = "Something went wrong, please try again.";
+            }
+            return objRes;
+        }
+        public ResponseDomainModel MergeProject(long projectmergeto, long projectmergefrom)
+        {
+            ResponseDomainModel objRes = new ResponseDomainModel();
+            try
+            {
+                var merge = objHelper.Query<string>("MERGEPROJECT", new { projectmergeto = projectmergeto, projectmergefrom = projectmergefrom}).FirstOrDefault();
+                var add= objHelper.Query<string>("ADD_MERGE_PROJECT_DETAILS", new { projectmergeto = projectmergeto, projectmergefrom = projectmergefrom }).FirstOrDefault();
+                if (merge == "Successfull" && add== "Insert")
+                {
+                    objRes.isSuccess = true;
+                    objRes.response = "Project Merged Successfully.";
+                }
+                else
+                {
+                    objRes.isSuccess = false;
+                    objRes.response = "something wrong with database";
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError(ex);
+                objRes.isSuccess = false;
+                objRes.response = "Something went wrong, please try again.";
+            }
+            return objRes;
+        }
         }
 
         public ResponseDomainModel AddUpdateProject(AddUpdateProjectDomainModel model)

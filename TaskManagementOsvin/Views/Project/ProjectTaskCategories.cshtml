@@ -1,10 +1,8 @@
 ﻿
 @{
-    ViewBag.Title = "Designations";
+    ViewBag.Title = "Project Task Categories";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@using TaskManagementOsvin.Security;
-@using TaskManagementOsvin.Models;
 <div class="page-content">
     <!-- BEGIN PAGE BAR -->
     <div class="page-bar">
@@ -14,7 +12,7 @@
                 <i class="fa fa-circle"></i>
             </li>
             <li>
-                <a href="#">Designations</a>
+                <a href="#">Project Task Categories</a>
                 <i class="fa fa-circle"></i>
             </li>
             @*<li>
@@ -56,7 +54,7 @@
     <!-- END PAGE BAR -->
     <!-- BEGIN PAGE TITLE-->
     <h1 class="page-title">
-        Add / Update Designations
+        Add / Update Project Task Categories
         @*<small>blank page layout</small>*@
     </h1>
     <!-- END PAGE TITLE-->
@@ -67,55 +65,52 @@
                 <div class="portlet-title">
                     <div class="caption font-green">
                         <i class="icon-layers font-green"></i>
-                        <span class="caption-subject font-green bold uppercase">Designation Details</span>
+                        <span class="caption-subject font-green bold uppercase">Project Task Categories</span>
                     </div>
-                    <a class="btn btn-sm green table-group-action-submit pull-right" href="#" id="btnAddDesignation">
-                        <i class="fa fa-plus"></i> Add Designation
+                    <a class="btn btn-sm green table-group-action-submit pull-right" href="#" id="btnAddFeedback">
+                        <i class="fa fa-plus"></i> Add Project Task Category
                     </a>
                 </div>
                 <div class="portlet-body">
                     <div class="alert alert-success dvAlert @ViewBag.Class">
-                        @*<button type="button" class="close" data-close="alert"></button>*@
                         <a class="close" onclick="$('.alert').hide()">×</a>
                         <span id="lblMessage"> @ViewBag.Message </span>
                     </div>
-                    <div class="row" id="dvAddDesignation" style="display:none">
+                    <div class="row" id="dvAddProjectTaskCategory" style="display:none">
                         <div class="col-md-12">
-                            @using (Html.BeginForm("AddDesignation", "Management", FormMethod.Post, new { enctype = "multipart/form-data", @id = "frmAddDesignation", @class = "form-horizontal" }))
-                            {
+                            <form class="form-horizontal">
                                 <div class="form-body">
-                                    @*<div class="text-danger">
-                                            <label id="lblmsg"></label>
-                                        </div>*@
-                                    <input type="hidden" id="hdnDesignationId" />
-                                    <input type="hidden" id="hdnDeptId" />
-                                    <input type="hidden" id="hdnRole" value="@UserManager.user.roleType" />
-                                    @if (UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType == roleTypeModel.HR)
-                                    {
-                                        <div class="form-group">
-                                            <label class="control-label col-md-4">
-                                                Department
-                                                <span class="required"> * </span>
-                                            </label>
-                                            <div class="col-md-4">
-                                                <select class="form-control" id="ddlDepartment">
-                                                    <option value="0">Please select</option>
-                                                    @foreach (var Department in ViewBag.listDepartments)
-                                                    {
-                                                        <option value="@Department.DepartmentId">@Department.DepartmentName</option>
-                                                    }
-                                                </select>
-                                            </div>
-                                        </div>
-                                    }
                                     <div class="form-group">
-                                        <input type="hidden" id="hdnDeptId" />
+                                        <input type="hidden" id="hdnCategoryId" />
                                         <label class="control-label col-md-4">
-                                            Designation
+                                            Department
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-4">
-                                            <input tye="text" class="form-control" id="txtDesignation" />
+                                            @Html.DropDownList("ddlDepartment", ViewBag.listDepartments as SelectList, "Select Department", new { @class = "form-control"})
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="hidden" id="hdnCategoryId" />
+                                        <label class="control-label col-md-4">
+                                            Project Task Category Name
+                                            <span class="required"> * </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input tye="text" class="form-control" id="txtProjectTaskCategory" placeholder="Enter Project Task Category"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4">
+                                            Status
+                                            <span class="required"> * </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <select id="ddlStatus" class="form-control">
+                                                <option value>Please Select</option>
+                                                <option value="1">True</option>
+                                                <option value="0">False</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -126,43 +121,35 @@
                                         </div>
                                     </div>
                                 </div>
-                            }
+                            </form>
                         </div>
                     </div>
-                    <div class="row" id="dvDesignationDetails">
-                        @Html.Action("_Designations", "Management")
+                    <div class="row" id="dvProjectCategoryDetails">
+                        @Html.Action("_ProjectTaskCategories", "Project")
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 <!--AddUpdate modal -->
 <script type="text/javascript">
     jQuery(document).on('ready', function () {
-        var table = $('#tbl_Designation').DataTable();
+        var table = $('#tbl_ProjectReportCategory').DataTable();
         table.state.clear();
         table.destroy();
-        $('#tbl_Designation').DataTable({
+       $('#tbl_ProjectReportCategory').DataTable({
             "bStateSave": true,
         });
     });
-    function DeleteDesignation(param) {
-        $(".dvAlert").hide();
-        $("#lblMessage").html("");
-        var DesignationId = param;
+    function DeleteProjectReportCategory(CategoryId) {
         $.ajax({
             type: "Get",
             contentType: "application/json; charset=utf-8",
-            url: "/Management/DeleteDesignationById?DesignationId=" + DesignationId,
-            beforeSend: function () {
-                $("#lblMessage").html("Please wait...");
-                $(".dvAlert").show();
-            },
+            url: "/Project/DeleteProjectReportCategory?CategoryId=" + CategoryId,
             success: function (response) {
-                $('#dvDesignationDetails').html(response);
-                $('#tbl_Designation').DataTable({
+                $('#dvProjectCategoryDetails').html(response);
+                $('#tbl_ProjectReportCategory').DataTable({
                     "bStateSave": true,
                     "fnStateSave": function (oSettings, oData) {
                         localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
@@ -172,37 +159,26 @@
                         return JSON.parse(data);
                     }
                 });
-                $("#lblMessage").html("Designation deleted successfully");
+                $("#lblMessage").html("Category deleted successfully");
                 $(".dvAlert").show();
-                //if (response.isSuccess == true) {
-                //    if (response.response != "You are not allowed to delete this Designation.") {
-                //        $("#row_" + DesignationId).remove();
-                //    }
-                //    $("#lblMessage").html(response.response);
-                //    $(".dvAlert").show();
-                //}
-                //else {
-                //    $("#lblMessage").html(response.response);
-                //    $(".dvAlert").show();
-                //}
             },
             error: function (error) {
-                $("#lblMessage").html("Something went wrong, please try again");
+                $("#lblMessage").html("Something went wrong, please try again.");
                 $(".dvAlert").show();
                 console.log(error);
             }
         });
     }
-    function ActivateDeactivateDesignation(DesignationId, IsActive) {
+    function ActivateDeactivateProjectReportCategory(CategoryId, IsActive) {
         $(".dvAlert").hide();
         $("#lblMessage").html("");
         $.ajax({
             type: "Get",
             contentType: "application/json; charset=utf-8",
-            url: "/Management/ActivateDeactivateDesignation?DesignationId=" + DesignationId + "&IsActive=" + IsActive,
+            url: "/Project/ActivateDeactivateProjectReportCategory?CategoryId=" + CategoryId + "&IsActive=" + IsActive,
             success: function (response) {
-                $('#dvDesignationDetails').html(response);
-                $('#tbl_Designation').DataTable({
+                $('#dvProjectCategoryDetails').html(response);
+                $('#tbl_ProjectReportCategory').DataTable({
                     "bStateSave": true,
                     "fnStateSave": function (oSettings, oData) {
                         localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
@@ -214,12 +190,12 @@
                 });
                 //if (response.isSuccess == true) {
                 //    if (IsActive == false) {
-                //        $("#StatusActiveLink_" + DesignationId).remove();
-                //        $("#StatusActive_" + DesignationId).append('<a id="StatusActiveLink_' + DesignationId + '" href="#" onclick="ActivateDeactivateDesignation(' + DesignationId + ', true)"><img alt="In Active" src="/assets/global/img/Guiimages/InActive.png" width="30px" height="30px"/></a>');
+                //        $("#StatusActiveLink_" + CategoryId).remove();
+                //        $("#StatusActive_" + CategoryId).append('<a title="InActive" id="StatusActiveLink_' + CategoryId + '" href="#" onclick="ActivateDeactivateProjectReportCategory(' + CategoryId + ', true)"><img alt="In Active" src="/assets/global/img/Guiimages/InActive.png" width="30px" height="30px"/></a>');
                 //    }
                 //    else {
-                //        $("#StatusActiveLink_" + DesignationId).remove();
-                //        $("#StatusActive_" + DesignationId).append('<a id="StatusActiveLink_' + DesignationId + '" href="#" onclick="ActivateDeactivateDesignation(' + DesignationId + ', false)"><img alt="Active" src="/assets/global/img/Guiimages/Active.png" width="30px" height="30px"/></a>');
+                //        $("#StatusActiveLink_" + CategoryId).remove();
+                //        $("#StatusActive_" + CategoryId).append('<a title="Active" id="StatusActiveLink_' + CategoryId + '" href="#" onclick="ActivateDeactivateProjectReportCategory(' + CategoryId + ', false)"><img alt="Active" src="/assets/global/img/Guiimages/Active.png" width="30px" height="30px"/></a>');
                 //    }
                 //}
             },
@@ -228,50 +204,57 @@
             }
         });
     }
+
     $("#btnAdd").click(function () {
         $("#lblMessage").html("");
         $(".dvAlert").hide();
-        var DepartmentId = $("#ddlDepartment").val();
-        var Designation = $("#txtDesignation").val();
-        var Role = $("#hdnRole").val();
         var IsValid = true;
-        if ((DepartmentId == undefined || DepartmentId <= 0) && (Role == "Admin" || Role == "HR")) {
+        var DepartmentId = $("#ddlDepartment").val();
+        var CategoryName = $("#txtProjectTaskCategory").val();
+        var Status = $('#ddlStatus').val();
+
+        if (DepartmentId == null || DepartmentId <= 0) {
             $('#ddlDepartment').css('border-color', 'red');
             IsValid = false;
         }
         else {
             $('#ddlDepartment').css('border-color', '');
         }
-        if (Designation == null || Designation == "") {
-            $('#txtDesignation').css('border-color', 'red');
+       
+        if (CategoryName == null || CategoryName == "") {
+            $('#txtProjectTaskCategory').css('border-color', 'red');
             IsValid = false;
         }
         else {
-            $('#txtDesignation').css('border-color', '');
+            $('#txtProjectTaskCategory').css('border-color', '');
+        }       
+        if (Status == null ||Status=="") {
+            $('#ddlStatus').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#ddlStatus').css('border-color', '');
         }
         if (IsValid == false) {
             return false;
         }
         var model = {
             DepartmentId: DepartmentId,
-            DesignationName: Designation
+            CategoryName: CategoryName,
+            IsActive: Status == 1 ? true : false
         }
         $.ajax({
             type: "POST",
             contentType: "application/json; charset=utf-8",
-            url: "/Management/AddupdateDesignation",
+            url: "/Project/AddUpateProjectTaskCategories",
             data: JSON.stringify(model),
             beforeSend: function () {
                 $("#lblMessage").html("Please wait...");
                 $(".dvAlert").show();
             },
             success: function (response) {
-                $('#dvDesignationDetails').html(response);
-                $("#lblMessage").html("Designation added successfully");
-                $(".dvAlert").show();
-                $('#ddlDepartment').val(0);
-                $("#txtDesignation").val('');
-                $('#tbl_Designation').DataTable({
+                $('#dvProjectCategoryDetails').html(response);
+                $('#tbl_ProjectReportCategory').DataTable({
                     "bStateSave": true,
                     "fnStateSave": function (oSettings, oData) {
                         localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
@@ -281,19 +264,10 @@
                         return JSON.parse(data);
                     }
                 });
-                //if (response.isSuccess == true) {
-                //    $("#lblMessage").html("Designation added successfully");
-                //    $(".dvAlert").show();
-                //    $("#txtDesignation").val("");
-                //    $("#ddlDepartment").val(0);
-                //    setTimeout(function () {
-                //        window.location.href = "/Management/Designations";
-                //    }, 1700);
-                //}
-                //else {
-                //    $("#lblMessage").html(response.response);
-                //    $(".dvAlert").show();
-                //}
+                $("#lblMessage").html("Category added successfully");
+                $(".dvAlert").show();
+                ClearFields();
+
             },
             error: function (error) {
                 $("#lblMessage").html("Something went wrong, please try again");
@@ -302,60 +276,69 @@
             }
         });
     });
-    function EditDesignation(DesignationId, DepartmentId, DesignationName) {
+    function EditProjectReportCategory(Category) {
         $("#lblMessage").html("");
         $(".dvAlert").hide();
-        $("#dvAddDesignation").show();
-        $('#ddlDepartment').css('border-color', '');
-        $('#txtDesignation').css('border-color', '');
-        $("#hdnDesignationId").val(DesignationId);
-        $("#hdnDeptId").val(DepartmentId);
-        $("#ddlDepartment").val(DepartmentId);
-        $("#txtDesignation").val(DesignationName);
+        $("#dvAddProjectTaskCategory").show();
+        $("#hdnCategoryId").val(Category.CategoryId);
+        $("#ddlDepartment").val(Category.DepartmentId);
+        $("#txtProjectTaskCategory").val(Category.CategoryName);
+        $("#ddlStatus").val(Category.IsActive == true ? 1 : 0);
         $("#btnAdd").hide();
         $("#btnUpdate").show();
     }
     $("#btnUpdate").click(function () {
         $("#lblMessage").html("");
         $(".dvAlert").hide();
-        var DepartmentId = $("#ddlDepartment").val();
-        var DesignationName = $("#txtDesignation").val()
-        var Role = $("#hdnRole").val();
         var IsValid = true;
-        if ((DepartmentId == undefined || DepartmentId <= 0) && (Role == "Admin" || Role == "HR")) {
+        var DepartmentId = $("#ddlDepartment").val();
+        var CategoryName = $("#txtProjectTaskCategory").val();
+        var Status = $('#ddlStatus').val();
+
+        if (DepartmentId == null || DepartmentId <= 0) {
             $('#ddlDepartment').css('border-color', 'red');
             IsValid = false;
         }
         else {
             $('#ddlDepartment').css('border-color', '');
         }
-        if (DesignationName == null || DesignationName == "") {
-            $('#txtDesignation').css('border-color', 'red');
+       
+        if (CategoryName == null || CategoryName == "") {
+            $('#txtProjectTaskCategory').css('border-color', 'red');
             IsValid = false;
         }
         else {
-            $('#txtDesignation').css('border-color', '');
+            $('#txtProjectTaskCategory').css('border-color', '');
+        }
+        
+        if (Status == null || Status == "") {
+            $('#ddlStatus').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#ddlStatus').css('border-color', '');
         }
         if (IsValid == false) {
             return false;
         }
         var model = {
-            DesignationId: $("#hdnDesignationId").val(),
+            CategoryId: $("#hdnCategoryId").val(),
             DepartmentId: DepartmentId,
-            DesignationName: DesignationName
+            CategoryName: CategoryName,
+            IsActive: Status == 1 ? true : false
         }
         $.ajax({
             type: "POST",
             contentType: "application/json; charset=utf-8",
-            url: "/Management/AddupdateDesignation",
+            url: "/Project/AddUpateProjectTaskCategories",
             data: JSON.stringify(model),
             beforeSend: function () {
                 $("#lblMessage").html("Please wait...");
                 $(".dvAlert").show();
             },
             success: function (response) {
-                $('#dvDesignationDetails').html(response);
-                $('#tbl_Designation').DataTable({
+                $('#dvProjectCategoryDetails').html(response);
+                $('#tbl_ProjectReportCategory').DataTable({
                     "bStateSave": true,
                     "fnStateSave": function (oSettings, oData) {
                         localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
@@ -365,27 +348,11 @@
                         return JSON.parse(data);
                     }
                 });
-                $("#lblMessage").html("Designation updated successfully");
+                $("#lblMessage").html("Category updated successfully");
                 $(".dvAlert").show();
                 $("#btnUpdate").hide();
                 $("#btnAdd").show();
-                $("#txtDesignation").val("");
-                $("#ddlDepartment").val(0);
-                //if (response.isSuccess == true) {
-                //    $("#lblMessage").html("Designation Updated successully");
-                //    $(".dvAlert").show();
-                //    $("#txtDesignation").val("");
-                //    $("#ddlDepartment").val(0);
-                //    $("#btnUpdate").hide();
-                //    $("#btnAdd").show();
-                //    setTimeout(function () {
-                //        window.location.href = "/Management/Designations";
-                //    }, 1700);
-                //}
-                //else {
-                //    $("#lblMessage").html(response.response);
-                //    $(".dvAlert").show();
-                //}
+                ClearFields();
             },
             error: function (error) {
                 $("#lblMessage").html("Something went wrong, please try again");
@@ -394,20 +361,18 @@
             }
         });
     });
-    $("#btnAddDesignation").click(function () {
-        $("#dvAddDesignation").show();
+    $("#btnAddFeedback").click(function () {
+        $("#dvAddProjectTaskCategory").show();
         $("#btnAdd").show();
         $("#btnUpdate").hide();
-        $('#ddlDepartment').val(0);
-        $("#txtDesignation").val('');
-        $('#ddlDepartment').css('border-color', '');
-        $('#txtDesignation').css('border-color', '');
     });
     $("#btnCancel").click(function () {
-        $("#dvAddDesignation").hide();
-        $('#ddlDepartment').val(0);
-        $("#txtDesignation").val('');
-        $('#ddlDepartment').css('border-color', '');
-        $('#txtDesignation').css('border-color', '');
+        $("#dvAddProjectTaskCategory").hide();
+        ClearFields();
     });
+    function ClearFields() {
+        $("#ddlDepartment").val('');
+        $("#txtProjectTaskCategory").val('');
+        $('#ddlStatus').val('');
+    }
 </script>

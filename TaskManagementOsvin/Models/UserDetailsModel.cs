@@ -34,6 +34,7 @@ namespace TaskManagementOsvin.Models
         HR = 2,
         ProjectManager = 3,
         TeamLeader = 4,
-        Employee = 5
+        Employee = 5,
+        NetworkAdmin=6
     }
 }

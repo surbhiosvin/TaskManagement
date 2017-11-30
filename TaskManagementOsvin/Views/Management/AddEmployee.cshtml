@@ -69,7 +69,7 @@
                 </div>
                 <div class="portlet-body form">
                     <!-- BEGIN FORM-->
-                    @using (Html.BeginForm("AddEmployee", "Management", FormMethod.Post, new { enctype = "multipart/form-data", @id = "frmChangePassword", @class = "form-horizontal" }))
+                    @using (Html.BeginForm("AddEmployee", "Management", FormMethod.Post, new { enctype = "multipart/form-data", @id = "frmAddEmp", @class = "form-horizontal" }))
                     {
                         @Html.HiddenFor(model => model.UserId)
                         <div class="form-body">
@@ -81,7 +81,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Department</label>
                                 <div class="col-md-6">
-                                    @Html.DropDownListFor(m => m.DepartmentId, new SelectList(Model.listDepartment, "DepartmentId", "DepartmentName"), "Please Select", new { @class = "form-control ddlDept" })
+                                    @Html.DropDownListFor(m => m.DepartmentId, new SelectList(Model.listDepartment, "DepartmentId", "DepartmentName"), "Please Select", new { @class = "form-control ddlDept", @required = "required" })
                                     <div class="text-danger">
                                         @Html.ValidationMessageFor(m => m.DepartmentId)
                                     </div>
@@ -92,13 +92,13 @@
                                 <div class="col-md-6">
                                     @if (Model.listDesignation == null || Model.listDesignation.Count <= 0)
                                     {
-                                        <select class="form-control ddlDesignation" id="DesignationId" name="DesignationId">
+                                        <select class="form-control ddlDesignation" id="DesignationId" name="DesignationId" required>
                                             <option value="">Please Select</option>
                                         </select>
                                     }
                                     else
                                     {
-                                        @Html.DropDownListFor(m => m.DesignationId, new SelectList(Model.listDesignation, "DesignationId", "DesignationName"), "Please Select", new { @class = "form-control ddlDesignation" })
+                                        @Html.DropDownListFor(m => m.DesignationId, new SelectList(Model.listDesignation, "DesignationId", "DesignationName"), "Please Select", new { @class = "form-control ddlDesignation", @required = "required" })
                                     }
                                     <div class="text-danger">
                                         @Html.ValidationMessageFor(m => m.DesignationId)
@@ -108,7 +108,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label">First Name</label>
                                 <div class="col-md-6">
-                                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "Enter First Name" })
+                                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "Enter First Name", @required = "required" })
                                     <div class="text-danger">
                                         @Html.ValidationMessageFor(m => m.FirstName)
                                     </div>
@@ -117,7 +117,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Last Name</label>
                                 <div class="col-md-6">
-                                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Enter Last Name" })
+                                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Enter Last Name", @required = "required" })
                                     <div class="text-danger">
                                         @Html.ValidationMessageFor(m => m.LastName)
                                     </div>
@@ -144,7 +144,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Osvin Email Id</label>
                                 <div class="col-md-6">
-                                    @Html.TextBoxFor(m => m.Email, new { @type = "email", @class = "form-control", @placeholder = "Enter Email Address" })
+                                    @Html.TextBoxFor(m => m.Email, new { @type = "email", @class = "form-control", @placeholder = "Enter Email Address", @required = "required" })
                                     <div class="text-danger">
                                         @Html.ValidationMessageFor(m => m.Email)
                                     </div>
@@ -153,7 +153,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Password</label>
                                 <div class="col-md-6">
-                                    @Html.TextBoxFor(m => m.Password, new { @type = "password", @class = "form-control", @placeholder = "Enter Password" })
+                                    @Html.TextBoxFor(m => m.Password, new { @type = "password", @class = "form-control", @placeholder = "Enter Password", @required = "required" })
                                     <div class="text-danger">
                                         @Html.ValidationMessageFor(m => m.Password)
                                     </div>
@@ -162,7 +162,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Date Of Birth</label>
                                 <div class="col-md-6">
-                                    @Html.TextBoxFor(m => m.DOB, new { @class = "form-control datepicker", @placeholder = "Enter Date Of Birth" })
+                                    @Html.TextBoxFor(m => m.DOB, new { @class = "form-control datepicker", @placeholder = "Enter Date Of Birth", @required = "required" })
                                     <div class="text-danger">
                                         @Html.ValidationMessageFor(m => m.DOB)
                                     </div>
@@ -171,7 +171,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Role</label>
                                 <div class="col-md-6">
-                                    @Html.DropDownListFor(m => m.Role, new SelectList(ViewData["ddlRole"] as List<SelectListItem>, "Value", "Text", Model.Role), "Please Select", new { @class = "form-control" })
+                                    @Html.DropDownListFor(m => m.Role, new SelectList(ViewData["ddlRole"] as List<SelectListItem>, "Value", "Text", Model.Role), "Please Select", new { @class = "form-control", @required = "required" })
                                     <div class="text-danger">
                                         @Html.ValidationMessageFor(m => m.Role)
                                     </div>
@@ -493,111 +493,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            @*<div class="form-group">
-                                    <label class="col-md-3 control-label">Image</label>
-                                    <div class="col-md-5">
-                                        @Html.TextBoxFor(m => m.ImageFile, new { type = "file", @class = "form-control", @accept = "image/x-png,image/gif,image/jpeg" })
-                                        <div class="text-danger">
-                                            @Html.ValidationMessageFor(m => m.ImageFile)
-                                            @Html.HiddenFor(m => m.Image)
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <button class="btn btn-danger">Clear</button>
-                                    </div>
-                                </div>*@
-                            @*<div class="form-group">
-                                    <label class="col-md-3 control-label">Ist ID Proof</label>
-                                    <div class="col-md-5">
-                                        @Html.TextBoxFor(m => m.IDCardFirst_File, new { type = "file", @class = "form-control" })
-                                        <div class="text-danger">
-                                            @Html.ValidationMessageFor(m => m.IDCardFirst_File)
-                                            @Html.HiddenFor(m => m.IDCardFirst)
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <button class="btn btn-danger">Clear</button>
-                                    </div>
-                                </div>*@
-                            @*<div class="form-group">
-                                    <label class="col-md-3 control-label">IInd ID Proof (Addess Proof)</label>
-                                    <div class="col-md-5">
-                                        @Html.TextBoxFor(m => m.IDCardSecond_AddressProof_File, new { type = "file", @class = "form-control" })
-                                        <div class="text-danger">
-                                            @Html.ValidationMessageFor(m => m.IDCardSecond_AddressProof_File)
-                                            @Html.HiddenFor(m => m.IDCardSecond_AddressProof_)
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <button class="btn btn-danger">Clear</button>
-                                    </div>
-                                </div>*@
-                            @*<div class="form-group">
-                                    <label class="col-md-3 control-label">CV</label>
-                                    <div class="col-md-5">
-                                        @Html.TextBoxFor(m => m.CV_File, new { type = "file", @class = "form-control" })
-                                        <div class="text-danger">
-                                            @Html.ValidationMessageFor(m => m.CV_File)
-                                            @Html.HiddenFor(m => m.CV)
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <button class="btn btn-danger">Clear</button>
-                                    </div>
-                                </div>*@
-                            @*<div class="form-group">
-                                    <label class="col-md-3 control-label">Experience Certificate</label>
-                                    <div class="col-md-5">
-                                        @Html.TextBoxFor(m => m.ExperienceCertificate_File, new { type = "file", @class = "form-control" })
-                                        <div class="text-danger">
-                                            @Html.ValidationMessageFor(m => m.ExperienceCertificate_File)
-                                            @Html.HiddenFor(m => m.ExperienceCertificate)
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <button class="btn btn-danger">Clear</button>
-                                    </div>
-                                </div>*@
-                            @*<div class="form-group">
-                                <label class="col-md-3 control-label">Appointment Letter</label>
-                                <div class="col-md-5">
-                                    @Html.TextBoxFor(m => m.AppointementLetter_File, new { type = "file", @class = "form-control" })
-                                    <div class="text-danger">
-                                        @Html.ValidationMessageFor(m => m.AppointementLetter_File)
-                                        @Html.HiddenFor(m => m.AppointementLetter)
-                                    </div>
-                                </div>
-                                <div class="col-md-1">
-                                    <button class="btn btn-danger">Clear</button>
-                                </div>
-                            </div>*@
-                            @*<div class="form-group">
-                                <label class="col-md-3 control-label">Aggrement Document</label>
-                                <div class="col-md-5">
-                                    @Html.TextBoxFor(m => m.AggrementDocument_File, new { type = "file", @class = "form-control" })
-                                    <div class="text-danger">
-                                        @Html.ValidationMessageFor(m => m.AggrementDocument_File)
-                                        @Html.HiddenFor(m => m.AggrementDocument)
-                                    </div>
-                                </div>
-                                <div class="col-md-1">
-                                    <button class="btn btn-danger">Clear</button>
-                                </div>
-                            </div>*@
-                            @*<div class="form-group last">
-                                <label class="col-md-3 control-label">Other Document</label>
-                                <div class="col-md-5">
-                                    @Html.TextBoxFor(m => m.OtherDocument_File, new { type = "file", @class = "form-control" })
-                                    <div class="text-danger">
-                                        @Html.ValidationMessageFor(m => m.OtherDocument_File)
-                                        @Html.HiddenFor(m => m.OtherDocument)
-                                    </div>
-                                </div>
-                                <div class="col-md-1">
-                                    <button class="btn btn-danger">Clear</button>
-                                </div>
-                            </div>*@
+                            </div>                           
                         </div>
                         <div class="form-actions text-center">
                             <div class="btn-set">

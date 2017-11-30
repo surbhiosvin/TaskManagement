@@ -85,7 +85,7 @@ namespace Providers.Providers.SP.Repositories
                     PhoneNumber=model.PhoneNumber,
                     IsActive = true,
                     CreatedDate = DateTime.Now,
-                    Archived="NonArchive",
+                    Archived=model.Archived,
                     CreatedBy=model.CreatedBy
                 });
                 if (model.ClientId > 0)

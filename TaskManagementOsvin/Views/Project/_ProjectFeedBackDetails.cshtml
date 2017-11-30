@@ -1,5 +1,5 @@
 ﻿
-@model List<AddendumDomainModel>
+@model List<FeedbackDomainModel>
 @if (Model != null && Model.Count > 0)
 {
     <div class="row">
@@ -9,37 +9,25 @@
                 <div class="portlet-title">
                     <div class="caption font-green">
                         <i class="icon-layers font-green"></i>
-                        <span class="caption-subject font-green bold uppercase">Project Addendums Details</span>
+                        <span class="caption-subject font-green bold uppercase">Project FeedBack Details</span>
                     </div>
                 </div>
                 <div class="portlet-body">
-                    <table class="table table-striped table-bordered table-hover table-header-fixed" id="tbl_User">
+                    <table class="table table-striped table-bordered table-hover table-header-fixed">
                         <thead>
                             <tr class="">
-                                <th class="text-center"> Estimation Hours </th>
-                                <th class="text-center"> Assign Hours </th>
+                                <th class="text-center"> User Name </th>
                                 <th class="text-center"> Description </th>
-                                <th class="text-center"> Document </th>
-                                <th class="text-center"> Developer Coding Hours </th>
-                                <th class="text-center"> WebService Hours </th>
-                                <th class="text-center"> Design Hours </th>
-                                <th class="text-center"> Hourly Rate </th>
-                                <th class="text-center"> IsApproved </th>
+                                <th class="text-center"> Feed </th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var addendum in @Model)
+                            @foreach (var feedback in @Model)
                             {
                                 <tr>
-                                    <td class="text-center"> @addendum.EstimateHours </td>
-                                    <td class="text-center"> @addendum.AssignHours </td>
-                                    <td class="text-center"> @addendum.Description </td>
-                                    <td class="text-center"> @addendum.UploadDocument </td>
-                                    <td class="text-center"> @addendum.DeveloperCodingHours </td>
-                                    <td class="text-center"> @addendum.WebServiceHours </td>
-                                    <td class="text-center"> @addendum.DesignHours</td>
-                                    <td class="text-center"> @addendum.HourlyRate </td>
-                                    <td class="text-center"> @addendum.IsApprove</td>
+                                    <td class="text-center"> @feedback.Name </td>
+                                    <td class="text-center"> @feedback.Description </td>
+                                    <td class="text-center"> @feedback.Feed </td>
                                 </tr>
                             }
                         </tbody>

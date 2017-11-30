@@ -1,0 +1,42 @@
+﻿
+@using TaskManagementOsvin.Security;
+@using TaskManagementOsvin.Models;
+@model List<FeedbackDomainModel>
+
+<table class="table table-striped table-bordered table-hover table-header-fixed" id="tbl_Feedback">
+    <thead>
+        <tr class="">
+            <th class="text-center"> Client Name </th>
+            <th class="text-center"> Project Title </th>
+            <th class="text-center"> Description </th>
+            <th class="text-center"> Feed </th>
+            <th class="text-center"> Status </th>
+            <th class="text-center"> Edit </th>
+            <th class="text-center"> Delete </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var feedback in @Model)
+            {
+                <tr id="row_@feedback.FeedbackId">
+                    <td class="text-center"> @feedback.Name</td>
+                    <td class="text-center"> @feedback.ProjectTitle</td>
+                    <td class="text-center"> @feedback.Description</td>
+                    <td class="text-center"> @feedback.Feed</td>
+                    @if (feedback.IsActive)
+                    {
+                        <td class="text-center" id="StatusActive_@feedback.FeedbackId"><a title="Active" id="StatusActiveLink_@feedback.FeedbackId" href="#" onclick="ActivateDeactivateFeedback(@feedback.FeedbackId, false)"><img alt='Active' src='~/assets/global/img/Guiimages/Active.png' width='30px' height='30px' /></a></td>
+                    }
+                    else
+                    {
+                        <td class="text-center" id="StatusActive_@feedback.FeedbackId"><a title="InActive" id="StatusActiveLink_@feedback.FeedbackId" href="#" onclick="ActivateDeactivateFeedback(@feedback.FeedbackId, true)"><img alt='In Active Slip' src='~/assets/global/img/Guiimages/InActive.png' width='30px' height='30px' /></a></td>
+                    }
+                    <td class="text-center"><a class="btn green-dark" href="#" onclick="EditFeedback(@Json.Encode(feedback))"><i class="fa fa-edit"></i></a> </td>
+                    <td class="text-center"><a class="btn red " href="#" onclick="DeleteFeedback(@feedback.FeedbackId)"><i class="fa fa-trash"></i></a> </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

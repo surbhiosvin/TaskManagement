@@ -1,0 +1,120 @@
+﻿@model TaskManagementOsvin.Models.ProjectWorkingHoursBeforePMSModel
+@{
+    ViewBag.Title = "AddWorkingHoursOfProjectBeforePMS";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="page-content">
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="~/Dashboard/Welcome">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="#">Add Working Hours on Project Before PMS</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            @*<li>
+                    <span>Page Layouts</span>
+                </li>*@
+        </ul>
+        <div class="page-toolbar">
+            <div class="btn-group pull-right">
+                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li>
+                        <a href="#">
+                            <i class="icon-bell"></i> Action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-shield"></i> Another action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-user"></i> Something else here
+                        </a>
+                    </li>
+                    <li class="divider"> </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-bag"></i> Separated link
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE BAR -->
+    <h1 class="page-title">
+        Add Working Hours on Project Before PMS
+        <small></small>
+    </h1>
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN VALIDATION STATES-->
+            <div class="portlet light portlet-fit portlet-form bordered" id="form_wizard_1">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-layers font-green"></i>
+                        <span class="caption-subject font-green sbold uppercase">Add Working Hours on Project Before PMS</span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <!-- BEGIN FORM-->
+                    @using (Html.BeginForm("AddWorkingHoursOfProjectBeforePMS", "Project", FormMethod.Post, new { enctype = "multipart/form-data", @id = "frmAddWorkingHours", @class = "form-horizontal" }))
+                    {
+                        <div class="form-body">
+                            <div class="alert @ViewBag.AlertType @ViewBag.Class">
+                                @*<button type="button" class="close" data-close="alert"></button>*@
+                                <a class="close" onclick="$('.alert').hide()">×</a>
+                                <span> @Html.ValidationMessage("CustomError") </span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">
+                                   Project Title
+                                    <span class="required"> * </span>
+                                </label>
+                                <div class="col-md-4">
+                                    @Html.DropDownListFor(m => m.ProjectId, ViewBag.listProjects as SelectList, "Select Project", new { @class = "form-control", @required = "required" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.ProjectId)
+                                    </div>
+                                    @*<input type="password" name="oldPassword" data-required="1" class="form-control" />*@
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">
+                                    Estimate Working Hours Before PMS
+                                    <span class="required"> * </span>
+                                </label>
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(m => m.WorkinghHours, new {@class = "form-control", @required = "required", @placeholder="Enter Hours" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.WorkinghHours)
+                                    </div>
+                                    @*<input name="newPasswprd" type="text" class="form-control" />*@
+                                </div>
+                            </div>                          
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button type="submit" class="btn green">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <!-- END FORM-->
+                </div>
+            </div>
+            <!-- END VALIDATION STATES-->
+        </div>
+    </div>
+</div>

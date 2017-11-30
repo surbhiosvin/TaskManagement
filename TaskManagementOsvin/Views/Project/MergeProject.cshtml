@@ -1,0 +1,171 @@
+﻿
+@{
+    ViewBag.Title = "MergeProject";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-content">
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="~/Dashboard/Welcome">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="#">Merge Project</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            @*<li>
+                    <span>Page Layouts</span>
+                </li>*@
+        </ul>
+        <div class="page-toolbar">
+            <div class="btn-group pull-right">
+                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li>
+                        <a href="#">
+                            <i class="icon-bell"></i> Action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-shield"></i> Another action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-user"></i> Something else here
+                        </a>
+                    </li>
+                    <li class="divider"> </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-bag"></i> Separated link
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE BAR -->
+    <h1 class="page-title">
+        Merge Project
+        <small></small>
+    </h1>
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN VALIDATION STATES-->
+            <div class="portlet light portlet-fit portlet-form bordered" id="form_wizard_1">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-layers font-green"></i>
+                        <span class="caption-subject font-green sbold uppercase">Merge Project</span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="alert alert-success dvAlert @ViewBag.Class">
+                        <a class="close" onclick="$('.alert').hide()">×</a>
+                        <span id="lblMessage"> @ViewBag.Message </span>
+                    </div>
+                    <!-- BEGIN FORM-->
+                    @using (Html.BeginForm("MergeProject", "Project", FormMethod.Post, new { enctype = "multipart/form-data", @id = "frmMergeProject", @class = "form-horizontal" }))
+                    {
+                        <div class="form-body">
+                            <div class="alert @ViewBag.AlertType @ViewBag.Class">
+                                @*<button type="button" class="close" data-close="alert"></button>*@
+                                <a class="close" onclick="$('.alert').hide()">×</a>
+                                <span> @Html.ValidationMessage("CustomError") </span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">
+                                    Merge Into
+                                    <span class="required"> * </span>
+                                </label>
+                                <div class="col-md-4">
+                                    @Html.DropDownList("ddlProjectMergeTo", ViewBag.listProjects as SelectList, "Select Project", new { @class = "form-control", @required = "required" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">
+                                    Remove Project
+                                    <span class="required"> * </span>
+                                </label>
+                                <div class="col-md-4">
+                                    @Html.DropDownList("ddlProjectMergeFrom", ViewBag.listProjects as SelectList, "Select Project", new { @class = "form-control", @required = "required" })
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button type="button" class="btn green" id="btnMerge">Merge</button>
+                                    <button type="button" class="btn red" id="btnCancel">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <!-- END FORM-->
+                </div>
+            </div>
+            <!-- END VALIDATION STATES-->
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#btnMerge").click(function () {
+        var projectmergeto = $("#ddlProjectMergeTo").val();
+        var projectmergefrom = $("#ddlProjectMergeFrom").val();
+        var IsValid = true;
+        if (projectmergeto == null || projectmergeto <= 0) {
+            $('#ddlProjectMergeTo').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#ddlProjectMergeTo').css('border-color', '');
+        }
+        if (projectmergefrom == null || projectmergefrom <= 0) {
+            $('#ddlProjectMergeFrom').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#ddlProjectMergeFrom').css('border-color', '');
+        }
+        if (IsValid == false) {
+            return false;
+        }
+        $.ajax({
+            type: "Get",
+            contentType: "application/json; charset=utf-8",
+            url: "/api/Project/MergeProject?projectmergeto=" + projectmergeto + "&projectmergefrom=" + projectmergefrom,
+            beforeSend: function () {
+                $("#lblMessage").html("Please wait...");
+                $(".dvAlert").show();
+            },
+            success: function (response) {
+                $("#lblMessage").html(response.response);
+                $(".dvAlert").show();
+                ClearFields();
+
+            },
+            error: function (error) {
+                $("#lblMessage").html("Something went wrong, please try again");
+                $(".dvAlert").show();
+                console.log(error);
+            }
+        });
+    });
+    $("#btnCancel").click(function () {
+        $("#ddlProjectMergeTo").val('');
+        $("#ddlProjectMergeFrom").val('');
+        $('#ddlProjectMergeTo').css('border-color', '');
+        $('#ddlProjectMergeFrom').css('border-color', '');
+    });
+</script>
+

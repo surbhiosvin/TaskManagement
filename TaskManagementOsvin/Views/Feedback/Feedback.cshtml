@@ -1,0 +1,465 @@
+﻿
+@{
+    ViewBag.Title = "Feedback";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="page-content">
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="~/Dashboard/Welcome">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="#">Feedback</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            @*<li>
+                    <span>Page Layouts</span>
+                </li>*@
+        </ul>
+        <div class="page-toolbar">
+            <div class="btn-group pull-right">
+                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li>
+                        <a href="#">
+                            <i class="icon-bell"></i> Action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-shield"></i> Another action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-user"></i> Something else here
+                        </a>
+                    </li>
+                    <li class="divider"> </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-bag"></i> Separated link
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE BAR -->
+    <!-- BEGIN PAGE TITLE-->
+    <h1 class="page-title">
+        Add / Update Feedback
+        @*<small>blank page layout</small>*@
+    </h1>
+    <!-- END PAGE TITLE-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN EXAMPLE TABLE PORTLET-->
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption font-green">
+                        <i class="icon-layers font-green"></i>
+                        <span class="caption-subject font-green bold uppercase">Feedback Details</span>
+                    </div>
+                    <a class="btn btn-sm green table-group-action-submit pull-right" href="#" id="btnAddFeedback">
+                        <i class="fa fa-plus"></i> Add Feedback
+                    </a>
+                </div>
+                <div class="portlet-body">
+                    <div class="alert alert-success dvAlert @ViewBag.Class">
+                        <a class="close" onclick="$('.alert').hide()">×</a>
+                        <span id="lblMessage"> @ViewBag.Message </span>
+                    </div>
+                    <div class="row" id="dvAddFeedback" style="display:none">
+                        <div class="col-md-12">
+                            <form class="form-horizontal">
+                                <div class="form-body">
+                                    @*<div class="text-danger">
+                                            <label id="lblmsg"></label>
+                                        </div>*@
+                                    <div class="form-group">
+                                        <input type="hidden" id="hdnFeedbackId" />
+                                        <div class="col-md-offset-2 col-md-4">
+                                            <label class="control-label">
+                                                Project
+                                                <span class="required"> * </span>
+                                            </label>
+                                            @*<select id="ddlProject" class="form-control"></select>*@
+                                            @Html.DropDownList("ddlProjects", ViewBag.listProjects as SelectList, "Select Project", new { @class = "form-control" })
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label">
+                                                Feed By
+                                            </label>
+                                            @*<select id="ddlfeedBy" class="form-control">
+                                                    <option>Please select</option>
+                                                    <option Value="09:00 AM - 10:00 AM">Quality Analyst</option>
+                                                    <option Value="10:00 AM - 11:00 AM">Client</option>
+                                                </select>*@
+                                            @Html.DropDownList("ddlFeedType", ViewBag.listFeedTypes as SelectList, "Select Feed", new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-4">
+                                            <label class="control-label">
+                                                Client Name
+                                                <span class="required"> * </span>
+                                            </label>
+                                            <input tye="text" class="form-control" id="txtClientName" placeholder="Enter Name" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label">
+                                                Description
+                                                <span class="required"> * </span>
+                                            </label>
+                                            <input tye="text" class="form-control" id="txtDescription" placeholder="Enter Description" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-4">
+                                            <label class="control-label">
+                                                Rating
+                                                <span class="required"> * </span>
+                                            </label>
+                                            <input tye="text" class="form-control" id="txtRating" placeholder="Enter rating from 5 like, 0.00" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label">
+                                                Status
+                                                <span class="required"> * </span>
+                                            </label>
+                                            <select id="ddlStatus" class="form-control">
+                                                <option value>Please Select</option>
+                                                <option value="1">True</option>
+                                                <option value="0">False</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="text-center">
+                                            <button type="button" class="btn green" id="btnAdd">Add</button>
+                                            <button type="button" class="btn green" id="btnUpdate" style="display:none">Update</button>
+                                            <button type="button" class="btn red" id="btnCancel">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row" id="dvFeedbackDetails">
+                        @Html.Action("_Feedback", "Feedback")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--AddUpdate modal -->
+<script type="text/javascript">
+    jQuery(document).on('ready', function () {
+        var table = $('#tbl_Feedback').DataTable();
+        table.state.clear();
+        table.destroy();
+        $('#tbl_Feedback').DataTable({
+            "bStateSave": true,
+        });
+    });
+    function DeleteFeedback(FeedbackId) {
+        $.ajax({
+            type: "Get",
+            contentType: "application/json; charset=utf-8",
+            url: "/Feedback/DeleteFeedback?FeedbackId=" + FeedbackId,
+            success: function (response) {
+                $('#dvFeedbackDetails').html(response);
+                $('#tbl_Feedback').DataTable({
+                    "bStateSave": true,
+                    "fnStateSave": function (oSettings, oData) {
+                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+                    },
+                    "fnStateLoad": function (oSettings) {
+                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
+                        return JSON.parse(data);
+                    }
+                });
+                $("#lblMessage").html("Feedback deleted successfully");
+                $(".dvAlert").show();
+            },
+            error: function (error) {
+                $("#lblMessage").html("Something went wrong, please try again.");
+                $(".dvAlert").show();
+                console.log(error);
+            }
+        });
+    }
+    function ActivateDeactivateFeedback(FeedbackId, IsActive) {
+        $(".dvAlert").hide();
+        $("#lblMessage").html("");
+        $.ajax({
+            type: "Get",
+            contentType: "application/json; charset=utf-8",
+            url: "/Feedback/ActivateDeactivateFeedback?FeedbackId=" + FeedbackId + "&IsActive=" + IsActive,
+            success: function (response) {
+                $('#dvFeedbackDetails').html(response);
+                $('#tbl_Feedback').DataTable({
+                    "bStateSave": true,
+                    "fnStateSave": function (oSettings, oData) {
+                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+                    },
+                    "fnStateLoad": function (oSettings) {
+                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
+                        return JSON.parse(data);
+                    }
+                });
+                //if (response.isSuccess == true) {
+                //    if (IsActive == false) {
+                //        $("#StatusActiveLink_" + FeedbackId).remove();
+                //        $("#StatusActive_" + FeedbackId).append('<a title="InActive" id="StatusActiveLink_' + FeedbackId + '" href="#" onclick="ActivateDeactivateFeedback(' + FeedbackId + ', true)"><img alt="In Active" src="/assets/global/img/Guiimages/InActive.png" width="30px" height="30px"/></a>');
+                //    }
+                //    else {
+                //        $("#StatusActiveLink_" + FeedbackId).remove();
+                //        $("#StatusActive_" + FeedbackId).append('<a title="Active" id="StatusActiveLink_' + FeedbackId + '" href="#" onclick="ActivateDeactivateFeedback(' + FeedbackId + ', false)"><img alt="Active" src="/assets/global/img/Guiimages/Active.png" width="30px" height="30px"/></a>');
+                //    }
+                //}
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    $("#btnAdd").click(function () {
+        $("#lblMessage").html("");
+        $(".dvAlert").hide();
+        var IsValid = true;
+        var ProjectId = $("#ddlProjects").val();
+        var FeedTypeId = $("#ddlFeedType").val();
+        var Name = $("#txtClientName").val();
+        var Description = $('#txtDescription').val();
+        var Rating = $('#txtRating').val();
+        var Status = $('#ddlStatus').val();
+
+        if (ProjectId == null || ProjectId <= 0) {
+            $('#ddlProjects').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#ddlProjects').css('border-color', '');
+        }
+        if (FeedTypeId == null || FeedTypeId <= 0) {
+            $('#ddlFeedType').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#ddlFeedType').css('border-color', '');
+        }
+        if (Name == null || Name == "") {
+            $('#txtClientName').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#txtClientName').css('border-color', '');
+        }
+        if (Description == null || Description == "") {
+            $('#txtDescription').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#txtDescription').css('border-color', '');
+        }
+        if (Rating == null || Rating == "") {
+            $('#txtRating').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#txtRating').css('border-color', '');
+        }
+        if (Status == null || Status == "") {
+            $('#ddlStatus').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#ddlStatus').css('border-color', '');
+        }
+        if (IsValid == false) {
+            return false;
+        }
+        var model = {
+            ProjectId: ProjectId,
+            FeedTypeId: FeedTypeId,
+            Name: Name,
+            Description: Description,
+            Feed: Rating,
+            IsActive: Status==1?true:false
+        }
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "/Feedback/AddUpdateFeedback",
+            data: JSON.stringify(model),
+            beforeSend: function () {
+                $("#lblMessage").html("Please wait...");
+                $(".dvAlert").show();
+            },
+            success: function (response) {
+                $('#dvFeedbackDetails').html(response);
+                $('#tbl_Feedback').DataTable({
+                    "bStateSave": true,
+                    "fnStateSave": function (oSettings, oData) {
+                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+                    },
+                    "fnStateLoad": function (oSettings) {
+                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
+                        return JSON.parse(data);
+                    }
+                });
+                $("#lblMessage").html("Feedback added successfully");
+                $(".dvAlert").show();
+                ClearFields();
+
+            },
+            error: function (error) {
+                $("#lblMessage").html("Something went wrong, please try again");
+                $(".dvAlert").show();
+                console.log(error);
+            }
+        });
+    });
+    function EditFeedback(Feedback) {
+        $("#lblMessage").html("");
+        $(".dvAlert").hide();
+        $("#dvAddFeedback").show();
+        $("#hdnFeedbackId").val(Feedback.FeedbackId);
+        $("#ddlProjects").val(Feedback.ProjectId);
+        $("#ddlFeedType").val(Feedback.FeedTypeId);
+        $("#txtClientName").val(Feedback.Name);
+        $("#txtDescription").val(Feedback.Description);
+        $("#txtRating").val(Feedback.Feed);
+        $("#ddlStatus").val(Feedback.IsActive==true?1:0);
+        $("#btnAdd").hide();
+        $("#btnUpdate").show();
+    }
+    $("#btnUpdate").click(function () {
+        $("#lblMessage").html("");
+        $(".dvAlert").hide();
+        var IsValid = true;
+        var ProjectId = $("#ddlProjects").val();
+        var FeedTypeId = $("#ddlFeedType").val();
+        var Name = $("#txtClientName").val();
+        var Description = $('#txtDescription').val();
+        var Rating = $('#txtRating').val();
+        var Status = $('#ddlStatus').val();
+
+        if (ProjectId == null || ProjectId <= 0) {
+            $('#ddlProjects').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#ddlProjects').css('border-color', '');
+        }
+        if (FeedTypeId == null || FeedTypeId <= 0) {
+            $('#ddlFeedType').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#ddlFeedType').css('border-color', '');
+        }
+        if (Name == null || Name == "") {
+            $('#txtClientName').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#txtClientName').css('border-color', '');
+        }
+        if (Description == null || Description == "") {
+            $('#txtDescription').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#txtDescription').css('border-color', '');
+        }
+        if (Rating == null || Rating == "") {
+            $('#txtRating').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#txtRating').css('border-color', '');
+        }
+        if (Status == null || Status == "") {
+            $('#ddlStatus').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#ddlStatus').css('border-color', '');
+        }
+        if (IsValid == false) {
+            return false;
+        }
+        var model = {
+            FeedbackId: $("#hdnFeedbackId").val(),
+            ProjectId: ProjectId,
+            FeedTypeId: FeedTypeId,
+            Name: Name,
+            Description: Description,
+            Feed: Rating,
+            IsActive: Status == 1 ? true : false
+        }
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "/Feedback/AddUpdateFeedback",
+            data: JSON.stringify(model),
+            beforeSend: function () {
+                $("#lblMessage").html("Please wait...");
+                $(".dvAlert").show();
+            },
+            success: function (response) {
+                $('#dvFeedbackDetails').html(response); $('#dvFeedbackDetails').html(response);
+                $('#tbl_Feedback').DataTable({
+                    "bStateSave": true,
+                    "fnStateSave": function (oSettings, oData) {
+                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+                    },
+                    "fnStateLoad": function (oSettings) {
+                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
+                        return JSON.parse(data);
+                    }
+                });
+                $("#lblMessage").html("Feedback updated successfully");
+                $(".dvAlert").show();
+                $("#btnUpdate").hide();
+                $("#btnAdd").show();
+                ClearFields();
+            },
+            error: function (error) {
+                $("#lblMessage").html("Something went wrong, please try again");
+                $(".dvAlert").show();
+                console.log(error);
+            }
+        });       
+    });
+    $("#btnAddFeedback").click(function () {
+        $("#dvAddFeedback").show();
+        $("#btnAdd").show();
+        $("#btnUpdate").hide();
+    });
+    $("#btnCancel").click(function () {
+        $("#dvAddFeedback").hide();
+        ClearFields();
+    });
+    function ClearFields() {
+        $("#ddlProjects").val('');
+        $("#ddlFeedType").val('');
+        $("#txtClientName").val('');
+        $('#txtDescription').val('');
+        $('#txtRating').val('');
+        $('#ddlStatus').val('');
+    }
+</script>
+
+

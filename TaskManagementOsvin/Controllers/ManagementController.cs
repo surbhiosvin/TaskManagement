@@ -2,6 +2,7 @@
 using iTextSharp.text;
 using iTextSharp.text.html.simpleparser;
 using iTextSharp.text.pdf;
+using Newtonsoft.Json;
 using Providers.Helper;
 using Providers.Providers.SP.Repositories;
 using Providers.Repositories;
@@ -148,7 +149,7 @@ namespace TaskManagementOsvin.Controllers
                     if (!string.IsNullOrWhiteSpace(model.DOB))
                         model.DateOfBirth = DateTime.ParseExact(model.DOB, "dd/MM/yyyy", null);
                     //model.DateOfBirth = Convert.ToDateTime(model.DOB);
-                    var serialized = new JavaScriptSerializer().Serialize(model);
+                    var serialized = JsonConvert.SerializeObject(model);
                     var client = new HttpClient();
                     var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
                     client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
@@ -156,7 +157,7 @@ namespace TaskManagementOsvin.Controllers
                     if (result.StatusCode == HttpStatusCode.OK)
                     {
                         var contents = result.Content.ReadAsStringAsync().Result;
-                        var Response = new JavaScriptSerializer().Deserialize<ResponseModel>(contents);
+                        var Response = JsonConvert.DeserializeObject<ResponseModel>(contents);
                         ModelState.Clear();
                         ModelState.AddModelError("CustomError", Response.response);
                         ViewBag.AlertType = "alert-success";
@@ -166,7 +167,7 @@ namespace TaskManagementOsvin.Controllers
                     else if (result.StatusCode == HttpStatusCode.Unauthorized)
                     {
                         var contents = result.Content.ReadAsStringAsync().Result;
-                        var Response = new JavaScriptSerializer().Deserialize<ResponseModel>(contents);
+                        var Response = JsonConvert.DeserializeObject<ResponseModel>(contents);
                         ModelState.AddModelError("CustomError", Response.response);
                         ViewBag.Class = null;
                         ViewBag.AlertType = "alert-danger";
@@ -225,6 +226,13 @@ namespace TaskManagementOsvin.Controllers
                 var contents = result.Content.ReadAsStringAsync().Result;
                 var Response = new JavaScriptSerializer().Deserialize<UserListDomainModel>(contents);
                 listusers = Response.listUsers;
+                if (listusers != null && listusers.Count > 0)
+                {
+                    foreach (var Emp in listusers)
+                    {
+                        Emp.DOB = Convert.ToDateTime(Emp.DateOfBirth).ToString("d MMMM", CultureInfo.CreateSpecificCulture("en-US"));
+                    }
+                }
             }
             return PartialView(listusers);
         }
@@ -233,9 +241,14 @@ namespace TaskManagementOsvin.Controllers
         public ActionResult Departments()
         {
             ViewBag.Class = "display-hide";
+            return View();
+        }
+        [HttpGet]
+        public ActionResult _Departments()
+        {
             List<DepartmentDomainModel> listDepartments = new List<DepartmentDomainModel>();
             listDepartments = GetDepartments();
-            return View(listDepartments);
+            return PartialView(listDepartments);
         }
         [HttpGet]
         public ActionResult EmployeeDetails(long UserId)
@@ -276,17 +289,23 @@ namespace TaskManagementOsvin.Controllers
         public ActionResult Designations()
         {
             ViewBag.Class = "display-hide";
-            DesignationDomainModel model = new DesignationDomainModel();
+            ViewBag.listDepartments = GetDepartments();
+            return View();
+        }
+        [HttpGet]
+        public ActionResult _Designations()
+        {
+            ViewBag.Class = "display-hide";
+            List<DesignationDomainModel> listDesignations = new List<DesignationDomainModel>();
             if (UserManager.user.roleType == roleTypeModel.TeamLeader)
             {
-                model.listDesignations = GetDesignationsBasedOnRole(UserManager.user.DepartmentId);
+                listDesignations = GetDesignationsBasedOnRole(UserManager.user.DepartmentId);
             }
             else
             {
-                model.listDesignations = GetDesignationsBasedOnRole(0);
+                listDesignations = GetDesignationsBasedOnRole(0);
             }
-            model.listDepartments = GetDepartments();
-            return View(model);
+            return PartialView(listDesignations);
         }
         [HttpGet]
         public ActionResult GenerateSalarySlip(long UserId = 0)
@@ -411,6 +430,110 @@ namespace TaskManagementOsvin.Controllers
             string body = ConvertViewToString("_PaySlip", model);
             bool res = Email.SendEmail(model.Email, body, "Pay Slip");
             return View("PaySlip", model);
+        }
+        [HttpGet]
+        public ActionResult DeleteDepartmentById(long DepartmentId)
+        {
+            if (DepartmentId > 0)
+            {
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+                var result = client.GetAsync("/api/Management/DeleteDepartmentById?DepartmentId=" + DepartmentId).Result;
+                if (result.StatusCode == HttpStatusCode.OK)
+                {
+                    var contents = result.Content.ReadAsStringAsync().Result;
+                    var Response = new JavaScriptSerializer().Deserialize<ResponseModel>(contents);
+                }
+            }
+            return RedirectToAction("_Departments");
+        }
+        [HttpPost]
+        public ActionResult AddUpdateDepartment(DepartmentDomainModel model)
+        {
+            if (model != null)
+            {
+                var serialized = new JavaScriptSerializer().Serialize(model);
+                var client = new HttpClient();
+                var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
+                client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+                var result = client.PostAsync("/api/Management/AddupdateDepartment", content).Result;
+                if (result.StatusCode == HttpStatusCode.OK)
+                {
+                    var contents = result.Content.ReadAsStringAsync().Result;
+                    var Response = new JavaScriptSerializer().Deserialize<ResponseModel>(contents);
+                }
+            }
+            return RedirectToAction("_Departments");
+        }
+        [HttpPost]
+        public ActionResult AddUpdateDesignation(DesignationDomainModel model)
+        {
+            if (model != null)
+            {
+                if (UserManager.user.roleType == roleTypeModel.TeamLeader)
+                {
+                    model.DepartmentId = UserManager.user.DepartmentId;
+                }
+                var serialized = new JavaScriptSerializer().Serialize(model);
+                var client = new HttpClient();
+                var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
+                client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+                var result = client.PostAsync("/api/Management/AddupdateDesignation", content).Result;
+                if (result.StatusCode == HttpStatusCode.OK)
+                {
+                    var contents = result.Content.ReadAsStringAsync().Result;
+                    var Response = new JavaScriptSerializer().Deserialize<ResponseModel>(contents);
+                }
+            }
+            return RedirectToAction("_Designations");
+        }
+        [HttpGet]
+        public ActionResult DeleteDesignationById(long DesignationId)
+        {
+            if (DesignationId > 0)
+            {
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+                var result = client.GetAsync("/api/Management/DeleteDesignationById?DesignationId=" + DesignationId).Result;
+                if (result.StatusCode == HttpStatusCode.OK)
+                {
+                    var contents = result.Content.ReadAsStringAsync().Result;
+                    var Response = new JavaScriptSerializer().Deserialize<ResponseModel>(contents);
+                }
+            }
+            return RedirectToAction("_Designations");
+        }
+        [HttpGet]
+        public ActionResult ActivateDeactivateDepartment(long DepartmentId, bool IsActive)
+        {
+            if (DepartmentId > 0)
+            {
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+                var result = client.GetAsync("/api/Management/ActivateDeactivateDepartment?DepartmentId=" + DepartmentId + "&IsActive=" + IsActive).Result;
+                if (result.StatusCode == HttpStatusCode.OK)
+                {
+                    var contents = result.Content.ReadAsStringAsync().Result;
+                    var Response = new JavaScriptSerializer().Deserialize<ResponseModel>(contents);
+                }
+            }
+            return RedirectToAction("_Departments");
+        }
+        [HttpGet]
+        public ActionResult ActivateDeactivateDesignation(long DesignationId, bool IsActive)
+        {
+            if (DesignationId > 0)
+            {
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+                var result = client.GetAsync("/api/Management/ActivateDeactivateDesignation?DesignationId=" + DesignationId + "&IsActive=" + IsActive).Result;
+                if (result.StatusCode == HttpStatusCode.OK)
+                {
+                    var contents = result.Content.ReadAsStringAsync().Result;
+                    var Response = new JavaScriptSerializer().Deserialize<ResponseModel>(contents);
+                }
+            }
+            return RedirectToAction("_Designations");
         }
 
         #region User Defined Functions
