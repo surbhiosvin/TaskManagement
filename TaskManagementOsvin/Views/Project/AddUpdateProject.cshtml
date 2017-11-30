@@ -1,60 +1,24 @@
 ﻿@using TaskManagementOsvin.Models;
+@model AddUpdateProjectModel
 @{
     ViewBag.Title = "Add Update Project";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var clients = ViewBag.Clients as List<ClientModel>;
     var projectType = ViewBag.ProjectType as List<ProjectTypeModel>;
-    var employees = ViewBag.Employees as List<EmployeesModel>;
 }
-@model TaskManagementOsvin.Models.AddUpdateProjectModel
 <div class="page-content">
     <!-- BEGIN PAGE HEADER-->
     <!-- BEGIN PAGE BAR -->
     <div class="page-bar">
         <ul class="page-breadcrumb">
             <li>
-                <a href="index.html">Home</a>
+                <a href="javascript:">Home</a>
                 <i class="fa fa-circle"></i>
             </li>
             <li>
-                <a href="#">Blank Page</a>
-                <i class="fa fa-circle"></i>
-            </li>
-            <li>
-                <span>Page Layouts</span>
+                <a href="javascript:">Add Project</a>
             </li>
         </ul>
-        <div class="page-toolbar">
-            <div class="btn-group pull-right">
-                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
-                    Actions
-                    <i class="fa fa-angle-down"></i>
-                </button>
-                <ul class="dropdown-menu pull-right" role="menu">
-                    <li>
-                        <a href="#">
-                            <i class="icon-bell"></i> Action
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="icon-shield"></i> Another action
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="icon-user"></i> Something else here
-                        </a>
-                    </li>
-                    <li class="divider"> </li>
-                    <li>
-                        <a href="#">
-                            <i class="icon-bag"></i> Separated link
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
     </div>
     <!-- END PAGE BAR -->
     <!-- BEGIN PAGE TITLE-->
@@ -66,9 +30,14 @@
         <div class="col-md-12">
             <div class="portlet light bordered">
                 <div class="portlet-body">
-                    @using (Html.BeginForm())
+                    <div class="col-md-12">
+                        <div class="alert @ViewBag.Class">
+                            @ViewBag.Message
+                        </div>
+                    </div>
+                    @using (Html.BeginForm("AddUpdateProject", "Project", FormMethod.Post, new { enctype = "multipart/form-data",@id = "AddUpdateProject" }))
                     {
-                        @Html.HiddenFor(x=>x.ClientId)
+                        @Html.HiddenFor(x=>x.ProjectId)
                         <div class="col-md-12">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -81,16 +50,35 @@
                                             </button>
                                         </span>
                                     </div>
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(x => x.ClientId)
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                <div class="form-group">
                                    <label>Project Type</label>
-                                   @Html.DropDownListFor(x => x.ProjectTypeId, new SelectList(projectType, "TypeId", "TypeName"), "Select Project Type", new
-                                    {
-                                    @class = "form-control"
-                                    })
+                                   @Html.DropDownListFor(x => x.ProjectTypeId, new SelectList(projectType, "TypeId", "TypeName"), "Select Project Type", new{@class = "form-control"})
+                                   <div class="text-danger">
+                                       @Html.ValidationMessageFor(x => x.ProjectTypeId)
+                                   </div>
                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12" style="display:none" id="HourlyDiv">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Hourly Rate</label>
+                                    @Html.TextBoxFor(x => x.HourlyRate, new { @class = "form-control", @placeholder = "Hourly Rate" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(x => x.HourlyRate)
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -99,17 +87,20 @@
                                 <div class="form-group">
                                     <label>Project Title </label>
                                     @Html.TextBoxFor(x => x.ProjectTitle, new { @class = "form-control", @placeholder = "Project Title" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(x=>x.ProjectTitle)
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Project URL</label>
-                                    @Html.TextBoxFor(x => x.ProjectTitle, new { @class = "form-control", @placeholder = "Project URL" })
+                                    @Html.TextBoxFor(x => x.ProjectUrl, new { @class = "form-control", @placeholder = "Project URL" })
                                 </div>
                             </div>
                         </div>
 
-                        @*<div class="col-md-12">
+                        <div class="col-md-12">
                             <div class="col-md-6">
                                 <label>Description Document</label> <br />
                                 <div class="fileinput fileinput-new" data-provides="fileinput">
@@ -128,9 +119,15 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label>Project Type</label>
+                               <div class="form-group">
+                                   <label>Select Profile</label>
+                                   @Html.TextBoxFor(x=>x.upworkprofiles,new { @class = "form-control", @data_role = "tagsinput", @placeholder = "Select Upwork Profile" })
+                                   <div class="text-danger">
+                                       @Html.ValidationMessageFor(x=>x.upworkprofiles)
+                                   </div>
+                               </div>
                             </div>
-                        </div>*@
+                        </div>
 
                         <div class="col-md-12">
                             <div class="col-md-6">
@@ -152,25 +149,18 @@
                                 <div class="form-group">
                                     <label>Estimate Hours </label>
                                     @Html.EditorFor(x => x.EstimateHours, new { htmlAttributes = new { @class = "form-control", @placeholder = "Estimate Hours" } })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(x => x.EstimateHours)
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Project Type</label>
-                                    <input type="text" name="name" value="" id="input" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Project Type</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Project Type</label>
+                                    <label>Assigned Hours</label>
+                                    @Html.EditorFor(x => x.AssignedHours, new { htmlAttributes = new { @class = "form-control", @placeholder = "Assigned Hours" } })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(x => x.AssignedHours)
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -178,25 +168,20 @@
                         <div class="col-md-12">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Project Type</label>
+                                    <label>Developer Coding Hours</label>
+                                    @Html.EditorFor(x => x.developerCodinghours, new { htmlAttributes = new { @class = "form-control", @placeholder = "Developer Coding Hours" } })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(x => x.developerCodinghours)
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Project Type</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Project Type</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Project Type</label>
+                                    <label>Webservice Hours</label>
+                                    @Html.EditorFor(x => x.developerCodinghours, new { htmlAttributes = new { @class = "form-control", @placeholder = "Webservice Hours" } })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(x => x.WebserviceHours)
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -204,12 +189,20 @@
                         <div class="col-md-12">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Project Type</label>
+                                    <label>Estimate Design Hours</label>
+                                    @Html.EditorFor(x => x.EstimateDesignHours, new { htmlAttributes = new { @class = "form-control", @placeholder = "Estimate Design Hours" } })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(x => x.EstimateDesignHours)
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Project Type</label>
+                                    <label>SEO Hours </label>
+                                    @Html.EditorFor(x => x.SEOHours, new { htmlAttributes = new { @class = "form-control", @placeholder = "SEO Hours" } })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(x => x.EstimateDesignHours)
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -217,13 +210,98 @@
                         <div class="col-md-12">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Project Type</label>
+                                    <label>Analysis Hours</label>
+                                    @Html.EditorFor(x => x.AnalysisHours, new { htmlAttributes = new { @class = "form-control", @placeholder = "Analysis Hours" } })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(x => x.AnalysisHours)
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Project Type</label>
+                                    <label>Client Communication Hours</label>
+                                    @Html.EditorFor(x => x.ClientCommunicationHours, new { htmlAttributes = new { @class = "form-control", @placeholder = "Client Communication Hours" } })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(x => x.ClientCommunicationHours)
+                                    </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>SetUp Hours</label>
+                                    @Html.EditorFor(x => x.SetUpHours, new { htmlAttributes = new { @class = "form-control", @placeholder = "SetUp Hours" } })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(x => x.SetUpHours)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Maintainence Hours</label>
+                                    @Html.EditorFor(x => x.MaintainenceHours, new { htmlAttributes = new { @class = "form-control", @placeholder = "Maintainence Hours" } })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(x => x.MaintainenceHours)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Network Support Hours</label>
+                                    @Html.EditorFor(x => x.NetworkSupportHours, new { htmlAttributes = new { @class = "form-control", @placeholder = "Network Support Hours" } })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(x => x.NetworkSupportHours)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Quality Analyst Hours</label>
+                                    @Html.EditorFor(x => x.QualityAnalystHours, new { htmlAttributes = new { @class = "form-control", @placeholder = "Quality Analyst Hours" } })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(x => x.QualityAnalystHours)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label> Attach Additional Document</label> <br />
+                                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                                        <div class="input-group input-large">
+                                            <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+                                                <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                                <span class="fileinput-filename"> </span>
+                                            </div>
+                                            <span class="input-group-addon btn default btn-file">
+                                                <span class="fileinput-new"> Select file </span>
+                                                <span class="fileinput-exists"> Change </span>
+                                                @Html.TextBoxFor(x => x.UploadDocumentFile, new { @type = "File" })
+                                            </span>
+                                            <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                               <div class="col-md-offset-3 col-md-9">
+                                   <input type="submit" name="name" value="Submit" class="btn btn-lg btn-success" />
+                                   <input type="button" name="cancel" value="Cancel" class="btn btn-lg btn-default" />
+                               </div>
                             </div>
                         </div>
                     }
@@ -233,15 +311,47 @@
         </div>
     </div>
 </div>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js"></script>
+
 <script>
     $(document).ready(function () {
+        ShowHideDiv();
+        $.validator.setDefaults({ ignore: null });
         var items = [];
-        @foreach (var item in employees)
-        {
-            @:items.push({name:@item.EmployeeName,value:@item.UserId})
-        }
-        $("#input").tagsinput(items)
+        $.ajax({
+            type: "GET",
+            url: "/api/Employee/GetEmployees",
+            content: "application/json;",
+            dataType: "json",
+            success: function (data, textStatus, xhr) {
+                for (var i = 0; i < data.length; i++) {
+                    items.push(data[i].EmployeeName);
+                }
+            }
+        });
+        $('#upworkprofiles').tagsinput({
+            typeahead: {
+                source: items,
+                afterSelect: () => {
+                    $("#upworkprofiles").tagsinput('input').val('');
+                }
+            },
+            freeInput: false,
+            tagClass: 'label label-info'
+        });
+    });
+
+    $('#ProjectTypeId').change(function () {
+        ShowHideDiv();
     })
+
+    function ShowHideDiv() {
+        var value = $('#ProjectTypeId option:selected').text().toLowerCase();
+        if (value.indexOf("hourly") >= 0) {
+            $('#HourlyDiv').show();
+        }
+        else {
+            $('#HourlyRate').val('');
+            $('#HourlyDiv').hide();
+        }
+    }
 </script>
