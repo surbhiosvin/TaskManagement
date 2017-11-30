@@ -21,5 +21,8 @@ namespace Providers.Repositories
         List<ProjectReportCategoryDomainModel> GetProjectReportCategories();
         ResponseDomainModel AddProjectTimeEstimation(AddendumDomainModel model);
         ResponseDomainModel MergeProject(long projectmergeto, long projectmergefrom);
+        ResponseDomainModel AddUpdateProject(AddUpdateProjectDomainModel model);
+        List<AllProjectsDomainModel> GetAllProjectsBasedOnStatus(GetAllProjectsDomainModel model);
+        bool UpdateProjectArchive(long projectid);
     }
 }

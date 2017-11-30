@@ -1,11 +1,32 @@
-﻿@media (min-width: 992px) {
+﻿
+
+@media (min-width: 992px) {
     .page-content-wrapper .page-content {
         margin-left: 45px !important;
     }
 
-    .page-header-fixed .page-container {
+    /*.page-header-fixed .page-container {
         margin-top: 0 !important;
+    }*/
+}
+
+#loader{
+    z-index: 999;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    text-align: center;
+    display:table;
+    background-color: #e3e3e33d;
+    height:100%;
+}
+    #loader .loader-inside{
+        display:table-cell;
+        vertical-align:middle;
     }
+
+.vertical-center{
+    vertical-align:middle !important;
 }
 
 .actions-padding {

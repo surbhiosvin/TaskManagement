@@ -1,0 +1,96 @@
+﻿
+@{
+    ViewBag.Title = "ProjectList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="page-content">
+    <!-- BEGIN PAGE HEADER-->
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="javascript:">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="javascript:">Project Details</a>
+            </li>
+        </ul>
+    </div>
+    <!-- END PAGE BAR -->
+    <!-- BEGIN PAGE TITLE-->
+    <h1 class="page-title">
+        Project Details
+    </h1>
+    <!-- END PAGE TITLE-->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light bordered">
+                <div class="portlet-body" id="update">
+                    @Html.Action("_ProjectList")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        lengthchange();
+        //$('#loader').css('height', $(document).height());
+        $('.loader-inside').css('height', $(document).height() - $(document).height() * 50 / 100);
+    })
+
+    function populateTable(len) {
+        $('#loader').show();
+        $('#update').load("_ProjectList?PageSize=" + len, function () {
+            $('#sample_3').attr('data-pageLen', len)
+            TableDatatablesFixedHeader.init();
+            lengthchange();
+            $('#loader').hide();
+        });
+    }
+
+    function lengthchange() {
+        $('#sample_3').on('length.dt', function (e, settings, len) {
+            populateTable(len);
+        });
+    }
+
+    function confirm(projectId) {
+        swal({
+            title: "Are you sure want to archive?",
+            text: "Your will find this project in non-archived!",
+            type: "info",
+            showCancelButton: true,
+            confirmButtonClass: "btn-warning",
+            confirmButtonText: "Yes, archive it!",
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true
+        }, function () {
+            $.ajax({
+                type: "POST",
+                url: "/api/Project/UpdateProjectArchive?ProjectId=" + projectId,
+                success: function (response) {
+                    if (response) {
+                        //populateTable();
+                        setTimeout(function () {
+                            swal("Archived!", "Archived Successfully.", "success");
+                        }, 1000);
+                    }
+                    else {
+                        setTimeout(function () {
+                            swal("Error!", "Error occurred!", "error");
+                        }, 1000);
+                    }
+                },
+                error: function () {
+                    setTimeout(function () {
+                        swal("Error!", "Error occurred!", "error");
+                    }, 1000);
+                }
+            });
+            
+        });
+    }
+</script>
