@@ -37,3 +37,13 @@
     /*float:right;*/
     font-weight:bold;
 }
+.alert-error1 {
+  background-color: #FF4747 !important;
+
+}
+.alert-success1 {
+  background-color: #33CC33  !important;
+}
+.modal-dialog{
+    left:0px!important;
+}

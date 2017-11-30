@@ -32,7 +32,7 @@
             <li class="has-sub">
                 <a href='#'><span>Network and Hardware Issue</span></a>
                 <ul>
-                    <li><a href='#'><span>Network and Hardware Issue</span></a></li>
+                    <li><a href='~/NetworkIssues/ReportIssue'><span>Network and Hardware Issue</span></a></li>
                 </ul>
             </li>
             <li class='has-sub last'>
@@ -57,9 +57,9 @@
                 <ul>
                     <li><a href='#'><span>Project List</span></a></li>
                     <li><a href='~/Project/AddUpdateProject'><span>Add/Edit Project</span></a></li>
-                    <li><a href='#'><span>Add/Edit Addendums</span></a></li>
-                    <li><a href='#'><span>Add Working Hour of Project Before PMS</span></a></li>
-                    <li><a href='#'><span>Add/Edit Project Task Category</span></a></li>
+                    <li><a href='~/Project/AddProjectAddendumDetails'><span>Add/Edit Addendums</span></a></li>
+                    <li><a href='~/Project/AddWorkingHoursOfProjectBeforePMS'><span>Add Working Hour of Project Before PMS</span></a></li>
+                    <li><a href='~/Project/ProjectTaskCategories'><span>Add/Edit Project Task Category</span></a></li>
                 </ul>
             </li>
             <li class="has-sub">
@@ -81,7 +81,7 @@
             <li class="has-sub">
                 <a href='#'><span>Network and Hardware Issue</span></a>
                 <ul>
-                    <li><a href='#'><span>Network and Hardware Issue</span></a></li>
+                    <li><a href='~/NetworkIssues/ReportIssue'><span>Network and Hardware Issue</span></a></li>
                 </ul>
             </li>
             <li class='has-sub last'>
@@ -91,7 +91,54 @@
                 </ul>
             </li>
         }
-        else if (UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType==roleTypeModel.HR)
+        else if (UserManager.user.roleType == roleTypeModel.NetworkAdmin)
+        {
+            <li class="has-sub">
+                <a href="#">User</a>
+                <ul>
+                    <li><a href='~/Dashboard/ChangePassword'><span>Change Password</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="#">Manage Project</a>
+                <ul>
+                    <li><a href='#'><span>Project List</span></a></li>
+                    <li><a href='~/Project/AddUpdateProject'><span>Add/Edit Project</span></a></li>
+                    <li><a href='~/Project/AddProjectAddendumDetails'><span>Add/Edit Addendums</span></a></li>
+                    <li><a href='~/Project/AddWorkingHoursOfProjectBeforePMS'><span>Add Working Hour of Project Before PMS</span></a></li>
+                    <li><a href='~/Project/ProjectTaskCategories'><span>Add/Edit Project Task Category</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href='#'><span>Manage Client</span></a>
+                <ul>
+                    <li><a href='~/Client/Clients'><span>Add/Edit Client</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="#">Manage Report</a>
+                <ul>
+                    <li><a href='#'><span>Project Report</span></a></li>
+                    <li><a href='#'><span>Employee Report</span></a></li>
+                    <li><a href='#'><span>Add/Edit Status Report</span></a></li>
+                    <li><a href='#'><span>Add Daily Status Report of Employee</span></a></li>
+                    <li><a href='#'><span>Employee Daily Status Report Filed by Team Leader</span></a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href='#'><span>Network and Hardware Issue</span></a>
+                <ul>
+                    <li><a href='~/NetworkIssues/ReportIssue'><span>Network and Hardware Issue</span></a></li>
+                </ul>
+            </li>
+            <li class='has-sub last'>
+                <a href='#'><span>Project Bug</span></a>
+                <ul>
+                    <li><a href='#'><span>Bugs List</span></a></li>
+                </ul>
+            </li>
+        }
+        else if (UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType == roleTypeModel.HR)
         {
             <li class="has-sub">
                 <a href="#">User</a>
@@ -112,10 +159,10 @@
                 <ul>
                     <li><a href='#'><span>Project List</span></a></li>
                     <li><a href='~/Project/AddUpdateProject'><span>Add/Edit Project</span></a></li>
-                    <li><a href='#'><span>Add/Edit Addendums</span></a></li>
-                    <li><a href='#'><span>Add Working Hour of Project Before PMS</span></a></li>
-                    <li><a href='#'><span>Add/Edit Project Task Category</span></a></li>
-                    <li><a href='#'><span>Merge Project</span></a></li>
+                    <li><a href='~/Project/AddProjectAddendumDetails'><span>Add/Edit Addendums</span></a></li>
+                    <li><a href='~/Project/AddWorkingHoursOfProjectBeforePMS'><span>Add Working Hour of Project Before PMS</span></a></li>
+                    <li><a href='~/Project/ProjectTaskCategories'><span>Add/Edit Project Task Category</span></a></li>
+                    <li><a href='~/Project/MergeProject'><span>Merge Project</span></a></li>
                 </ul>
             </li>
             <li class="has-sub">
@@ -127,7 +174,7 @@
             <li class="has-sub">
                 <a href='#'><span>Feedback</span></a>
                 <ul>
-                    <li><a href='#'><span>Add/Edit Feedback</span></a></li>
+                    <li><a href='~/Feedback/Feedback'><span>Add/Edit Feedback</span></a></li>
                 </ul>
             </li>
             <li class="has-sub">
@@ -143,7 +190,7 @@
             <li class="has-sub">
                 <a href='#'><span>Network and Hardware Issue</span></a>
                 <ul>
-                    <li><a href='#'><span>Network and Hardware Issue</span></a></li>
+                    <li><a href='~/NetworkIssues/ReportIssue'><span>Network and Hardware Issue</span></a></li>
                     <li><a href='#'><span>Network and Hardware Issue Graph</span></a></li>
                 </ul>
             </li>
@@ -164,16 +211,16 @@
                     <li><a href='~/Management/AddUpdateUser'><span>Add/Edit User</span></a></li>
                     <li><a href='~/Dashboard/ChangePassword'><span>Change Password</span></a></li>
                 </ul>
-            </li>            
+            </li>
             <li class="has-sub">
                 <a href="#">Manage Project</a>
                 <ul>
                     <li><a href='#'><span>Project List</span></a></li>
                     <li><a href='~/Project/AddUpdateProject'><span>Add/Edit Project</span></a></li>
-                    <li><a href='#'><span>Add/Edit Addendums</span></a></li>
-                    <li><a href='#'><span>Add Working Hour of Project Before PMS</span></a></li>
-                    <li><a href='#'><span>Add/Edit Project Task Category</span></a></li>
-                    <li><a href='#'><span>Merge Project</span></a></li>
+                    <li><a href='~/Project/AddProjectAddendumDetails'><span>Add/Edit Addendums</span></a></li>
+                    <li><a href='~/Project/AddWorkingHoursOfProjectBeforePMS'><span>Add Working Hour of Project Before PMS</span></a></li>
+                    <li><a href='~/Project/ProjectTaskCategories'><span>Add/Edit Project Task Category</span></a></li>
+                    <li><a href='~/Project/MergeProject'><span>Merge Project</span></a></li>
                 </ul>
             </li>
             <li class="has-sub">
@@ -185,7 +232,7 @@
             <li class="has-sub">
                 <a href='#'><span>Feedback</span></a>
                 <ul>
-                    <li><a href='~/Management/AddEditFeedback'><span>Add/Edit Feedback</span></a></li>
+                    <li><a href='~/Feedback/Feedback'><span>Add/Edit Feedback</span></a></li>
                 </ul>
             </li>
             <li class="has-sub">
@@ -201,7 +248,7 @@
             <li class="has-sub">
                 <a href='#'><span>Network and Hardware Issue</span></a>
                 <ul>
-                    <li><a href='#'><span>Network and Hardware Issue</span></a></li>
+                    <li><a href='~/NetworkIssues/ReportIssue'><span>Network and Hardware Issue</span></a></li>
                 </ul>
             </li>
             <li class='has-sub last'>
@@ -212,6 +259,6 @@
                     <li><a href='#'><span>Bugs Graph</span></a></li>
                 </ul>
             </li>
-        }      
+        }
     </ul>
 </div>

@@ -334,10 +334,6 @@ namespace TaskManagementOsvin.Controllers
                 ResponseDomainModel res = new ResponseDomainModel();
                 if (model != null && !string.IsNullOrWhiteSpace(model.DesignationName))
                 {
-                    if(UserManager.user.roleType==roleTypeModel.TeamLeader)
-                    {
-                        model.DepartmentId = UserManager.user.DepartmentId;
-                    }
                     res = managementRepository.AddUpdateDesignation(model);
                     if (res != null && res.isSuccess)
                     {

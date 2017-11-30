@@ -108,7 +108,6 @@ namespace TaskManagementOsvin.Controllers
                 ResponseDomainModel res = new ResponseDomainModel();
                 if (model != null)
                 {
-                    model.CreatedBy = UserManager.user.UserId;
                     res = ClientRepository.AddUpdateClient(model);
                     if (res != null && res.isSuccess)
                     {

@@ -1,0 +1,266 @@
+﻿
+@{
+    ViewBag.Title = "AddProjectAddendumDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model TaskManagementOsvin.Models.AddendumModel
+<div class="page-content">
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="~/Dashboard/Welcome">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="#">Add Project Addendums Details</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            @*<li>
+                    <span>Page Layouts</span>
+                </li>*@
+        </ul>
+        <div class="page-toolbar">
+            <div class="btn-group pull-right">
+                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li>
+                        <a href="#">
+                            <i class="icon-bell"></i> Action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-shield"></i> Another action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-user"></i> Something else here
+                        </a>
+                    </li>
+                    <li class="divider"> </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-bag"></i> Separated link
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE BAR -->
+    <h1 class="page-title">
+        Add Project Addendums Details
+        <small></small>
+    </h1>
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN VALIDATION STATES-->
+            <div class="portlet light portlet-fit portlet-form bordered" id="form_wizard_1">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-layers font-green"></i>
+                        <span class="caption-subject font-green sbold uppercase">Add Project Addendums Details</span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <!-- BEGIN FORM-->
+                    @using (Html.BeginForm("AddProjectAddendumDetails", "Project", FormMethod.Post, new { enctype = "multipart/form-data", @id = "frmAddAddendum", @class = "form-horizontal" }))
+                    {
+                        <div class="form-body">
+                            <div class="alert @ViewBag.AlertType @ViewBag.Class">
+                                @*<button type="button" class="close" data-close="alert"></button>*@
+                                <a class="close" onclick="$('.alert').hide()">×</a>
+                                <span> @Html.ValidationMessage("CustomError") </span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">
+                                    Project Name
+                                    <span class="required"> * </span>
+                                </label>
+                                <div class="col-md-4">
+                                    @Html.DropDownListFor(m => m.ProjectId, ViewBag.listProjects as SelectList, "Select Project", new { @class = "form-control", @required = "required", @id = "ddlProject" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.ProjectId)
+                                    </div>
+                                    @*<input type="password" name="oldPassword" data-required="1" class="form-control" />*@
+                                </div>
+                            </div>
+                           
+                            <div class="form-group" id="dvHourlyRate" style="display:none">
+                                <label class="control-label col-md-3">
+                                    Hourly Rate  
+                                </label>
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(m => m.HourlyRate, new { @class = "form-control", @placeholder = "Enter Hourly Rate like 0.00" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.HourlyRate)
+                                    </div>
+                                    @*<input name="newPasswprd" type="text" class="form-control" />*@
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3">
+                                    Estimation Hours
+                                    <span class="required"> * </span>
+                                </label>
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(m => m.EstimateHours, new { @class = "form-control", @required = "required", @placeholder = "Enter Hours" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.EstimateHours)
+                                    </div>
+                                    @*<input name="newPasswprd" type="text" class="form-control" />*@
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3">
+                                   Assign Hours
+                                    <span class="required"> * </span>
+                                </label>
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(m => m.AssignHours, new { @class = "form-control", @required = "required", @placeholder = "Enter Hours" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.AssignHours)
+                                    </div>
+                                    @*<input name="newPasswprd" type="text" class="form-control" />*@
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Attach Addendums Documents</label>
+                                <div class="col-md-6">
+                                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                                        <div class="input-group input-large">
+                                            <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+                                                <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                                <span class="fileinput-filename"> </span>
+                                            </div>
+                                            <span class="input-group-addon btn default btn-file">
+                                                <span class="fileinput-new"> Select file </span>
+                                                <span class="fileinput-exists"> Change </span>
+                                                @*<input type="file" name="...">*@
+                                                @Html.TextBoxFor(m => m.UploadDocumentFile, new { type = "file" })
+                                                <div class="text-danger">
+                                                    @Html.ValidationMessageFor(m => m.UploadDocumentFile)
+                                                    @Html.HiddenFor(m => m.UploadDocument)
+                                                </div>
+                                            </span>
+                                            <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">
+                                    Developer Coding Hours
+                                </label>
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(m => m.DeveloperCodingHours, new { @class = "form-control", @placeholder = "Enter Hours" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.DeveloperCodingHours)
+                                    </div>
+                                    @*<input name="newPasswprd" type="text" class="form-control" />*@
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">
+                                    WebService Design Hours
+                                </label>
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(m => m.WebServiceHours, new { @class = "form-control", @placeholder = "Enter Hours" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.WebServiceHours)
+                                    </div>
+                                    @*<input name="newPasswprd" type="text" class="form-control" />*@
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">
+                                    Design Hours
+                                </label>
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(m => m.DesignHours, new { @class = "form-control", @placeholder = "Enter Hours" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.DesignHours)
+                                    </div>
+                                    @*<input name="newPasswprd" type="text" class="form-control" />*@
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">
+                                    QA Hours
+                                </label>
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(m => m.QAHours, new { @class = "form-control", @placeholder = "Enter Hours" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.QAHours)
+                                    </div>
+                                    @*<input name="newPasswprd" type="text" class="form-control" />*@
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">
+                                    Is Approved
+                                    <span class="required"> * </span>
+                                </label>
+                                <div class="col-md-4">
+                                    @Html.DropDownListFor(modelItem => modelItem.IsApprove, new[] { new SelectListItem { Text = "Please select", Value = "" }, new SelectListItem { Text = "True", Value = "True" }, new SelectListItem { Text = "False", Value = "False" } }, new { @class = "form-control", @required = "required", @id = "ddlStatus" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(m => m.IsApprove)
+                                    </div>
+                                    @*<input type="password" name="oldPassword" data-required="1" class="form-control" />*@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button type="submit" class="btn green">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <!-- END FORM-->
+                </div>
+            </div>
+            <!-- END VALIDATION STATES-->
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        ShowHideDivHourlyRate();
+    });
+    $(document).on('change', '#ddlProject', function (e) {
+        //debugger
+        ShowHideDivHourlyRate();
+    });
+    function ShowHideDivHourlyRate() {
+        var ProjectId = $("#ddlProject").val();
+        if (typeof ProjectId != 'undefined' && ProjectId!="") {
+            var url = "/api/Project/GetProjectTypeById?ProjectId=" + ProjectId
+            $.ajax({
+                type: "GET",
+                url: url,
+                contentType: "application/json; charset=utf-8",
+                dataType: "text",
+                success: function (response) {
+                    if (response == 4) {
+                        $("#dvHourlyRate").hide();
+                    }
+                    else {
+                        $("#dvHourlyRate").show();
+                    }
+                },
+                failure: function (msg) {
+                    console.log(error);
+                }
+            });
+        }
+    }
+</script>

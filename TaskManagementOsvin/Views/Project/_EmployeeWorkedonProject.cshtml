@@ -1,5 +1,6 @@
-﻿@model ProjectFullDetailsDomainModel
-@if (Model != null)
+﻿@using Providers.Helper;
+@model List<ProjectAssignToUserTotalWorkingHoursDomainModel>
+@if (Model != null && Model.Count > 0)
 {
     <div class="row">
         <div class="col-md-12">
@@ -8,89 +9,39 @@
                 <div class="portlet-title">
                     <div class="caption font-green">
                         <i class="icon-layers font-green"></i>
-                        <span class="caption-subject font-green bold uppercase">Project Additional Details</span>
+                        <span class="caption-subject font-green bold uppercase">Employee Worked on Project</span>
                     </div>
                 </div>
                 <div class="portlet-body">
-                    <table class="table table-responsive table-striped">
-                        <tr>
-                            <td class="oddColumn">Project Title :</td>
-                            <td>@Model.ProjectTitle</td>
-                            <td class="oddColumn">Project Type :</td>
-                            <td>@Model.ProjectType</td>
-                            <td class="oddColumn">Client Name :</td>
-                            <td>@Model.ClientName</td>
-                        </tr>
-                        <tr>
-                            <td class="oddColumn">Technology Name :</td>
-                            <td>@Model.TechnologyName</td>
-                            <td class="oddColumn">Hourly Rate :</td>
-                            <td>@Model.HourlyRate</td>
-                            <td class="oddColumn">Description :</td>
-                            <td>@Model.Description</td>
-                        </tr>
-                        <tr>
-                            <td class="oddColumn">Total Estimate Hours :</td>
-                            <td>@Model.TotalEstimateHours</td>
-                            <td class="oddColumn">Total Assign Hours :</td>
-                            <td>@Model.TotalAssignHours</td>
-                            <td class="oddColumn">Total Working Hours of Users : </td>
-                            <td>@Model.TotalWorkingHoursOfUser</td>
-                        </tr>
-                        <tr>
-                            <td class="oddColumn">Start Date :</td>
-                            <td>@Model.StartDate</td>
-                            <td class="oddColumn">End Date :</td>
-                            <td>@Model.EndDate</td>
-                            <td class="oddColumn">Status :</td>
-                            <td>@Model.ProjectStatus</td>
-                        </tr>
-                        <tr>
-                            <td class="oddColumn">EstimateHours :</td>
-                            <td>@Model.EstimateHours</td>
-                            <td class="oddColumn">Assign Hours :</td>
-                            <td>@Model.AssignHours</td>
-                            <td class="oddColumn">Upload Document :</td>
-                            <td>@Model.UploadDocument</td>
-                        </tr>
-                        <tr>
-                            <td class="oddColumn">DeveloperCoding Hours :</td>
-                            <td>@Model.DeveloperCodingHours</td>
-                            <td class="oddColumn">WebService Hours :</td>
-                            <td>@Model.WebServiceHours</td>
-                            <td class="oddColumn">Design Hours :</td>
-                            <td>@Model.DesignHours</td>
-                        </tr>
-                        <tr>
-                            <td class="oddColumn">Design Hourly Rate :</td>
-                            <td>@Model.DesignHourlyRate</td>
-                            <td class="oddColumn">QA Hours :</td>
-                            <td>@Model.QAHours</td>
-                            <td class="oddColumn">QA Hourly Rate :</td>
-                            <td>@Model.QAHourlyRate</td>
-                        </tr>
-                        <tr>
-                            <td class="oddColumn">SEO Hours :</td>
-                            <td>@Model.SEOHours</td>
-                            <td class="oddColumn">SEO Hourly Rate :</td>
-                            <td>@Model.SEOHourlyRate</td>
-                            <td class="oddColumn">Analysis Hours :</td>
-                            <td>@Model.AnalysisHours</td>
-                        </tr>
-                        <tr>
-                            <td class="oddColumn">Client Communication Hours :</td>
-                            <td>@Model.ClientCommunicationHours</td>
-                            <td class="oddColumn">SetUp Hours :</td>
-                            <td>@Model.SetUpHours</td>
-                            <td class="oddColumn">Maintainence Hours :</td>
-                            <td>@Model.MaintainenceHours</td>
-                        </tr>
-                        <tr>
-                            <td class="oddColumn">Network Support Hours :</td>
-                            <td>@Model.NetworkSupportHours</td>
-                            <td class="oddColumn">Close Date :</td>
-                            <td>@Model.ClosedDate</td>
-                        </tr>
+                    <table class="table table-striped table-bordered table-hover table-header-fixed" id="tbl_User">
+                        <thead>
+                            <tr class="">
+                                <th class="text-center"> Employee Name </th>
+                                <th class="text-center"> Department </th>
+                                <th class="text-center"> Designation </th>
+                                <th class="text-center"> Task Category </th>
+                                <th class="text-center"> Working Hours </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var obj in @Model)
+                            {
+                                <tr>
+                                    <td class="text-center"> @obj.EmployeeName </td>
+                                    <td class="text-center"> @obj.DepartmentName </td>
+                                    <td class="text-center"> @obj.DesignationName </td>
+                                    <td class="text-center"> @obj.CategoryName </td>
+                                    <td class="text-center"> @obj.EmployeeWorkingHours </td>
+                                </tr>
+                            }
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-center oddColumn">Total Working Hours :</td>
+                                <td class="text-center"> @Model[0].TotalWorkingHours </td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>

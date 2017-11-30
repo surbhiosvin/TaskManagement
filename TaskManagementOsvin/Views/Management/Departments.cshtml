@@ -3,7 +3,7 @@
     ViewBag.Title = "Departments";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@model List<DepartmentDomainModel>
+
 <div class="page-content">
     <!-- BEGIN PAGE BAR -->
     <div class="page-bar">
@@ -80,8 +80,8 @@
                     </div>
                     <div class="row" id="dvAddDept" style="display:none">
                         <div class="col-md-12">
-                           @using (Html.BeginForm("AddDepartment", "Management", FormMethod.Post, new { enctype = "multipart/form-data", @id = "frmChangePassword", @class = "form-horizontal" }))
-                           {
+                            @using (Html.BeginForm("AddDepartment", "Management", FormMethod.Post, new { enctype = "multipart/form-data", @id = "frmChangePassword", @class = "form-horizontal" }))
+                            {
                                 <div class="form-body">
                                     @*<div class="text-danger">
                                             <label id="lblmsg"></label>
@@ -100,43 +100,16 @@
                                         <div class="text-center">
                                             <button type="button" class="btn green" id="btnAdd">Add</button>
                                             <button type="button" class="btn green" id="btnUpdate" style="display:none">Update</button>
+                                            <button type="button" class="btn red" id="btnCancel">Cancel</button>
                                         </div>
                                     </div>
                                 </div>
-                           }
+                            }
                         </div>
                     </div>
-                    <table class="table table-striped table-bordered table-hover table-header-fixed" id="tbl_Dept">
-                        <thead>
-                            <tr class="">
-                                <th class="text-center"> Department </th>
-                                <th class="text-center"> Status </th>
-                                <th class="text-center"> Edit </th>
-                                <th class="text-center"> Delete </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Model != null)
-                            {
-                                foreach (var Dept in @Model)
-                                {
-                                    <tr id="row_@Dept.DepartmentId">
-                                        <td class="text-center"> @Dept.DepartmentName </td>
-                                        @if (Dept.IsActive)
-                                        {
-                                            <td class="text-center" id="StatusActive_@Dept.DepartmentId"><a title="Active" id="StatusActiveLink_@Dept.DepartmentId" href="#" onclick="ActivateDeactivateDepartment(@Dept.DepartmentId, false)"><img alt='Active' src='~/assets/global/img/Guiimages/Active.png' width='30px' height='30px' /></a></td>
-                                        }
-                                        else
-                                        {
-                                            <td class="text-center" id="StatusActive_@Dept.DepartmentId"><a title="InActive" id="StatusActiveLink_@Dept.DepartmentId" href="#" onclick="ActivateDeactivateDepartment(@Dept.DepartmentId, true)"><img alt='In Active Slip' src='~/assets/global/img/Guiimages/InActive.png' width='30px' height='30px' /></a></td>
-                                        }
-                                        <td class="text-center"><a class="btn green-dark" href="#" onclick="EditDepartment(@Dept.DepartmentId, '@Dept.DepartmentName')"><i class="fa fa-edit"></i></a> </td>
-                                        <td class="text-center"><a class="btn red" href="#" onclick="DeleteDepartment(@Dept.DepartmentId)"><i class="fa fa-trash"></i></a> </td>
-                                    </tr>
-                                }
-                            }
-                        </tbody>
-                    </table>
+                    <div class="row" id="dvDepartmentDetails">
+                        @Html.Action("_Departments", "Management")
+                    </div>
                 </div>
             </div>
         </div>
@@ -144,10 +117,14 @@
 </div>
 
 <!--AddUpdate modal -->
-<script type="text/javascript"> 
+<script type="text/javascript">
     jQuery(document).on('ready', function () {
+        var table = $('#tbl_Dept').DataTable();
+        table.state.clear();
+        table.destroy();
         $('#tbl_Dept').DataTable({
-        });      
+            "bStateSave": true,
+        });
     });
     function DeleteDepartment(param) {
         $(".dvAlert").hide();
@@ -156,24 +133,25 @@
         $.ajax({
             type: "Get",
             contentType: "application/json; charset=utf-8",
-            url: "/api/Management/DeleteDepartmentById?DepartmentId=" + DepartmentId,
+            url: "/Management/DeleteDepartmentById?DepartmentId=" + DepartmentId,
             beforeSend: function () {
                 $("#lblMessage").html("Please wait...");
                 $(".dvAlert").show();
             },
             success: function (response) {
-                if (response.isSuccess == true) {
-                    if(response.response!="You are not allowed to delete this department.")
-                    {
-                        $("#row_" + DepartmentId).remove();
+                $('#dvDepartmentDetails').html(response);
+                $('#tbl_Dept').DataTable({
+                    "bStateSave": true,
+                    "fnStateSave": function (oSettings, oData) {
+                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+                    },
+                    "fnStateLoad": function (oSettings) {
+                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
+                        return JSON.parse(data);
                     }
-                    $("#lblMessage").html(response.response);
-                    $(".dvAlert").show();
-                }
-                else {
-                    $("#lblMessage").html(response.response);
-                    $(".dvAlert").show();
-                }
+                });
+                $("#lblMessage").html("Department deleted successfully");
+                $(".dvAlert").show();            
             },
             error: function (error) {
                 $("#lblMessage").html("Something went wrong, please try again");
@@ -181,26 +159,37 @@
                 console.log(error);
             }
         });
-    }  
-    
+    }
+
     function ActivateDeactivateDepartment(DepartmentId, IsActive) {
         $(".dvAlert").hide();
         $("#lblMessage").html("");
         $.ajax({
             type: "Get",
             contentType: "application/json; charset=utf-8",
-            url: "/api/Management/ActivateDeactivateDepartment?DepartmentId=" + DepartmentId + "&IsActive=" + IsActive,          
+            url: "/Management/ActivateDeactivateDepartment?DepartmentId=" + DepartmentId + "&IsActive=" + IsActive,
             success: function (response) {
-                if (response.isSuccess == true) {
-                    if (IsActive == false) {
-                        $("#StatusActiveLink_" + DepartmentId).remove();
-                        $("#StatusActive_" + DepartmentId).append('<a title="InActive" id="StatusActiveLink_' + DepartmentId + '" href="#" onclick="ActivateDeactivateDepartment(' + DepartmentId + ', true)"><img alt="In Active" src="/assets/global/img/Guiimages/InActive.png" width="30px" height="30px"/></a>');
+                $('#dvDepartmentDetails').html(response);
+                $('#tbl_Dept').DataTable({
+                    "bStateSave": true,
+                    "fnStateSave": function (oSettings, oData) {
+                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+                    },
+                    "fnStateLoad": function (oSettings) {
+                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
+                        return JSON.parse(data);
                     }
-                    else {
-                        $("#StatusActiveLink_" + DepartmentId).remove();
-                        $("#StatusActive_" + DepartmentId).append('<a title="Active" id="StatusActiveLink_' + DepartmentId + '" href="#" onclick="ActivateDeactivateDepartment(' + DepartmentId + ', false)"><img alt="Active" src="/assets/global/img/Guiimages/Active.png" width="30px" height="30px"/></a>');
-                    }
-                }
+                });
+                //if (response.isSuccess == true) {
+                //    if (IsActive == false) {
+                //        $("#StatusActiveLink_" + DepartmentId).remove();
+                //        $("#StatusActive_" + DepartmentId).append('<a title="InActive" id="StatusActiveLink_' + DepartmentId + '" href="#" onclick="ActivateDeactivateDepartment(' + DepartmentId + ', true)"><img alt="In Active" src="/assets/global/img/Guiimages/InActive.png" width="30px" height="30px"/></a>');
+                //    }
+                //    else {
+                //        $("#StatusActiveLink_" + DepartmentId).remove();
+                //        $("#StatusActive_" + DepartmentId).append('<a title="Active" id="StatusActiveLink_' + DepartmentId + '" href="#" onclick="ActivateDeactivateDepartment(' + DepartmentId + ', false)"><img alt="Active" src="/assets/global/img/Guiimages/Active.png" width="30px" height="30px"/></a>');
+                //    }
+                //}
             },
             error: function (error) {
                 console.log(error);
@@ -210,10 +199,16 @@
     $("#btnAdd").click(function () {
         $("#lblMessage").html("");
         $(".dvAlert").hide();
+        var IsValid = true;
         var DepartmentName = $("#txtDepartmentName").val()
         if (DepartmentName == null || DepartmentName == "") {
-            $("#lblMessage").html("Please Enter Department Name.");
-            $(".dvAlert").show();
+            $('#txtDepartmentName').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#txtDepartmentName').css('border-color', '');
+        }
+        if (IsValid == false) {
             return false;
         }
         var model = {
@@ -222,25 +217,27 @@
         $.ajax({
             type: "POST",
             contentType: "application/json; charset=utf-8",
-            url: "/api/Management/AddupdateDepartment",
+            url: "/Management/AddUpdateDepartment",
             data: JSON.stringify(model),
             beforeSend: function () {
                 $("#lblMessage").html("Please wait...");
                 $(".dvAlert").show();
             },
             success: function (response) {
-                if (response.isSuccess == true) {
-                    $("#lblMessage").html("Department added successfully");
-                    $(".dvAlert").show();
-                    $("#txtDepartmentName").val("");
-                    setTimeout(function () {
-                        window.location.href = "/Management/Departments";
-                    }, 1700);
-                }
-                else {
-                    $("#lblMessage").html(response.response);
-                    $(".dvAlert").show();
-                }
+                $('#dvDepartmentDetails').html(response);
+                $('#tbl_Dept').DataTable({
+                    "bStateSave": true,
+                    "fnStateSave": function (oSettings, oData) {
+                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+                    },
+                    "fnStateLoad": function (oSettings) {
+                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
+                        return JSON.parse(data);
+                    }
+                });
+                $("#lblMessage").html("Department added successfully");
+                $(".dvAlert").show();
+                $("#txtDepartmentName").val('');
             },
             error: function (error) {
                 $("#lblMessage").html("Something went wrong, please try again");
@@ -261,10 +258,16 @@
     $("#btnUpdate").click(function () {
         $("#lblMessage").html("");
         $(".dvAlert").hide();
-        var DepartmentName = $("#txtDepartmentName").val()
+        var DepartmentName = $("#txtDepartmentName").val();
+        var IsValid=true;
         if (DepartmentName == null || DepartmentName == "") {
-            $("#lblMessage").html("Please Enter Department Name.");
-            $(".dvAlert").show();
+            $('#txtDepartmentName').css('border-color', 'red');
+            IsValid = false;
+        }
+        else {
+            $('#txtDepartmentName').css('border-color', '');
+        }
+        if (IsValid == false) {
             return false;
         }
         var model = {
@@ -274,27 +277,29 @@
         $.ajax({
             type: "POST",
             contentType: "application/json; charset=utf-8",
-            url: "/api/Management/AddupdateDepartment",
+            url: "/Management/AddupdateDepartment",
             data: JSON.stringify(model),
             beforeSend: function () {
                 $("#lblMessage").html("Please wait...");
                 $(".dvAlert").show();
             },
             success: function (response) {
-                if (response.isSuccess == true) {
-                    $("#lblMessage").html("Department Updated successully");
-                    $(".dvAlert").show();
-                    $("#txtDepartmentName").val("");
-                    $("#btnUpdate").hide();
-                    $("#btnAdd").show();
-                    setTimeout(function () {
-                        window.location.href = "/Management/Departments";
-                    }, 1700);
-                }
-                else {
-                    $("#lblMessage").html(response.response);
-                    $(".dvAlert").show();
-                }
+                $('#dvDepartmentDetails').html(response);
+                $('#tbl_Dept').DataTable({
+                    "bStateSave": true,
+                    "fnStateSave": function (oSettings, oData) {
+                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+                    },
+                    "fnStateLoad": function (oSettings) {
+                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
+                        return JSON.parse(data);
+                    }
+                });
+                $("#lblMessage").html("Department updated successfully");
+                $(".dvAlert").show();
+                $("#btnUpdate").hide();
+                $("#btnAdd").show();
+                $("#txtDepartmentName").val('');
             },
             error: function (error) {
                 $("#lblMessage").html("Something went wrong, please try again");
@@ -305,5 +310,11 @@
     });
     $("#btnAddDepartment").click(function () {
         $("#dvAddDept").show();
+        $("#btnAdd").show();
+        $("#btnUpdate").hide();
+    });
+    $("#btnCancel").click(function () {
+        $("#dvAddDept").hide();
+        $("#txtDepartmentName").val('');
     });
 </script>

@@ -22,6 +22,7 @@ namespace DomainModel.EntityModel
         public String Email { get; set; }
         public string Password { get; set; }
         public DateTime DateOfBirth { get; set; }
+        public string DOB { get; set; }
         public bool IsActive { get; set; }
         public string Role { get; set; }
         public string PermanentAddress { get; set; }
