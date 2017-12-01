@@ -24,5 +24,7 @@ namespace Providers.Repositories
         ResponseDomainModel AddUpdateProject(AddUpdateProjectDomainModel model);
         List<AllProjectsDomainModel> GetAllProjectsBasedOnStatus(GetAllProjectsDomainModel model);
         bool UpdateProjectArchive(long projectid);
+        ResponseDomainModel UpdateProjectStatus(UpdateProjectStatusDomainModel model);
+        GetProjectByIdDomainModel GetProjectDetailsById(long ProjectId);
     }
 }

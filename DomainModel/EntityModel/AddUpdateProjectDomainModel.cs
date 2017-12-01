@@ -8,7 +8,7 @@ namespace DomainModel.EntityModel
 {
     public class AddUpdateProjectDomainModel
     {
-        public long ProjectId { get; set; }
+        public long? ProjectId { get; set; }
         public long ClientId { get; set; }
         public int DepartmentId { get; set; }
         public string TechnologyName { get; set; }

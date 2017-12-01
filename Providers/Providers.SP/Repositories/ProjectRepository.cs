@@ -27,71 +27,106 @@ namespace Providers.Providers.SP.Repositories
             }
             catch (Exception ex)
             {
+                ErrorLog.LogError(ex);
                 return null;
             }
         }
         public ProjectFullDetailsDomainModel GetProjectFullDetails(long ProjectId)
         {
-            ProjectFullDetailsDomainModel objRes = new ProjectFullDetailsDomainModel();
             try
             {
-                objRes = objHelper.Query<ProjectFullDetailsDomainModel>("GET_PROJECT_FULL_DETAILS_MAIN_NEW_MVC", new { ProjectId = ProjectId }).FirstOrDefault();
+               var objRes = objHelper.Query<ProjectFullDetailsDomainModel>("GET_PROJECT_FULL_DETAILS_MAIN_NEW_MVC", new { ProjectId = ProjectId }).FirstOrDefault();
+                return objRes;
             }
             catch (Exception ex)
             {
                 ErrorLog.LogError(ex);
+                return null;
             }
-            return objRes;
+        }
+
+        public GetProjectByIdDomainModel GetProjectDetailsById(long ProjectId)
+        {
+            try
+            {
+                var objRes = objHelper.Query<GetProjectByIdDomainModel>("GetProjectById", new { ProjectId = ProjectId }).FirstOrDefault();
+                return objRes;
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError(ex);
+                return null;
+            }
+        }
+
+        public ResponseDomainModel UpdateProjectStatus(UpdateProjectStatusDomainModel model)
+        {
+            ResponseDomainModel responseModel = new ResponseDomainModel();
+            try
+            {
+                var response = objHelper.Execute("UpdateProjectStatus", new { ProjectId = model.ProjectId, status = model.status, ProjectUrl = model.ProjectUrl });
+                if (response > 0)
+                {
+                    responseModel.isSuccess = true;
+                    responseModel.response = "Success";
+                }
+                return responseModel;
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError(ex);
+                return null;
+            }
         }
         public List<AddendumDomainModel> GetProjectAddendumDetails(long ProjectId)
         {
-            List<AddendumDomainModel> listAddendums = new List<AddendumDomainModel>();
             try
             {
-                listAddendums = objHelper.Query<AddendumDomainModel>("GetProjectAddendumDetails", new { ProjectId = ProjectId }).ToList();
+               var listAddendums = objHelper.Query<AddendumDomainModel>("GetProjectAddendumDetails", new { ProjectId = ProjectId }).ToList();
+                return listAddendums;
             }
             catch (Exception ex)
             {
                 ErrorLog.LogError(ex);
+                return null;
             }
-            return listAddendums;
         }
         public List<ProjectAssignToUserTotalWorkingHoursDomainModel> GetProjectAssignToUserWithTotalWorkingHours(long ProjectId = 0, long DepartmentId = 0, string Status = "")
         {
-            List<ProjectAssignToUserTotalWorkingHoursDomainModel> listEmployeeHours = new List<ProjectAssignToUserTotalWorkingHoursDomainModel>();
             try
             {
-                listEmployeeHours = objHelper.Query<ProjectAssignToUserTotalWorkingHoursDomainModel>("GET_PROJECT_ASSIGN_TO_USER_WITH_TOTAL_WORKING_HOURS_NEW", new
+               var listEmployeeHours = objHelper.Query<ProjectAssignToUserTotalWorkingHoursDomainModel>("GET_PROJECT_ASSIGN_TO_USER_WITH_TOTAL_WORKING_HOURS_NEW", new
                 {
                     projectid = ProjectId,
                     DepartmentId = DepartmentId,
                     Status = Status
                 }).ToList();
+                return listEmployeeHours;
             }
             catch (Exception ex)
             {
                 ErrorLog.LogError(ex);
+                return null;
             }
-            return listEmployeeHours;
         }
         public List<ProjectDomainModel> GetProjectList()
         {
-            List<ProjectDomainModel> listProjects = new List<ProjectDomainModel>();
             try
             {
-                listProjects = objHelper.Query<ProjectDomainModel>("GetProjectList", null).ToList();
+               var listProjects = objHelper.Query<ProjectDomainModel>("GetProjectList", null).ToList();
+                return listProjects;
             }
             catch (Exception ex)
             {
                 ErrorLog.LogError(ex);
+                return null;
             }
-            return listProjects;
         }
         public ResponseDomainModel AddProjectWorkingHoursBeforePms(ProjectWorkingHoursBeforePMSDomainModel model)
         {
-            ResponseDomainModel objRes = new ResponseDomainModel();
             try
             {
+                ResponseDomainModel objRes = new ResponseDomainModel();
                 var add = objHelper.Query<string>("ADD_PROJECT_WORKING_HOURS_BEFORE_PMS", new { projectid = model.ProjectId, Workinghours = model.WorkinghHours, createddate = model.CreatedDate, createdby = model.CreatedBy }).FirstOrDefault();
                 if (add == "Insert")
                 {
@@ -108,14 +143,13 @@ namespace Providers.Providers.SP.Repositories
                     objRes.isSuccess = false;
                     objRes.response = "Working Hours not saved.";
                 }
+                return objRes;
             }
             catch (Exception ex)
             {
                 ErrorLog.LogError(ex);
-                objRes.isSuccess = false;
-                objRes.response = "Something went wrong, please try again.";
+                return null;
             }
-            return objRes;
         }
         public ResponseDomainModel AddUpdateReportCategory(ProjectReportCategoryDomainModel model)
         {
@@ -146,14 +180,14 @@ namespace Providers.Providers.SP.Repositories
                     objRes.isSuccess = false;
                     objRes.response = "Something went wrong, please try again.";
                 }
+                return objRes;
             }
             catch (Exception ex)
             {
                 ErrorLog.LogError(ex);
-                objRes.isSuccess = false;
-                objRes.response = "Something went wrong, please try again.";
+                return null;
             }
-            return objRes;
+            
         }
         public ResponseDomainModel ActivateDeactivateProjectReportCategory(long CategoryId, bool IsActive)
         {
@@ -164,51 +198,53 @@ namespace Providers.Providers.SP.Repositories
                 if (res > 0)
                 {
                     objRes.isSuccess = true;
-                    objRes.response = "sucsess";
+                    objRes.response = "success";
                 }
+                return objRes;
             }
             catch (Exception ex)
             {
                 ErrorLog.LogError(ex);
+                return null;
             }
-            return objRes;
         }
         public ResponseDomainModel DeleteProjectReportCategory(long CategoryId)
         {
-            ResponseDomainModel objRes = new ResponseDomainModel();
             try
             {
+                ResponseDomainModel objRes = new ResponseDomainModel();
                 var res = objHelper.Execute("DeleteProjectReportCategory", new { CategoryId = CategoryId });
                 if (res > 0)
                 {
                     objRes.isSuccess = true;
-                    objRes.response = "sucsess";
+                    objRes.response = "success";
                 }
+                return objRes;
             }
             catch (Exception ex)
             {
                 ErrorLog.LogError(ex);
+                return null;
             }
-            return objRes;
         }
         public List<ProjectReportCategoryDomainModel> GetProjectReportCategories()
         {
-            List<ProjectReportCategoryDomainModel> listProjectReportCategories = new List<ProjectReportCategoryDomainModel>();
             try
             {
-                listProjectReportCategories = objHelper.Query<ProjectReportCategoryDomainModel>("GetProjectReportCategories", null).ToList();
+               var listProjectReportCategories = objHelper.Query<ProjectReportCategoryDomainModel>("GetProjectReportCategories", null).ToList();
+                return listProjectReportCategories;
             }
             catch (Exception ex)
             {
                 ErrorLog.LogError(ex);
+                return null;
             }
-            return listProjectReportCategories;
         }
         public ResponseDomainModel AddProjectTimeEstimation(AddendumDomainModel model)
         {
-            ResponseDomainModel objRes = new ResponseDomainModel();
             try
             {
+                ResponseDomainModel objRes = new ResponseDomainModel();
                 int ProjectTimeEstimation = objHelper.ExecuteScalar("AddProjectTimeEstimation", new
                 {
                     @ProjectId = model.ProjectId,
@@ -233,20 +269,19 @@ namespace Providers.Providers.SP.Repositories
                     objRes.isSuccess = false;
                     objRes.response = "Something went wrong, please try again.";
                 }
+                return objRes;
             }
             catch (Exception ex)
             {
                 ErrorLog.LogError(ex);
-                objRes.isSuccess = false;
-                objRes.response = "Something went wrong, please try again.";
+                return null;
             }
-            return objRes;
         }
         public ResponseDomainModel MergeProject(long projectmergeto, long projectmergefrom)
         {
-            ResponseDomainModel objRes = new ResponseDomainModel();
             try
             {
+                ResponseDomainModel objRes = new ResponseDomainModel();
                 var merge = objHelper.Query<string>("MERGEPROJECT", new { projectmergeto = projectmergeto, projectmergefrom = projectmergefrom}).FirstOrDefault();
                 var add= objHelper.Query<string>("ADD_MERGE_PROJECT_DETAILS", new { projectmergeto = projectmergeto, projectmergefrom = projectmergefrom }).FirstOrDefault();
                 if (merge == "Successfull" && add== "Insert")
@@ -259,15 +294,13 @@ namespace Providers.Providers.SP.Repositories
                     objRes.isSuccess = false;
                     objRes.response = "something wrong with database";
                 }
+                return objRes;
             }
             catch (Exception ex)
             {
                 ErrorLog.LogError(ex);
-                objRes.isSuccess = false;
-                objRes.response = "Something went wrong, please try again.";
+                return null;
             }
-            return objRes;
-        }
         }
 
         public ResponseDomainModel AddUpdateProject(AddUpdateProjectDomainModel model)

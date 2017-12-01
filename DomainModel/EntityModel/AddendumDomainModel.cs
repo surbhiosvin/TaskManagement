@@ -8,8 +8,8 @@ namespace DomainModel.EntityModel
 {
     public class AddendumDomainModel
     {
-      public long TimeEstimationId { get; set; }
-      public long ProjectId { get; set; }
+        public long TimeEstimationId { get; set; }
+        public long ProjectId { get; set; }
         public string EstimateHours { get; set; }
         public string AssignHours { get; set; }
         public string Description { get; set; }
