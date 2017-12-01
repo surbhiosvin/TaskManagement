@@ -73,7 +73,7 @@
                     {
                         @Html.HiddenFor(model => model.UserId)
                         <div class="form-body">
-                            <div class="alert @ViewBag.AlertType @ViewBag.Class">
+                            <div class="alert @ViewBag.Class">
                                 @*<button type="button" class="close" data-close="alert"></button>*@
                                 <a class="close" onclick="$('.alert').hide()">×</a>
                                 <span> @Html.ValidationMessage("CustomError") </span>

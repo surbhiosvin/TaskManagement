@@ -1,0 +1,486 @@
+﻿
+@{
+    ViewBag.Title = "ReportBug";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using TaskManagementOsvin.Models;
+@model BugsModel
+<div class="page-content">
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="~/Dashboard/Welcome">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="#">Report Bug</a>
+                <i class="fa fa-circle"></i>
+            </li>
+        </ul>
+        <div class="page-toolbar">
+            <div class="btn-group pull-right">
+                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li>
+                        <a href="#">
+                            <i class="icon-bell"></i> Action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-shield"></i> Another action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-user"></i> Something else here
+                        </a>
+                    </li>
+                    <li class="divider"> </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-bag"></i> Separated link
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE BAR -->
+    <!-- BEGIN PAGE TITLE-->
+    <h1 class="page-title">
+        Report Bug
+        @*<small>blank page layout</small>*@
+    </h1>
+    <!-- END PAGE TITLE-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN EXAMPLE TABLE PORTLET-->
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption font-green">
+                        <i class="icon-layers font-green"></i>
+                        <span class="caption-subject font-green bold uppercase">Report Bug</span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="row" id="dvReportBug">
+                        <div class="col-md-12">
+                            @using (Html.BeginForm("ReportBug", "Bugs", FormMethod.Post, new { enctype = "multipart/form-data", @id = "frmReportBug", @class = "form-horizontal" }))
+                            {
+                            @Html.HiddenFor(model => model.BugId)
+                            <div class="form-body">
+                                <div class="alert @ViewBag.Class">
+                                    <a class="close" onclick="$('.alert').hide()">×</a>
+                                    <span> @Html.ValidationMessage("CustomError") </span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">
+                                        Emplyoee Name<span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6">
+                                        @Html.DropDownListFor(m => m.UserId, new SelectList(Model.listEmployees, "UserId", "EmployeeName"), "Please Select", new { @class = "form-control ddlEmployee", @required = "required" })
+                                        <div class="text-danger">
+                                            @Html.ValidationMessageFor(m => m.UserId)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">
+                                        Project <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6">
+                                        @Html.DropDownListFor(m => m.ProjectId, new SelectList(Model.listProjects, "ProjectId", "ProjectTitle"), "Please Select", new { @class = "form-control ddlProject", @required = "required" })
+                                        <div class="text-danger">
+                                            @Html.ValidationMessageFor(m => m.UserId)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">
+                                        Subject <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(m => m.BugSubject, new { @class = "form-control", @placeholder = "Enter Subject", @required = "required" })
+                                        <div class="text-danger">
+                                            @Html.ValidationMessageFor(m => m.BugSubject)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">
+                                        Description <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(m => m.BugDescription, new { @class = "form-control", @placeholder = "Enter Description", @required = "required" })
+                                        <div class="text-danger">
+                                            @Html.ValidationMessageFor(m => m.BugDescription)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">Ist ID Proof</label>
+                                    <div class="col-md-6">
+                                        <div class="fileinput fileinput-new" data-provides="fileinput">
+                                            <div class="input-group input-large">
+                                                <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+                                                    <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                                    <span class="fileinput-filename"> </span>
+                                                </div>
+                                                <span class="input-group-addon btn default btn-file">
+                                                    <span class="fileinput-new"> Select file </span>
+                                                    <span class="fileinput-exists"> Change </span>
+                                                    @Html.TextBoxFor(m => m.PostedFiles, new { type = "file", @multiple = "multiple" })
+                                                    <div class="text-danger">
+                                                        @Html.ValidationMessageFor(m => m.PostedFiles)
+                                                        @Html.HiddenFor(m => m.Files)
+                                                    </div>
+                                                </span>
+                                                <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">
+                                        Priority  <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6">
+                                        @Html.DropDownListFor(m => m.Priority, new SelectList(ViewData["ddlPriority"] as List<SelectListItem>, "Value", "Text", Model.Priority), "Please Select", new { @class = "form-control", @required = "required" })
+                                        <div class="text-danger">
+                                            @Html.ValidationMessageFor(m => m.Priority)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">
+                                        Status <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6">
+                                        @Html.DropDownListFor(m => m.Status, new SelectList(ViewData["ddlStatus"] as List<SelectListItem>, "Value", "Text", Model.Status), "Please Select", new { @class = "form-control", @required = "required" })
+                                        <div class="text-danger">
+                                            @Html.ValidationMessageFor(m => m.Status)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-actions text-center">
+                                <div class="btn-set">
+                                    <button type="submit" class="btn green">Submit</button>
+                                    <a href="~/Bugs/Bugs" class="btn blue">Bugs List</a>
+                                    <button type="button" class="btn red">Cancel</button>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--AddUpdate modal -->
+<script type="text/javascript">
+        jQuery(document).on('ready', function () {
+            var table = $('#tbl_Feedback').DataTable();
+            table.state.clear();
+            table.destroy();
+            $('#tbl_Feedback').DataTable({
+                "bStateSave": true,
+            });
+        });
+        function DeleteFeedback(FeedbackId) {
+            $.ajax({
+                type: "Get",
+                contentType: "application/json; charset=utf-8",
+                url: "/Feedback/DeleteFeedback?FeedbackId=" + FeedbackId,
+                success: function (response) {
+                    $('#dvFeedbackDetails').html(response);
+                    $('#tbl_Feedback').DataTable({
+                        "bStateSave": true,
+                        "fnStateSave": function (oSettings, oData) {
+                            localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+                        },
+                        "fnStateLoad": function (oSettings) {
+                            var data = localStorage.getItem('DataTables_' + window.location.pathname);
+                            return JSON.parse(data);
+                        }
+                    });
+                    $("#lblMessage").html("Feedback deleted successfully");
+                    $(".dvAlert").show();
+                },
+                error: function (error) {
+                    $("#lblMessage").html("Something went wrong, please try again.");
+                    $(".dvAlert").show();
+                    console.log(error);
+                }
+            });
+        }
+        function ActivateDeactivateFeedback(FeedbackId, IsActive) {
+            $(".dvAlert").hide();
+            $("#lblMessage").html("");
+            $.ajax({
+                type: "Get",
+                contentType: "application/json; charset=utf-8",
+                url: "/Feedback/ActivateDeactivateFeedback?FeedbackId=" + FeedbackId + "&IsActive=" + IsActive,
+                success: function (response) {
+                    $('#dvFeedbackDetails').html(response);
+                    $('#tbl_Feedback').DataTable({
+                        "bStateSave": true,
+                        "fnStateSave": function (oSettings, oData) {
+                            localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+                        },
+                        "fnStateLoad": function (oSettings) {
+                            var data = localStorage.getItem('DataTables_' + window.location.pathname);
+                            return JSON.parse(data);
+                        }
+                    });
+                    //if (response.isSuccess == true) {
+                    //    if (IsActive == false) {
+                    //        $("#StatusActiveLink_" + FeedbackId).remove();
+                    //        $("#StatusActive_" + FeedbackId).append('<a title="InActive" id="StatusActiveLink_' + FeedbackId + '" href="#" onclick="ActivateDeactivateFeedback(' + FeedbackId + ', true)"><img alt="In Active" src="/assets/global/img/Guiimages/InActive.png" width="30px" height="30px"/></a>');
+                    //    }
+                    //    else {
+                    //        $("#StatusActiveLink_" + FeedbackId).remove();
+                    //        $("#StatusActive_" + FeedbackId).append('<a title="Active" id="StatusActiveLink_' + FeedbackId + '" href="#" onclick="ActivateDeactivateFeedback(' + FeedbackId + ', false)"><img alt="Active" src="/assets/global/img/Guiimages/Active.png" width="30px" height="30px"/></a>');
+                    //    }
+                    //}
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        $("#btnAdd").click(function () {
+            $("#lblMessage").html("");
+            $(".dvAlert").hide();
+            var IsValid = true;
+            var ProjectId = $("#ddlProjects").val();
+            var FeedTypeId = $("#ddlFeedType").val();
+            var Name = $("#txtClientName").val();
+            var Description = $('#txtDescription').val();
+            var Rating = $('#txtRating').val();
+            var Status = $('#ddlStatus').val();
+
+            if (ProjectId == null || ProjectId <= 0) {
+                $('#ddlProjects').css('border-color', 'red');
+                IsValid = false;
+            }
+            else {
+                $('#ddlProjects').css('border-color', '');
+            }
+            if (FeedTypeId == null || FeedTypeId <= 0) {
+                $('#ddlFeedType').css('border-color', 'red');
+                IsValid = false;
+            }
+            else {
+                $('#ddlFeedType').css('border-color', '');
+            }
+            if (Name == null || Name == "") {
+                $('#txtClientName').css('border-color', 'red');
+                IsValid = false;
+            }
+            else {
+                $('#txtClientName').css('border-color', '');
+            }
+            if (Description == null || Description == "") {
+                $('#txtDescription').css('border-color', 'red');
+                IsValid = false;
+            }
+            else {
+                $('#txtDescription').css('border-color', '');
+            }
+            if (Rating == null || Rating == "") {
+                $('#txtRating').css('border-color', 'red');
+                IsValid = false;
+            }
+            else {
+                $('#txtRating').css('border-color', '');
+            }
+            if (Status == null || Status == "") {
+                $('#ddlStatus').css('border-color', 'red');
+                IsValid = false;
+            }
+            else {
+                $('#ddlStatus').css('border-color', '');
+            }
+            if (IsValid == false) {
+                return false;
+            }
+            var model = {
+                ProjectId: ProjectId,
+                FeedTypeId: FeedTypeId,
+                Name: Name,
+                Description: Description,
+                Feed: Rating,
+                IsActive: Status == 1 ? true : false
+            }
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "/Feedback/AddUpdateFeedback",
+                data: JSON.stringify(model),
+                beforeSend: function () {
+                    $("#lblMessage").html("Please wait...");
+                    $(".dvAlert").show();
+                },
+                success: function (response) {
+                    $('#dvFeedbackDetails').html(response);
+                    $('#tbl_Feedback').DataTable({
+                        "bStateSave": true,
+                        "fnStateSave": function (oSettings, oData) {
+                            localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+                        },
+                        "fnStateLoad": function (oSettings) {
+                            var data = localStorage.getItem('DataTables_' + window.location.pathname);
+                            return JSON.parse(data);
+                        }
+                    });
+                    $("#lblMessage").html("Feedback added successfully");
+                    $(".dvAlert").show();
+                    ClearFields();
+
+                },
+                error: function (error) {
+                    $("#lblMessage").html("Something went wrong, please try again");
+                    $(".dvAlert").show();
+                    console.log(error);
+                }
+            });
+        });
+        function EditFeedback(Feedback) {
+            $("#lblMessage").html("");
+            $(".dvAlert").hide();
+            $("#dvAddFeedback").show();
+            $("#hdnFeedbackId").val(Feedback.FeedbackId);
+            $("#ddlProjects").val(Feedback.ProjectId);
+            $("#ddlFeedType").val(Feedback.FeedTypeId);
+            $("#txtClientName").val(Feedback.Name);
+            $("#txtDescription").val(Feedback.Description);
+            $("#txtRating").val(Feedback.Feed);
+            $("#ddlStatus").val(Feedback.IsActive == true ? 1 : 0);
+            $("#btnAdd").hide();
+            $("#btnUpdate").show();
+        }
+        $("#btnUpdate").click(function () {
+            $("#lblMessage").html("");
+            $(".dvAlert").hide();
+            var IsValid = true;
+            var ProjectId = $("#ddlProjects").val();
+            var FeedTypeId = $("#ddlFeedType").val();
+            var Name = $("#txtClientName").val();
+            var Description = $('#txtDescription').val();
+            var Rating = $('#txtRating').val();
+            var Status = $('#ddlStatus').val();
+
+            if (ProjectId == null || ProjectId <= 0) {
+                $('#ddlProjects').css('border-color', 'red');
+                IsValid = false;
+            }
+            else {
+                $('#ddlProjects').css('border-color', '');
+            }
+            if (FeedTypeId == null || FeedTypeId <= 0) {
+                $('#ddlFeedType').css('border-color', 'red');
+                IsValid = false;
+            }
+            else {
+                $('#ddlFeedType').css('border-color', '');
+            }
+            if (Name == null || Name == "") {
+                $('#txtClientName').css('border-color', 'red');
+                IsValid = false;
+            }
+            else {
+                $('#txtClientName').css('border-color', '');
+            }
+            if (Description == null || Description == "") {
+                $('#txtDescription').css('border-color', 'red');
+                IsValid = false;
+            }
+            else {
+                $('#txtDescription').css('border-color', '');
+            }
+            if (Rating == null || Rating == "") {
+                $('#txtRating').css('border-color', 'red');
+                IsValid = false;
+            }
+            else {
+                $('#txtRating').css('border-color', '');
+            }
+            if (Status == null || Status == "") {
+                $('#ddlStatus').css('border-color', 'red');
+                IsValid = false;
+            }
+            else {
+                $('#ddlStatus').css('border-color', '');
+            }
+            if (IsValid == false) {
+                return false;
+            }
+            var model = {
+                FeedbackId: $("#hdnFeedbackId").val(),
+                ProjectId: ProjectId,
+                FeedTypeId: FeedTypeId,
+                Name: Name,
+                Description: Description,
+                Feed: Rating,
+                IsActive: Status == 1 ? true : false
+            }
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "/Feedback/AddUpdateFeedback",
+                data: JSON.stringify(model),
+                beforeSend: function () {
+                    $("#lblMessage").html("Please wait...");
+                    $(".dvAlert").show();
+                },
+                success: function (response) {
+                    $('#dvFeedbackDetails').html(response); $('#dvFeedbackDetails').html(response);
+                    $('#tbl_Feedback').DataTable({
+                        "bStateSave": true,
+                        "fnStateSave": function (oSettings, oData) {
+                            localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+                        },
+                        "fnStateLoad": function (oSettings) {
+                            var data = localStorage.getItem('DataTables_' + window.location.pathname);
+                            return JSON.parse(data);
+                        }
+                    });
+                    $("#lblMessage").html("Feedback updated successfully");
+                    $(".dvAlert").show();
+                    $("#btnUpdate").hide();
+                    $("#btnAdd").show();
+                    ClearFields();
+                },
+                error: function (error) {
+                    $("#lblMessage").html("Something went wrong, please try again");
+                    $(".dvAlert").show();
+                    console.log(error);
+                }
+            });
+        });
+        $("#btnAddFeedback").click(function () {
+            $("#dvAddFeedback").show();
+            $("#btnAdd").show();
+            $("#btnUpdate").hide();
+        });
+        $("#btnCancel").click(function () {
+            $("#dvAddFeedback").hide();
+            ClearFields();
+        });
+        function ClearFields() {
+            $("#ddlProjects").val('');
+            $("#ddlFeedType").val('');
+            $("#txtClientName").val('');
+            $('#txtDescription').val('');
+            $('#txtRating').val('');
+            $('#ddlStatus').val('');
+        }
+</script>

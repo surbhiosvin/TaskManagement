@@ -18,42 +18,42 @@ namespace Providers.Providers.SP.Repositories
         SqlHelper objHelper = new SqlHelper();
         public List<FeedbackDomainModel> GetProjectFeedback(long ProjectId)
         {
-            List<FeedbackDomainModel> listProjectFeedback = new List<FeedbackDomainModel>();
             try
             {
-                listProjectFeedback = objHelper.Query<FeedbackDomainModel>("GetProjectFeedback", new { ProjectId = ProjectId }).ToList();
+                var listProjectFeedback = objHelper.Query<FeedbackDomainModel>("GetProjectFeedback", new { ProjectId = ProjectId }).ToList();
+                return listProjectFeedback;
             }
             catch (Exception ex)
             {
                 ErrorLog.LogError(ex);
+                return null;
             }
-            return listProjectFeedback;
         }
         public List<FeedbackDomainModel> GetFeedList()
         {
-            List<FeedbackDomainModel> listFeedback = new List<FeedbackDomainModel>();
             try
             {
-                listFeedback = objHelper.Query<FeedbackDomainModel>("GetAllFeedbacks", null).ToList();
+               var listFeedback = objHelper.Query<FeedbackDomainModel>("GetAllFeedbacks", null).ToList();
+                return listFeedback;
             }
             catch (Exception ex)
             {
                 ErrorLog.LogError(ex);
+                return null;
             }
-            return listFeedback;
         }
         public List<FeedTypeDomainModel> GetAllFeedTypes()
         {
-            List<FeedTypeDomainModel> listFeedtypes = new List<FeedTypeDomainModel>();
             try
             {
-                listFeedtypes = objHelper.Query<FeedTypeDomainModel>("GetAllFeedTypes", null).ToList();
+               var listFeedtypes = objHelper.Query<FeedTypeDomainModel>("GetAllFeedTypes", null).ToList();
+                return listFeedtypes;
             }
             catch (Exception ex)
             {
                 ErrorLog.LogError(ex);
+                return null;
             }
-            return listFeedtypes;
         }
         public ResponseDomainModel AddUpdateFeedback(FeedbackDomainModel model)
         {

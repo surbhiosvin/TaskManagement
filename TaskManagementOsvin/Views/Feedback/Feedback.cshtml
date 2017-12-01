@@ -163,12 +163,10 @@
 <!--AddUpdate modal -->
 <script type="text/javascript">
     jQuery(document).on('ready', function () {
-        var table = $('#tbl_Feedback').DataTable();
+        var table = $('#sample_2').DataTable();
         table.state.clear();
         table.destroy();
-        $('#tbl_Feedback').DataTable({
-            "bStateSave": true,
-        });
+        TableDatatablesFixedHeader.init();
     });
     function DeleteFeedback(FeedbackId) {
         $.ajax({
@@ -176,17 +174,8 @@
             contentType: "application/json; charset=utf-8",
             url: "/Feedback/DeleteFeedback?FeedbackId=" + FeedbackId,
             success: function (response) {
-                $('#dvFeedbackDetails').html(response);
-                $('#tbl_Feedback').DataTable({
-                    "bStateSave": true,
-                    "fnStateSave": function (oSettings, oData) {
-                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
-                    },
-                    "fnStateLoad": function (oSettings) {
-                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
-                        return JSON.parse(data);
-                    }
-                });
+                $('#dvFeedbackDetails').html(response);                /
+                TableDatatablesFixedHeader.init();
                 $("#lblMessage").html("Feedback deleted successfully");
                 $(".dvAlert").show();
             },
@@ -206,16 +195,7 @@
             url: "/Feedback/ActivateDeactivateFeedback?FeedbackId=" + FeedbackId + "&IsActive=" + IsActive,
             success: function (response) {
                 $('#dvFeedbackDetails').html(response);
-                $('#tbl_Feedback').DataTable({
-                    "bStateSave": true,
-                    "fnStateSave": function (oSettings, oData) {
-                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
-                    },
-                    "fnStateLoad": function (oSettings) {
-                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
-                        return JSON.parse(data);
-                    }
-                });
+                TableDatatablesFixedHeader.init();
                 //if (response.isSuccess == true) {
                 //    if (IsActive == false) {
                 //        $("#StatusActiveLink_" + FeedbackId).remove();
@@ -308,16 +288,7 @@
             },
             success: function (response) {
                 $('#dvFeedbackDetails').html(response);
-                $('#tbl_Feedback').DataTable({
-                    "bStateSave": true,
-                    "fnStateSave": function (oSettings, oData) {
-                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
-                    },
-                    "fnStateLoad": function (oSettings) {
-                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
-                        return JSON.parse(data);
-                    }
-                });
+                TableDatatablesFixedHeader.init();
                 $("#lblMessage").html("Feedback added successfully");
                 $(".dvAlert").show();
                 ClearFields();
@@ -420,16 +391,7 @@
             },
             success: function (response) {
                 $('#dvFeedbackDetails').html(response); $('#dvFeedbackDetails').html(response);
-                $('#tbl_Feedback').DataTable({
-                    "bStateSave": true,
-                    "fnStateSave": function (oSettings, oData) {
-                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
-                    },
-                    "fnStateLoad": function (oSettings) {
-                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
-                        return JSON.parse(data);
-                    }
-                });
+                TableDatatablesFixedHeader.init();
                 $("#lblMessage").html("Feedback updated successfully");
                 $(".dvAlert").show();
                 $("#btnUpdate").hide();

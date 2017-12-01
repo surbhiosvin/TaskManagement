@@ -141,12 +141,10 @@
 <!--AddUpdate modal -->
 <script type="text/javascript">
     jQuery(document).on('ready', function () {
-        var table = $('#tbl_Designation').DataTable();
+        var table = $('#sample_2').DataTable();
         table.state.clear();
         table.destroy();
-        $('#tbl_Designation').DataTable({
-            "bStateSave": true,
-        });
+        TableDatatablesFixedHeader.init();
     });
     function DeleteDesignation(param) {
         $(".dvAlert").hide();
@@ -162,16 +160,7 @@
             },
             success: function (response) {
                 $('#dvDesignationDetails').html(response);
-                $('#tbl_Designation').DataTable({
-                    "bStateSave": true,
-                    "fnStateSave": function (oSettings, oData) {
-                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
-                    },
-                    "fnStateLoad": function (oSettings) {
-                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
-                        return JSON.parse(data);
-                    }
-                });
+                TableDatatablesFixedHeader.init();
                 $("#lblMessage").html("Designation deleted successfully");
                 $(".dvAlert").show();
                 //if (response.isSuccess == true) {
@@ -202,16 +191,7 @@
             url: "/Management/ActivateDeactivateDesignation?DesignationId=" + DesignationId + "&IsActive=" + IsActive,
             success: function (response) {
                 $('#dvDesignationDetails').html(response);
-                $('#tbl_Designation').DataTable({
-                    "bStateSave": true,
-                    "fnStateSave": function (oSettings, oData) {
-                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
-                    },
-                    "fnStateLoad": function (oSettings) {
-                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
-                        return JSON.parse(data);
-                    }
-                });
+                TableDatatablesFixedHeader.init();
                 //if (response.isSuccess == true) {
                 //    if (IsActive == false) {
                 //        $("#StatusActiveLink_" + DesignationId).remove();
@@ -271,16 +251,7 @@
                 $(".dvAlert").show();
                 $('#ddlDepartment').val(0);
                 $("#txtDesignation").val('');
-                $('#tbl_Designation').DataTable({
-                    "bStateSave": true,
-                    "fnStateSave": function (oSettings, oData) {
-                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
-                    },
-                    "fnStateLoad": function (oSettings) {
-                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
-                        return JSON.parse(data);
-                    }
-                });
+                TableDatatablesFixedHeader.init();
                 //if (response.isSuccess == true) {
                 //    $("#lblMessage").html("Designation added successfully");
                 //    $(".dvAlert").show();
@@ -355,16 +326,7 @@
             },
             success: function (response) {
                 $('#dvDesignationDetails').html(response);
-                $('#tbl_Designation').DataTable({
-                    "bStateSave": true,
-                    "fnStateSave": function (oSettings, oData) {
-                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
-                    },
-                    "fnStateLoad": function (oSettings) {
-                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
-                        return JSON.parse(data);
-                    }
-                });
+                TableDatatablesFixedHeader.init();
                 $("#lblMessage").html("Designation updated successfully");
                 $(".dvAlert").show();
                 $("#btnUpdate").hide();

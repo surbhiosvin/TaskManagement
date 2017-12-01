@@ -87,5 +87,10 @@ namespace TaskManagementOsvin.Controllers
             }
             return RedirectToAction("_ReportIssue");
         }
+        public ActionResult NetworkIssueReport()
+        {
+            ViewBag.Class = "display-hide";
+            return View();
+        }
     }
 }

@@ -405,14 +405,14 @@
 <link href="~/assets/pages/css/jquery.rating.css" rel="stylesheet" />
 <script src="~/assets/pages/scripts/jquery.rating.js"></script>
 <script type="text/javascript">
-    jQuery(document).on('ready', function () {
-        var table = $('#tbl_Issues').DataTable();
-        table.state.clear();
-        table.destroy();
-        $('#tbl_Issues').DataTable({
-            "bStateSave": true,
-        });
-    });
+    //jQuery(document).on('ready', function () {
+    //    var table = $('#tbl_Issues').DataTable();
+    //    table.state.clear();
+    //    table.destroy();
+    //    $('#tbl_Issues').DataTable({
+    //        "bStateSave": true,
+    //    });
+    //});
 
     $("#btnAdd").click(function () {
         $("#lblMessage").html("");
@@ -468,16 +468,17 @@
                 $('#dvIssuesDetails').html(response);
                 $("#lblMessage").html("Issue added successfully");
                 $(".dvAlert").show();
-                $('#tbl_Issues').DataTable({
-                    "bStateSave": true,
-                    "fnStateSave": function (oSettings, oData) {
-                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
-                    },
-                    "fnStateLoad": function (oSettings) {
-                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
-                        return JSON.parse(data);
-                    }
-                });
+                TableDatatablesFixedHeader.init();
+                //$('#tbl_Issues').DataTable({
+                //    "bStateSave": true,
+                //    "fnStateSave": function (oSettings, oData) {
+                //        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+                //    },
+                //    "fnStateLoad": function (oSettings) {
+                //        var data = localStorage.getItem('DataTables_' + window.location.pathname);
+                //        return JSON.parse(data);
+                //    }
+                //});
                 ClearFields();
             },
             error: function (error) {
@@ -556,16 +557,17 @@
                 $(".dvAlert").show();
                 $("#btnUpdate").hide();
                 $("#btnAdd").show();
-                $('#tbl_Issues').DataTable({
-                    "bStateSave": true,
-                    "fnStateSave": function (oSettings, oData) {
-                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
-                    },
-                    "fnStateLoad": function (oSettings) {
-                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
-                        return JSON.parse(data);
-                    }
-                });
+                TableDatatablesFixedHeader.init();
+                //$('#tbl_Issues').DataTable({
+                //    "bStateSave": true,
+                //    "fnStateSave": function (oSettings, oData) {
+                //        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+                //    },
+                //    "fnStateLoad": function (oSettings) {
+                //        var data = localStorage.getItem('DataTables_' + window.location.pathname);
+                //        return JSON.parse(data);
+                //    }
+                //});
                 ClearFields();
             },
             error: function (error) {
@@ -652,16 +654,17 @@
             },
             success: function (response) {
                 $('#dvIssuesDetails').html(response);
-                $('#tbl_Issues').DataTable({
-                    "bStateSave": true,
-                    "fnStateSave": function (oSettings, oData) {
-                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
-                    },
-                    "fnStateLoad": function (oSettings) {
-                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
-                        return JSON.parse(data);
-                    }
-                });
+                //$('#tbl_Issues').DataTable({
+                //    "bStateSave": true,
+                //    "fnStateSave": function (oSettings, oData) {
+                //        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+                //    },
+                //    "fnStateLoad": function (oSettings) {
+                //        var data = localStorage.getItem('DataTables_' + window.location.pathname);
+                //        return JSON.parse(data);
+                //    }
+                //});
+                TableDatatablesFixedHeader.init();
             },
             error: function (error) {
                 console.log(error);
@@ -718,16 +721,17 @@
                 $('#dvIssuesDetails').html(response);
                 $("#stmsg").show();
                 $("#stmsg").text("Issue Updated successfully.");
-                $('#tbl_Issues').DataTable({
-                    "bStateSave": true,
-                    "fnStateSave": function (oSettings, oData) {
-                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
-                    },
-                    "fnStateLoad": function (oSettings) {
-                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
-                        return JSON.parse(data);
-                    }
-                });
+                TableDatatablesFixedHeader.init();
+                //$('#tbl_Issues').DataTable({
+                //    "bStateSave": true,
+                //    "fnStateSave": function (oSettings, oData) {
+                //        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+                //    },
+                //    "fnStateLoad": function (oSettings) {
+                //        var data = localStorage.getItem('DataTables_' + window.location.pathname);
+                //        return JSON.parse(data);
+                //    }
+                //});
                 ClearFields();
             },
             error: function (error) {

@@ -119,12 +119,10 @@
 <!--AddUpdate modal -->
 <script type="text/javascript">
     jQuery(document).on('ready', function () {
-        var table = $('#tbl_Dept').DataTable();
+        var table = $('#sample_2').DataTable();
         table.state.clear();
         table.destroy();
-        $('#tbl_Dept').DataTable({
-            "bStateSave": true,
-        });
+        TableDatatablesFixedHeader.init();       
     });
     function DeleteDepartment(param) {
         $(".dvAlert").hide();
@@ -140,18 +138,9 @@
             },
             success: function (response) {
                 $('#dvDepartmentDetails').html(response);
-                $('#tbl_Dept').DataTable({
-                    "bStateSave": true,
-                    "fnStateSave": function (oSettings, oData) {
-                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
-                    },
-                    "fnStateLoad": function (oSettings) {
-                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
-                        return JSON.parse(data);
-                    }
-                });
+                TableDatatablesFixedHeader.init();
                 $("#lblMessage").html("Department deleted successfully");
-                $(".dvAlert").show();            
+                $(".dvAlert").show();
             },
             error: function (error) {
                 $("#lblMessage").html("Something went wrong, please try again");
@@ -170,16 +159,7 @@
             url: "/Management/ActivateDeactivateDepartment?DepartmentId=" + DepartmentId + "&IsActive=" + IsActive,
             success: function (response) {
                 $('#dvDepartmentDetails').html(response);
-                $('#tbl_Dept').DataTable({
-                    "bStateSave": true,
-                    "fnStateSave": function (oSettings, oData) {
-                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
-                    },
-                    "fnStateLoad": function (oSettings) {
-                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
-                        return JSON.parse(data);
-                    }
-                });
+                TableDatatablesFixedHeader.init();
                 //if (response.isSuccess == true) {
                 //    if (IsActive == false) {
                 //        $("#StatusActiveLink_" + DepartmentId).remove();
@@ -225,16 +205,7 @@
             },
             success: function (response) {
                 $('#dvDepartmentDetails').html(response);
-                $('#tbl_Dept').DataTable({
-                    "bStateSave": true,
-                    "fnStateSave": function (oSettings, oData) {
-                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
-                    },
-                    "fnStateLoad": function (oSettings) {
-                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
-                        return JSON.parse(data);
-                    }
-                });
+                TableDatatablesFixedHeader.init();
                 $("#lblMessage").html("Department added successfully");
                 $(".dvAlert").show();
                 $("#txtDepartmentName").val('');
@@ -259,7 +230,7 @@
         $("#lblMessage").html("");
         $(".dvAlert").hide();
         var DepartmentName = $("#txtDepartmentName").val();
-        var IsValid=true;
+        var IsValid = true;
         if (DepartmentName == null || DepartmentName == "") {
             $('#txtDepartmentName').css('border-color', 'red');
             IsValid = false;
@@ -285,16 +256,7 @@
             },
             success: function (response) {
                 $('#dvDepartmentDetails').html(response);
-                $('#tbl_Dept').DataTable({
-                    "bStateSave": true,
-                    "fnStateSave": function (oSettings, oData) {
-                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
-                    },
-                    "fnStateLoad": function (oSettings) {
-                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
-                        return JSON.parse(data);
-                    }
-                });
+                TableDatatablesFixedHeader.init();
                 $("#lblMessage").html("Department updated successfully");
                 $(".dvAlert").show();
                 $("#btnUpdate").hide();

@@ -160,8 +160,7 @@ namespace TaskManagementOsvin.Controllers
                         var Response = JsonConvert.DeserializeObject<ResponseModel>(contents);
                         ModelState.Clear();
                         ModelState.AddModelError("CustomError", Response.response);
-                        ViewBag.AlertType = "alert-success";
-                        ViewBag.Class = null;
+                        ViewBag.Class = "alert-success";
                         model = new EmployeeModel();
                     }
                     else if (result.StatusCode == HttpStatusCode.Unauthorized)
@@ -169,22 +168,19 @@ namespace TaskManagementOsvin.Controllers
                         var contents = result.Content.ReadAsStringAsync().Result;
                         var Response = JsonConvert.DeserializeObject<ResponseModel>(contents);
                         ModelState.AddModelError("CustomError", Response.response);
-                        ViewBag.Class = null;
-                        ViewBag.AlertType = "alert-danger";
+                        ViewBag.Class = "alert-danger";
                     }
                     else
                     {
                         ModelState.AddModelError("CustomError", "Error occurred");
-                        ViewBag.Class = null;
-                        ViewBag.AlertType = "alert-danger";
+                        ViewBag.Class = "alert-danger";
                     }
                 }
             }
             catch (Exception ex)
             {
-                ViewBag.Class = null;
                 ModelState.AddModelError("CustomError", ex.Message);
-                ViewBag.AlertType = "alert-danger";
+                ViewBag.Class = "alert-danger";
             }
             model.listDepartment = GetDepartments();
             model.listDepartment = model.listDepartment.Where(s => s.IsActive == true).ToList();
@@ -376,22 +372,19 @@ namespace TaskManagementOsvin.Controllers
                         var contents = result.Content.ReadAsStringAsync().Result;
                         var Response = new JavaScriptSerializer().Deserialize<PaySlipModel>(contents);
                         ModelState.AddModelError("CustomError", Response.response);
-                        ViewBag.Class = null;
-                        ViewBag.AlertType = "alert-danger";
+                        ViewBag.Class = "alert-danger";
                     }
                     else
                     {
                         ModelState.AddModelError("CustomError", "Error occurred");
-                        ViewBag.Class = null;
-                        ViewBag.AlertType = "alert-danger";
+                        ViewBag.Class = "alert-danger";
                     }
                 }
             }
             catch (Exception ex)
             {
-                ViewBag.Class = null;
                 ModelState.AddModelError("CustomError", ex.Message);
-                ViewBag.AlertType = "alert-danger";
+                ViewBag.Class = "alert-danger";
             }
             model.listEmployees = GetEmployeeList();
             model.listDepartments = GetDepartments();
@@ -534,6 +527,22 @@ namespace TaskManagementOsvin.Controllers
                 }
             }
             return RedirectToAction("_Designations");
+        }
+        [HttpGet]
+        public ActionResult ActivateDeactivateUser(long UserId, bool IsActive, bool Archived=false)
+        {
+            if (UserId > 0)
+            {
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+                var result = client.GetAsync("/api/Management/ActivateDeactivateUser?UserId=" + UserId + "&IsActive=" + IsActive).Result;
+                if (result.StatusCode == HttpStatusCode.OK)
+                {
+                    var contents = result.Content.ReadAsStringAsync().Result;
+                    var Response = new JavaScriptSerializer().Deserialize<ResponseModel>(contents);
+                }
+            }
+            return RedirectToAction("_AddUpdateUser",Archived);
         }
 
         #region User Defined Functions

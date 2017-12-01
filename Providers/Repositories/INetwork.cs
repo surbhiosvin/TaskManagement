@@ -15,5 +15,6 @@ namespace Providers.Repositories
         List<ReportIssueDomainModel> GetReportedIssueCount(long UserId, string Role);
         ResponseDomainModel ReportedIssueFeedBack(ReportIssueDomainModel model);
         ReportIssueDomainModel GetIssueFeedBack(long ReportId);
+        List<NetworkResolvedIssueResultDomainModel> GetNetworkResolvedIssue(int Month, int Year);
     }
 }

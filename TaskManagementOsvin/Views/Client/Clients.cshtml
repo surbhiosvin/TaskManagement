@@ -237,12 +237,10 @@
 <!--AddUpdate modal -->
 <script type="text/javascript">
     jQuery(document).on('ready', function () {
-        var table = $('#tbl_Client').DataTable();
+        var table = $('#sample_2').DataTable();
         table.state.clear();
         table.destroy();
-        $('#tbl_Client').DataTable({
-            "bStateSave": true,
-        });
+        TableDatatablesFixedHeader.init();
         $(document).on('change', '#ddlArchived', function () {
             var _this = $(this);
             var Archived = _this.val();
@@ -256,9 +254,10 @@
                     async: false,
                     success: function (response) {
                         $('#dvClientDetails').html(response);
-                        $('#tbl_Client').DataTable({
-                            "scrollX": false,
-                        });
+                        var table = $('#sample_2').DataTable();
+                        table.state.clear();
+                        table.destroy();
+                        TableDatatablesFixedHeader.init();
                     },
                     failure: function (msg) {
                         html = false;
@@ -275,16 +274,17 @@
             url: "/Client/ArchiveClient?ClientId=" + ClientId + "&Archived=" + Archived,
             success: function (response) {
                 $('#dvClientDetails').html(response);
-                $('#tbl_Client').DataTable({
-                    "bStateSave": true,
-                    "fnStateSave": function (oSettings, oData) {
-                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
-                    },
-                    "fnStateLoad": function (oSettings) {
-                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
-                        return JSON.parse(data);
-                    }
-                });
+                //$('#tbl_Client').DataTable({
+                //    "bStateSave": true,
+                //    "fnStateSave": function (oSettings, oData) {
+                //        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+                //    },
+                //    "fnStateLoad": function (oSettings) {
+                //        var data = localStorage.getItem('DataTables_' + window.location.pathname);
+                //        return JSON.parse(data);
+                //    }
+                //});
+                TableDatatablesFixedHeader.init();
                 if (Archived) {
                     $("#lblMessage").html("Client has removed from archive.");
                 }
@@ -389,16 +389,17 @@
                 $('#dvClientDetails').html(response);
                 $("#lblMessage").html("Client added successfully");
                 $(".dvAlert").show();
-                $('#tbl_Client').DataTable({
-                    "bStateSave": true,
-                    "fnStateSave": function (oSettings, oData) {
-                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
-                    },
-                    "fnStateLoad": function (oSettings) {
-                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
-                        return JSON.parse(data);
-                    }
-                });
+                //$('#tbl_Client').DataTable({
+                //    "bStateSave": true,
+                //    "fnStateSave": function (oSettings, oData) {
+                //        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+                //    },
+                //    "fnStateLoad": function (oSettings) {
+                //        var data = localStorage.getItem('DataTables_' + window.location.pathname);
+                //        return JSON.parse(data);
+                //    }
+                //});
+                TableDatatablesFixedHeader.init();
                 ClearFields();
                 //if (response.isSuccess == true) {
                 //    $("#lblMessage").html("Client added successfully");
@@ -566,16 +567,17 @@
                 $(".dvAlert").show();
                 $("#btnUpdate").hide();
                 $("#btnAdd").show();
-                $('#tbl_Client').DataTable({
-                    "bStateSave": true,
-                    "fnStateSave": function (oSettings, oData) {
-                        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
-                    },
-                    "fnStateLoad": function (oSettings) {
-                        var data = localStorage.getItem('DataTables_' + window.location.pathname);
-                        return JSON.parse(data);
-                    }
-                });
+                //$('#tbl_Client').DataTable({
+                //    "bStateSave": true,
+                //    "fnStateSave": function (oSettings, oData) {
+                //        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+                //    },
+                //    "fnStateLoad": function (oSettings) {
+                //        var data = localStorage.getItem('DataTables_' + window.location.pathname);
+                //        return JSON.parse(data);
+                //    }
+                //});
+                TableDatatablesFixedHeader.init();
                 ClearFields();
                 //if (response.isSuccess == true) {
                 //    $("#lblMessage").html("Client Updated successully");
