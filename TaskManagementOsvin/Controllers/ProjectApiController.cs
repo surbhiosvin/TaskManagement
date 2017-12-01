@@ -7,7 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using DomainModel.EntityModel;
+using System.Globalization;
 
 namespace TaskManagementOsvin.Controllers
 {
@@ -128,6 +128,43 @@ namespace TaskManagementOsvin.Controllers
                 });
             }
         }
+
+        [Route("~/api/Project/GetProjectDetailsById")]
+        public HttpResponseMessage GetProjectDetailsById(long ProjectId)
+        {
+            HttpResponseMessage httpResponse = new HttpResponseMessage();
+            try
+            {
+                var ProjectType = ProjectRepository.GetProjectDetailsById(ProjectId);
+                if (ProjectType == null)
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(ProjectType.StartDate))
+                    {
+                        ProjectType.StartDate = DateTime.ParseExact(ProjectType.StartDate, "yyyy/MM/dd", null).ToString("dd/MM/yyyy");
+                    }
+                    if (!string.IsNullOrEmpty(ProjectType.EndDate))
+                    {
+                        ProjectType.EndDate = DateTime.ParseExact(ProjectType.EndDate, "yyyy/MM/dd", null).ToString("dd/MM/yyyy");
+                    }
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, ProjectType);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+
         // GET api/<controller>
         [Route("~/api/Project/GetProjectAddendumDetails")]
         public HttpResponseMessage GetProjectAddendumDetails(long ProjectId)
@@ -156,6 +193,36 @@ namespace TaskManagementOsvin.Controllers
                 });
             }
         }
+
+        [Route("~/api/Project/UpdateProjectStatus")]
+        [HttpPost]
+        public HttpResponseMessage UpdateProjectStatus(UpdateProjectStatusDomainModel model)
+        {
+            HttpResponseMessage httpResponse = new HttpResponseMessage();
+            try
+            {
+                var response = ProjectRepository.UpdateProjectStatus(model);
+                if (response == null || response.isSuccess == false)
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, response);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+
         [Route("~/api/Project/GetProjectAssignToUserWithTotalWorkingHours")]
         public HttpResponseMessage GetProjectAssignToUserWithTotalWorkingHours(long ProjectId=0, long DepartmentId=0, string Status="")
         {
@@ -449,11 +516,13 @@ namespace TaskManagementOsvin.Controllers
                 }
                 if (!string.IsNullOrEmpty(model.StartDate))
                 {
-                    model.StartDate = Convert.ToDateTime(model.StartDate).ToString("yyyy/MM/dd");
+                    var sd = DateTime.ParseExact(model.StartDate, "dd/MM/yyyy", null).ToString("yyyy/MM/dd");
+                    model.StartDate = sd;
                 }
                 if (!string.IsNullOrEmpty(model.EndDate))
                 {
-                    model.EndDate = Convert.ToDateTime(model.EndDate).ToString("yyyy/MM/dd");
+                    var ed = DateTime.ParseExact(model.EndDate, "dd/MM/yyyy", null).ToString("yyyy/MM/dd");
+                    model.EndDate = ed;
                 }
                 var respnose = ProjectRepository.AddUpdateProject(model);
                 if (respnose == null)

@@ -1,0 +1,69 @@
+﻿@{
+    ViewBag.Title = "ProjectAddendumDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model  List<TaskManagementOsvin.Models.GetAddendumModel>
+<div class="page-content">
+    <!-- BEGIN PAGE HEADER-->
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="javascript:">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="javascript:">Project Details</a>
+            </li>
+        </ul>
+    </div>
+    <!-- END PAGE BAR -->
+    <!-- BEGIN PAGE TITLE-->
+    <h1 class="page-title">
+        Project Addendum Details
+    </h1>
+    <!-- END PAGE TITLE-->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light bordered">
+                <div class="portlet-body">
+                    <table class="table table-striped table-bordered table-hover table-header-fixed" id="sample_2">
+                        <thead>
+                            <tr>
+                                <th>Hourly Rate</th>
+                                <th>Estimation Hours</th>
+                                <th>Assign Hours</th>
+                                <th>Addendums Document</th>
+                                <th>Developing Hours</th>
+                                <th>Webservice Hours</th>
+                                <th>Design Hours</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Count() > 0)
+                            {
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="text-center vertical-center">@item.HourlyRate</td>
+                                        <td class="text-center vertical-center">@(string.IsNullOrEmpty(item.EstimateHours) ? "NA" : item.EstimateHours)</td>
+                                        <td class="text-center vertical-center">@(string.IsNullOrEmpty(item.AssignHours) ? "NA" : item.AssignHours)</td>
+                                        <td class="text-center vertical-center">@(string.IsNullOrEmpty(item.UploadDocument) ? "NA" : item.UploadDocument)</td>
+                                        <td class="text-center vertical-center">@(string.IsNullOrEmpty(item.DeveloperCodingHours) ? "NA" : item.DeveloperCodingHours)</td>
+                                        <td class="text-center vertical-center">@(string.IsNullOrEmpty(item.WebServiceHours) ? "NA" : item.WebServiceHours)</td>
+                                        <td class="text-center vertical-center">@(string.IsNullOrEmpty(item.DesignHours) ? "NA" : item.DesignHours)</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    <div class="col-md-12">
+                        <a href="@Url.Action("ProjectList")" class="btn btn-success"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

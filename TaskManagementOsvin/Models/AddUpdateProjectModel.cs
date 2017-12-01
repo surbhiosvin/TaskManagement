@@ -14,7 +14,7 @@ namespace TaskManagementOsvin.Models
         //    projectType = new List<ProjectTypeModel>();
         //    employees = new List<EmployeesModel>();
         //}
-        public long ProjectId { get; set; }
+        public long? ProjectId { get; set; }
         [Display(Name = "client")]
         [Required(ErrorMessage = "Select a client")]
         public long ClientId { get; set; }

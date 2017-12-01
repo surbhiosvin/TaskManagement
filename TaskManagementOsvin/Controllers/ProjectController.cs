@@ -12,7 +12,6 @@ using DomainModel.EntityModel;
 using Providers.Helper;
 using Newtonsoft.Json;
 using System.IO;
-using System.IO;
 
 namespace TaskManagementOsvin.Controllers
 {
@@ -24,14 +23,54 @@ namespace TaskManagementOsvin.Controllers
         {
             ViewBag.Class = "display-hide";
             GetProjectTypeAndClients();
-            AddUpdateProjectModel model = new AddUpdateProjectModel();
             try
             {
-                
-                return View(model);
+                if (ProjectId > 0)
+                {
+                    var client = new HttpClient();
+                    client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+                    var Clientresult = client.GetAsync("/api/Project/GetProjectDetailsById?ProjectId=" + ProjectId).Result;
+                    if (Clientresult.StatusCode == HttpStatusCode.OK)
+                    {
+                        var contents = Clientresult.Content.ReadAsStringAsync().Result;
+                        var response = new JavaScriptSerializer().Deserialize<GetProjectByIdModel>(contents);
+                        var a = string.IsNullOrEmpty(response.EstimateHours) ? (decimal?)null : Convert.ToDecimal(response.EstimateHours);
+                        AddUpdateProjectModel model = new AddUpdateProjectModel()
+                        {
+                            ProjectId = response.ProjectId,
+                            ClientId = response.ClientId,
+                            ProjectTypeId = response.ProjectTypeId,
+                            ProjectTitle = response.ProjectTitle,
+                            ProjectUrl = response.ProjectUrl,
+                            HourlyRate = response.HourlyRate,
+                            UploadDocument = response.UploadDocument,
+                            upworkprofiles = response.UpworkProfile,
+                            StartDate = response.StartDate,
+                            EndDate = response.EndDate,
+                            EstimateHours = string.IsNullOrEmpty(response.EstimateHours) ? (decimal?)null : Convert.ToDecimal(response.EstimateHours),
+                            AssignedHours = string.IsNullOrEmpty(response.AssignHours) ? (decimal?)null : Convert.ToDecimal(response.AssignHours),
+                            developerCodinghours = string.IsNullOrEmpty(response.DeveloperCodingHours) ? (decimal?)null : Convert.ToDecimal(response.DeveloperCodingHours),
+                            WebserviceHours = string.IsNullOrEmpty(response.WebServiceHours) ? (decimal?)null : Convert.ToDecimal(response.WebServiceHours),
+                            EstimateDesignHours = string.IsNullOrEmpty(response.DesignHours) ? (decimal?)null : Convert.ToDecimal(response.DesignHours),
+                            SEOHours = string.IsNullOrEmpty(response.SEOHours) ? (decimal?)null : Convert.ToDecimal(response.SEOHours),
+                            MaintainenceHours = string.IsNullOrEmpty(response.MaintainenceHours) ? (decimal?)null : Convert.ToDecimal(response.MaintainenceHours),
+                            NetworkSupportHours = string.IsNullOrEmpty(response.NetworkSupprotHours) ? (decimal?)null : Convert.ToDecimal(response.NetworkSupprotHours),
+                            QualityAnalystHours = string.IsNullOrEmpty(response.QAHours) ? (decimal?)null : Convert.ToDecimal(response.QAHours),
+                            UploadDetailsDocument = response.UploadDetailsDocument };
+                        return View(model);
+                    }
+                    else
+                    {
+                        ViewBag.Class = "alert-danger";
+                        ViewBag.Message = "Error Occurred";
+                    }
+                }
+                return View();
             }
             catch (Exception ex)
             {
+                ViewBag.Class = "alert-danger";
+                ViewBag.Message = ex.Message;
                 return View();
             }
         }
@@ -44,44 +83,51 @@ namespace TaskManagementOsvin.Controllers
             GetProjectTypeAndClients();
             try
             {
-                model.CreatedBy = UserManager.user.UserId;
-                if (model.UploadDetailsDocumentFile != null && model.UploadDetailsDocumentFile.ContentLength > 0)
+                if (ModelState.IsValid)
                 {
-                    var uniqueName = Guid.NewGuid();
-                    model.UploadDetailsDocument = uniqueName + model.UploadDetailsDocumentFile.FileName;
-                    model.UploadDetailsDocumentFile.SaveAs(Server.MapPath("~/UploadDocuments/" + model.UploadDetailsDocument));
-                    model.UploadDetailsDocumentFile = null; // do null nor it will cause error while serializing
-                }
-                if (model.UploadDocumentFile != null && model.UploadDocumentFile.ContentLength > 0)
-                {
-                    var uniqueName = Guid.NewGuid();
-                    model.UploadDocument = uniqueName + model.UploadDocumentFile.FileName;
-                    model.UploadDocumentFile.SaveAs(Server.MapPath("~/UploadDocuments/" + model.UploadDocument));
-                    model.UploadDocumentFile = null; // do null nor it will cause error while serializing
-                }
-                model.ProjectStatus = "Open";
-                model.Archived = "NonArchive";
-                var serialized = new JavaScriptSerializer().Serialize(model);
-                var client = new HttpClient();
-                var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
-                client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var Clientresult = client.PostAsync("/api/Project/AddUpdateProject", content).Result;
-                if (Clientresult.StatusCode == HttpStatusCode.OK)
-                {
-                    ViewBag.Class = "alert-success";
-                    if (model.ProjectId > 0)
+                    model.CreatedBy = UserManager.user.UserId;
+                    if (model.UploadDetailsDocumentFile != null && model.UploadDetailsDocumentFile.ContentLength > 0)
                     {
-                        ViewBag.Message = "Updated Successfully";
+                        var uniqueName = Guid.NewGuid();
+                        model.UploadDetailsDocument = uniqueName + model.UploadDetailsDocumentFile.FileName;
+                        model.UploadDetailsDocumentFile.SaveAs(Server.MapPath("~/UploadDocuments/" + model.UploadDetailsDocument));
+                        model.UploadDetailsDocumentFile = null; // do null nor it will cause error while serializing
                     }
-                    var contents = Clientresult.Content.ReadAsStringAsync().Result;
-                    var response = new JavaScriptSerializer().Deserialize<ResponseModel>(contents);
-                    ModelState.Clear();
-                } 
-                else if (Clientresult.StatusCode == HttpStatusCode.NotImplemented)
-                {
-                    var contents = Clientresult.Content.ReadAsStringAsync().Result;
-                    var response = new JavaScriptSerializer().Deserialize<ResponseModel>(contents);
-                    ViewBag.Message = response.response;
+                    if (model.UploadDocumentFile != null && model.UploadDocumentFile.ContentLength > 0)
+                    {
+                        var uniqueName = Guid.NewGuid();
+                        model.UploadDocument = uniqueName + model.UploadDocumentFile.FileName;
+                        model.UploadDocumentFile.SaveAs(Server.MapPath("~/UploadDocuments/" + model.UploadDocument));
+                        model.UploadDocumentFile = null; // do null nor it will cause error while serializing
+                    }
+                    model.ProjectStatus = "Open";
+                    model.Archived = "NonArchive";
+                    var serialized = new JavaScriptSerializer().Serialize(model);
+                    var client = new HttpClient();
+                    var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
+                    client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+                    var Clientresult = client.PostAsync("/api/Project/AddUpdateProject", content).Result;
+                    if (Clientresult.StatusCode == HttpStatusCode.OK)
+                    {
+                        ViewBag.Class = "alert-success";
+                        if (model.ProjectId > 0)
+                        {
+                            ViewBag.Message = "Updated Successfully";
+                        }
+                        var contents = Clientresult.Content.ReadAsStringAsync().Result;
+                        var response = new JavaScriptSerializer().Deserialize<ResponseModel>(contents);
+                        ModelState.Clear();
+                    }
+                    else if (Clientresult.StatusCode == HttpStatusCode.NotImplemented)
+                    {
+                        var contents = Clientresult.Content.ReadAsStringAsync().Result;
+                        var response = new JavaScriptSerializer().Deserialize<ResponseModel>(contents);
+                        ViewBag.Message = response.response;
+                    }
+                    else
+                    {
+                        ViewBag.Message = "Error Occurred";
+                    }
                 }
                 else
                 {
@@ -94,6 +140,59 @@ namespace TaskManagementOsvin.Controllers
                 ViewBag.Message = "Error Occurred";
                 return View();
             }
+        }
+        private void PopulateStatusList()
+        {
+            var list = new List<SelectListItem>
+            {
+                new SelectListItem{ Text="Open", Value = "Open"},
+                new SelectListItem{ Text="Close", Value = "Close"},
+                new SelectListItem {Text="Suspended", Value="Suspended" }
+            };
+            ViewBag.ddlStatusList = list;
+        }
+        public ActionResult UpdateProjectStatus(long ProjectId = 0)
+        {
+            PopulateStatusList();
+            ViewBag.Class = "display-hide";
+            if (ProjectId > 0)
+            {
+                UpdateProjectStatusModel model = new UpdateProjectStatusModel() { ProjectId = ProjectId };
+                return View(model);
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult UpdateProjectStatus(UpdateProjectStatusModel model)
+        {
+            PopulateStatusList();
+            ViewBag.Class = "alert-danger";
+            ViewBag.Message = "Error Occurred";
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var serialized = new JavaScriptSerializer().Serialize(model);
+                    var client = new HttpClient();
+                    var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
+                    client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+                    var Clientresult = client.PostAsync("/api/Project/UpdateProjectStatus", content).Result;
+                    if (Clientresult.StatusCode == HttpStatusCode.OK)
+                    {
+                        ViewBag.Class = "alert-success";
+                        ViewBag.Message = "Updated Successfully";
+                        var contents = Clientresult.Content.ReadAsStringAsync().Result;
+                        var response = new JavaScriptSerializer().Deserialize<ResponseModel>(contents);
+                        ModelState.Clear();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = ex.Message;
+            }
+            return View();
         }
 
         private void GetProjectTypeAndClients()
@@ -210,7 +309,7 @@ namespace TaskManagementOsvin.Controllers
             if (ProjectResult.StatusCode == HttpStatusCode.OK)
             {
                 var contents = ProjectResult.Content.ReadAsStringAsync().Result;
-                var response = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ProjectDomainModel>>(contents);
+                var response = JsonConvert.DeserializeObject<List<ProjectDomainModel>>(contents);
                 listProjects = response;
             }
             ViewBag.listProjects = new SelectList(listProjects, "ProjectId", "ProjectTitle");
@@ -468,7 +567,21 @@ namespace TaskManagementOsvin.Controllers
             return PartialView(GetProjects);
         }
 
-       
+        public ActionResult ProjectAddendumDetails(long ProjectId)
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+            var result = client.GetAsync("/api/Project/GetProjectAddendumDetails?ProjectId=" + ProjectId).Result;
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                var contents = result.Content.ReadAsStringAsync().Result;
+                var Response = new JavaScriptSerializer().Deserialize<List<GetAddendumModel>>(contents);
+                return View(Response);
+            }
+            return View();
+        }
+
+
         #region User Defined Functions
         public List<ProjectDomainModel> GetProjectList()
         {
