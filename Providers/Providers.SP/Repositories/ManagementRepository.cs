@@ -93,29 +93,29 @@ namespace Providers.Providers.SP.Repositories
         }
         public List<DepartmentDomainModel> GetDepartments()
         {
-            List<DepartmentDomainModel> listDept = new List<DepartmentDomainModel>();
             try
             {
-                listDept = objHelper.Query<DepartmentDomainModel>("GetAllDepartments", null).ToList();
+                var listDept = objHelper.Query<DepartmentDomainModel>("GetAllDepartments", null).ToList();
+                return listDept;
             }
             catch (Exception ex)
             {
                 ErrorLog.LogError(ex);
+                return null;
             }
-            return listDept;
         }
         public List<DesignationDomainModel> GetDesignationsByDepartmentId(long DepartmentId)
         {
-            List<DesignationDomainModel> listDesignation = new List<DesignationDomainModel>();
             try
             {
-                listDesignation = objHelper.Query<DesignationDomainModel>("GetDesignationByDepartmentId", new { DepartmentId = DepartmentId }).ToList();
+                var listDesignation = objHelper.Query<DesignationDomainModel>("GetDesignationByDepartmentId", new { DepartmentId = DepartmentId }).ToList();
+                return listDesignation;
             }
             catch (Exception ex)
             {
                 ErrorLog.LogError(ex);
+                return null;
             }
-            return listDesignation;
         }
         public UserListDomainModel UserListBySearch(long UserId, string Role, string Archived)
         {
@@ -367,7 +367,7 @@ namespace Providers.Providers.SP.Repositories
         }
         public List<DesignationDomainModel> GetDesignationsBasedOnRole(long DepartmentId = 0)
         {
-            List<DesignationDomainModel> listDesignation = new List<DesignationDomainModel>();
+            List<DesignationDomainModel> listDesignation = null;
             try
             {
                 if (DepartmentId > 0)
@@ -435,16 +435,16 @@ namespace Providers.Providers.SP.Repositories
         }
         public List<EmployeeDomainModel> GetEmployeeList()
         {
-            List<EmployeeDomainModel> listEmployees = new List<EmployeeDomainModel>();
             try
             {
-                listEmployees = objHelper.Query<EmployeeDomainModel>("GetEmployeeList", null).ToList();
+                var listEmployees = objHelper.Query<EmployeeDomainModel>("GetEmployeeList", null).ToList();
+                return listEmployees;
             }
             catch(Exception ex)
             {
                 ErrorLog.LogError(ex);
+                return null;
             }
-            return listEmployees;
         }
     }
 }

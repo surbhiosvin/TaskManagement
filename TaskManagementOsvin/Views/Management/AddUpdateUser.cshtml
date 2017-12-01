@@ -98,8 +98,11 @@
 
 <script type="text/javascript">
     jQuery(document).on('ready', function () {
-        $('#tbl_User').DataTable({
-        });
+        var table = $('#sample_2').DataTable();
+        table.state.clear();
+        table.destroy();
+        TableDatatablesFixedHeader.init();
+        $("#ddlArchived").val('false');
         $(document).on('change', '#ddlArchived', function () {
             var _this = $(this);
             var Archived = _this.val();
@@ -112,9 +115,10 @@
                     dataType: "text",
                     success: function (response) {
                         $('.dv_UserTableContainer').html(response);
-                        $('#tbl_User').DataTable({
-                            "scrollX": false,
-                        });
+                        var table = $('#sample_2').DataTable();
+                        table.state.clear();
+                        table.destroy();
+                        TableDatatablesFixedHeader.init();
                     },
                     failure: function (msg) {
                         html = false;
@@ -131,9 +135,7 @@
             url: "/Management/ArchiveEmployee?UserId=" + UserId + "&Archived=" + Archived,
             success: function (response) {
                 $('.dv_UserTableContainer').html(response);
-                $('#tbl_User').DataTable({
-                    "scrollX": false,
-                });
+                TableDatatablesFixedHeader.init();
                 if (Archived) {
                     $("#lblMessage").html("User has removed from archive.");
                 }
@@ -149,22 +151,25 @@
             }
         });
     }
-    function ActivateDeactivateDepartment(UserId, IsActive) {
+    function ActivateDeactivateUser(UserId, IsActive) {
+        var Archived = $("#ddlArchived").val();
         $.ajax({
             type: "Get",
             contentType: "application/json; charset=utf-8",
-            url: "/api/Management/ActivateDeactivateUser?UserId=" + UserId + "&IsActive=" + IsActive,
+            url: "/Management/ActivateDeactivateUser?UserId=" + UserId + "&IsActive=" + IsActive + "&Archived=" + Archived,
             success: function (response) {
-                if (response.isSuccess == true) {
-                    if (IsActive == false) {
-                        $("#StatusActiveLink_" + UserId).remove();
-                        $("#StatusActive_" + UserId).append('<a id="StatusActiveLink_' + UserId + '" href="#" onclick="ActivateDeactivateDepartment(' + UserId + ', true)"><img alt="In Active" src="/assets/global/img/Guiimages/InActive.png" width="30px" height="30px"/></a>');
-                    }
-                    else {
-                        $("#StatusActiveLink_" + UserId).remove();
-                        $("#StatusActive_" + UserId).append('<a id="StatusActiveLink_' + UserId + '" href="#" onclick="ActivateDeactivateDepartment(' + UserId + ', false)"><img alt="Active" src="/assets/global/img/Guiimages/Active.png" width="30px" height="30px"/></a>');
-                    }
-                }
+                $('.dv_UserTableContainer').html(response);
+                TableDatatablesFixedHeader.init();
+                //if (response.isSuccess == true) {
+                //    if (IsActive == false) {
+                //        $("#StatusActiveLink_" + UserId).remove();
+                //        $("#StatusActive_" + UserId).append('<a id="StatusActiveLink_' + UserId + '" href="#" onclick="ActivateDeactivateUser(' + UserId + ', true)"><img alt="In Active" src="/assets/global/img/Guiimages/InActive.png" width="30px" height="30px"/></a>');
+                //    }
+                //    else {
+                //        $("#StatusActiveLink_" + UserId).remove();
+                //        $("#StatusActive_" + UserId).append('<a id="StatusActiveLink_' + UserId + '" href="#" onclick="ActivateDeactivateUser(' + UserId + ', false)"><img alt="Active" src="/assets/global/img/Guiimages/Active.png" width="30px" height="30px"/></a>');
+                //    }
+                //}
             },
             error: function (error) {
                 console.log(error);

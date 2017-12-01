@@ -193,5 +193,33 @@ namespace TaskManagementOsvin.Controllers
                 });
             }
         }
+        [HttpGet]
+        [Route("~/api/NetworkIssues/GetNetworkResolvedIssue")]
+        public HttpResponseMessage GetNetworkResolvedIssue(int Month, int Year)
+        {
+            HttpResponseMessage httpResponse = new HttpResponseMessage();
+            try
+            {
+                var listNetworkResolvedIssue = networkRepository.GetNetworkResolvedIssue(Month,Year);
+                if (listNetworkResolvedIssue == null)
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, listNetworkResolvedIssue);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
     }
 }

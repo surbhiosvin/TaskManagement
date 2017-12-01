@@ -268,8 +268,6 @@ namespace Providers.Providers.SP.Repositories
             }
             return objRes;
         }
-        }
-
         public ResponseDomainModel AddUpdateProject(AddUpdateProjectDomainModel model)
         {
             ResponseDomainModel resp = new ResponseDomainModel();

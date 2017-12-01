@@ -18,16 +18,16 @@ namespace Providers.Providers.SP.Repositories
         }
         public List<ReportIssueDomainModel> GetReportIssues(ReportIssueDomainModel model)
         {
-            List<ReportIssueDomainModel> listReportIssues = new List<ReportIssueDomainModel>();
             try
             {
-                listReportIssues = objHelper.Query<ReportIssueDomainModel>("GetReportedIssuesNew", new { @userid = model.UserId, role = model.Role, status = model.Status, isread = model.IsRead }).ToList();
+                var listReportIssues = objHelper.Query<ReportIssueDomainModel>("GetReportedIssuesNew", new { @userid = model.UserId, role = model.Role, status = model.Status, isread = model.IsRead }).ToList();
+                return listReportIssues;
             }
             catch (Exception ex)
             {
                 ErrorLog.LogError(ex);
+                return null;
             }
-            return listReportIssues;
         }
         public ResponseDomainModel AddUpdateReportIssue(ReportIssueDomainModel model)
         {
@@ -83,16 +83,16 @@ namespace Providers.Providers.SP.Repositories
         }
         public List<ReportIssueDomainModel> GetReportedIssueCount(long UserId, string Role)
         {
-            List<ReportIssueDomainModel> listReportIssues = new List<ReportIssueDomainModel>();
             try
             {
-                listReportIssues = objHelper.Query<ReportIssueDomainModel>("GetReportedIssueCount", new { @userid = UserId, role = Role }).ToList();
+               var listReportIssues = objHelper.Query<ReportIssueDomainModel>("GetReportedIssueCount", new { @userid = UserId, role = Role }).ToList();
+                return listReportIssues;
             }
             catch (Exception ex)
             {
                 ErrorLog.LogError(ex);
+                return null;
             }
-            return listReportIssues;
         }
         public ResponseDomainModel ReportedIssueFeedBack(ReportIssueDomainModel model)
         {
@@ -138,6 +138,24 @@ namespace Providers.Providers.SP.Repositories
                 ErrorLog.LogError(ex);
             }
             return objRes;
+        }
+        public List<NetworkResolvedIssueResultDomainModel> GetNetworkResolvedIssue(int Month, int Year)
+        {
+            try
+            {
+                var list = objHelper.Query<NetworkResolvedIssueResultDomainModel>("GetNetworkResolvedIssue", new {month=Month, year=Year }).ToList();
+                if(list.Count==2)
+                {
+                    list[0].color = "#074796";
+                    list[1].color = "#2ef2f2";
+                }
+                return list;
+            }
+            catch(Exception ex)
+            {
+                ErrorLog.LogError(ex);
+                return null;
+            }
         }
     }
 }

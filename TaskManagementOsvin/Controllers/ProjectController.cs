@@ -12,7 +12,6 @@ using DomainModel.EntityModel;
 using Providers.Helper;
 using Newtonsoft.Json;
 using System.IO;
-using System.IO;
 
 namespace TaskManagementOsvin.Controllers
 {

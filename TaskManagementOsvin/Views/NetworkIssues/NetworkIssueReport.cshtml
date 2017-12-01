@@ -1,0 +1,211 @@
+﻿
+@{
+    ViewBag.Title = "NetworkIssueReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using TaskManagementOsvin.Security;
+@using TaskManagementOsvin.Models;
+<div class="page-content">
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="~/Dashboard/Welcome">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="#">Network Issue Report</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            @*<li>
+                    <span>Page Layouts</span>
+                </li>*@
+        </ul>
+        <div class="page-toolbar">
+            <div class="btn-group pull-right">
+                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li>
+                        <a href="#">
+                            <i class="icon-bell"></i> Action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-shield"></i> Another action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-user"></i> Something else here
+                        </a>
+                    </li>
+                    <li class="divider"> </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-bag"></i> Separated link
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE BAR -->
+    <!-- BEGIN PAGE TITLE-->
+    <h1 class="page-title">
+        Network Issue Report
+        @*<small>blank page layout</small>*@
+    </h1>
+    <!-- END PAGE TITLE-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN EXAMPLE TABLE PORTLET-->
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption font-green">
+                        <i class="icon-layers font-green"></i>
+                        <span class="caption-subject font-green bold uppercase">Network Issue Report</span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="alert dvAlert @ViewBag.Class">
+                        <a class="close" onclick="$('.alert').hide()">×</a>
+                        <span id="lblMessage"> @ViewBag.Message </span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-offset-2 col-sm-3">
+                                <div class="actions actions-padding">
+                                    <div>
+                                        <label class="control-label">Month</label>
+                                        <select id="ddlMonth" class="form-control">
+                                            <option value="1">January</option>
+                                            <option value="2">February</option>
+                                            <option value="3">March</option>
+                                            <option value="4">April</option>
+                                            <option value="5">May</option>
+                                            <option value="6">June</option>
+                                            <option value="7">July</option>
+                                            <option value="8">August</option>
+                                            <option value="9">September</option>
+                                            <option value="10">October</option>
+                                            <option value="11">November</option>
+                                            <option value="12">December</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="actions actions-padding">
+                                    <div>
+                                        <label for="ddlRead" class="control-label">Year</label>
+                                        <select id="ddlYear" class="form-control"></select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="actions actions-padding">
+                                    <div class="action-inline">
+                                        <label for="ddlRead" class="control-label">.</label>
+                                        <a class="btn btn-sm green table-group-action-submit form-control" href="#" id="btnSearch">
+                                            <i class="fa fa-search"></i> Search
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <hr />
+                                <div class="note text-center">
+                                    <h3>Network Resolved Issue Report</h3>
+                                </div>
+                                <form class="form-horizontal">
+                                    <div class="form-body" id="canvasContainer">
+                                        <canvas id="pieChart" height="200"></canvas>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+<script type="text/javascript">
+    jQuery(document).on('ready', function () {
+        var minOffset = -3, maxOffset = 100; // Change to whatever you want // minOffset = 0 for current year
+        var thisYear = (new Date()).getFullYear();
+        for (var i = minOffset; i <= maxOffset; i++) { var year = thisYear + i; $('<option>', { value: year, text: year }).appendTo("#ddlYear"); }
+        var currentMonth = new Date().getMonth() + 1;
+        $("#ddlMonth").val(currentMonth);
+        $("#ddlYear").val(thisYear);
+        GetNetworkResolvedIssue(currentMonth, thisYear);
+    });
+
+    function GetNetworkResolvedIssue(Month, Year) {
+        $("#lblMessage").html("");
+        $(".dvAlert").hide();
+        var model = {
+            Month: Month,
+            Year: Year
+        }
+        $.ajax({
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            url: "/api/NetworkIssues/GetNetworkResolvedIssue?Month=" + Month + "&Year=" + Year,
+            beforeSend: function () {
+            },
+            success: function (response) {
+                $('#pieChart').remove(); // this is my <canvas> element
+                $('#canvasContainer').append('<canvas id="pieChart"><canvas>');
+                canvas = document.querySelector('#pieChart');
+                if (response[0].Countnn == 0 && response[1].Countnn == 0) {
+                    $("#lblMessage").html("No Record Exists");
+                    $(".dvAlert").addClass("alert-danger");
+                    $(".dvAlert").show();
+                }
+                else {
+                    var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
+                    var pieChart = new Chart(pieChartCanvas);
+                    var PieData = [];
+
+                    // create PieData dynamically
+                    response.forEach(function (e) {
+                        //var random_color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+                        PieData.push({
+                            value: e.Countnn,
+                            color: e.color,
+                            highlight: e.color,
+                            label: e.Category
+                        });
+                    });
+                    //PieData.push({labels:["OpenCount","ClosedCount"]});
+                    var pieOptions = {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                    };
+
+                    pieChart.Pie(PieData, pieOptions);
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    $("#btnSearch").click(function () {
+        var Month = $("#ddlMonth").val();
+        var Year = $("#ddlYear").val();
+        GetNetworkResolvedIssue(Month, Year);
+    });
+
+</script>
