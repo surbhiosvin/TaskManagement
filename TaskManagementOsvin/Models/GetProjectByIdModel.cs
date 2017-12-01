@@ -24,7 +24,6 @@ namespace TaskManagementOsvin.Models
         public string Archived { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
-        public string UpworkProfile { get; set; }
         public string EstimateHours { get; set; }
         public string AssignHours { get; set; }
         public string Description { get; set; }

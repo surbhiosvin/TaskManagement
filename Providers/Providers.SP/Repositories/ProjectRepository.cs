@@ -321,7 +321,6 @@ namespace Providers.Providers.SP.Repositories
                     ProjectStatus = model.ProjectStatus,
                     Archived = model.Archived,
                     CreatedBy = model.CreatedBy,
-                    UpworkProfile = model.upworkprofiles,
                     EstimateHours = model.EstimateHours.ToString(),
                     AssignHours = model.AssignedHours.ToString(),
                     UploadDocument = model.UploadDocument,

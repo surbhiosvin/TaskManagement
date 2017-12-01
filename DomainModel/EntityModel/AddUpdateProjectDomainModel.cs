@@ -19,7 +19,6 @@ namespace DomainModel.EntityModel
         public string UploadDetailsDocument { get; set; }
         public string StartDate { get; set; }
         public string EndDate { get; set; }
-        public string upworkprofiles { get; set; }
         public DateTime ClosedDate { get; set; }
         public string ProjectUrl { get; set; }
         public string ProjectStatus { get; set; }

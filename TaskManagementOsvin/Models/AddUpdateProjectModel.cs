@@ -30,9 +30,6 @@ namespace TaskManagementOsvin.Models
         public string FullDescription { get; set; }
         public string StartDate { get; set; }
         public string EndDate { get; set; }
-        [Display(Name = "Upwork Profile(s)")]
-        [Required(ErrorMessage = "Upwork Profile(s) is required")]
-        public string upworkprofiles { get; set; }
         public DateTime ClosedDate { get; set; }
         public string ProjectUrl { get; set; }
         public string ProjectStatus { get; set; }
