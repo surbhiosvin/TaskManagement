@@ -1,0 +1,246 @@
+﻿
+@{
+    ViewBag.Title = "AddEmployeeDailyStatusReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model TaskManagementOsvin.Models.AddEmployeeDailyReportModel
+
+<div class="page-content">
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="~/Dashboard/Welcome">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="#">Add Employee Daily Status Report</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            @*<li>
+                    <span>Page Layouts</span>
+                </li>*@
+        </ul>
+        <div class="page-toolbar">
+            <div class="btn-group pull-right">
+                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li>
+                        <a href="#">
+                            <i class="icon-bell"></i> Action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-shield"></i> Another action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-user"></i> Something else here
+                        </a>
+                    </li>
+                    <li class="divider"> </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-bag"></i> Separated link
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE BAR -->
+    <h1 class="page-title">
+        Add Employee Daily Status Report
+        <small></small>
+    </h1>
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN VALIDATION STATES-->
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-layers font-green"></i>
+                        <span class="caption-subject font-green sbold uppercase">Add Employee Daily Status Report</span>
+                    </div>
+                    <button class="btn btn-primary table-group-action-submit pull-right" type="button" data-toggle="modal" data-target="#formatmodal" id="btnnotification">
+                        DSR format
+                    </button>
+                </div>
+                <div class="portlet-body form">
+                    <div class="row">
+                        <div class="text-center margin-bottom-30">
+                            <span style="color:red;">If your Project is not found, Please Contact to your Team Leader</span>
+                        </div>
+                    </div>
+                    @if (Model != null && Model.listEmployeeDailyStatusReport.Count > 0)
+                    {
+                        using (Html.BeginForm("AddEmployeeDailyStatusReport", "EmployeeDailyStatusReport", FormMethod.Post, new { enctype = "multipart/form-data", @id = "frmAddEmpStatusReport", @class = "form-horizontal" }))
+                        {
+                            for (int i = 0; i < Model.listEmployeeDailyStatusReport.Count; i++)
+                            {
+                                @Html.HiddenFor(m =>m.listEmployeeDailyStatusReport[i].DailyReportId)
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="control-label">Project Name</label>
+                                            @Html.DropDownListFor(m => m.listEmployeeDailyStatusReport[i].ProjectId, new SelectList(ViewData["ddlProject"] as List<SelectListItem>, "Value", "Text", Model.listEmployeeDailyStatusReport[i].ProjectId), "Please Select", new { @class = "form-control", @required = "required" })
+                                            <div class="text-danger">
+                                                @Html.ValidationMessageFor(m => m.listEmployeeDailyStatusReport[i].ProjectId)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="control-label">SubTask Category</label>
+                                            @Html.DropDownListFor(m => m.listEmployeeDailyStatusReport[i].ReportCategoryId, new SelectList(ViewData["ddlTaskCategories"] as List<SelectListItem>, "Value", "Text", Model.listEmployeeDailyStatusReport[i].ReportCategoryId), "Please Select", new { @class = "form-control", @required = "required" })
+                                            <div class="text-danger">
+                                                @Html.ValidationMessageFor(m => m.listEmployeeDailyStatusReport[i].ReportCategoryId)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="control-label">Description</label>
+                                            @Html.TextBoxFor(m => m.listEmployeeDailyStatusReport[i].Description, new { @class = "form-control", @multiline = "multiline", @required = "required" })
+                                            <div class="text-danger">
+                                                @Html.ValidationMessageFor(m => m.listEmployeeDailyStatusReport[i].Description)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="control-label">Upload File</label>
+                                            <div class="col-md-6">
+                                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                    <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 200px; height: 150px;"> </div>
+                                                    <div>
+                                                        <span class="btn red btn-outline btn-file">
+                                                            <span class="fileinput-new"> Select image </span>
+                                                            <span class="fileinput-exists"> Change </span>
+                                                            @*<input type="file" name="...">*@
+                                                            @*<input accept="image/x-png,image/gif,image/jpeg" id="ImageFile" name="ImageFile" type="file" value="">*@
+                                                            @Html.TextBoxFor(m => m.listEmployeeDailyStatusReport[i].PostedFile, new { type = "file", @accept = ".apk, .ipa" })
+                                                        </span>
+                                                        <a href="javascript:;" class="btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <div class="col-md-6">
+                                                <label>Hours:</label>
+                                                @Html.DropDownListFor(m => m.listEmployeeDailyStatusReport[i].Hours, new SelectList(ViewData["ddlHours"] as List<SelectListItem>, "Value", "Text", Model.listEmployeeDailyStatusReport[i].Hours), "Please Select", new { @class = "form-control", @required = "required" })
+                                                <div class="text-danger">
+                                                    @Html.ValidationMessageFor(m => m.listEmployeeDailyStatusReport[i].Hours)
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>Min:</label>
+                                                @Html.DropDownListFor(m => m.listEmployeeDailyStatusReport[i].Minutes, new SelectList(ViewData["ddlMinutes"] as List<SelectListItem>, "Value", "Text", Model.listEmployeeDailyStatusReport[i].Minutes), "Please Select", new { @class = "form-control", @required = "required" })
+                                                <div class="text-danger">
+                                                    @Html.ValidationMessageFor(m => m.listEmployeeDailyStatusReport[i].Minutes)
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="formatmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1">
+        <div class="modal-dialog" style="margin-top: 0;">
+            <div class="modal-content col-xs-12">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span>&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel1">DSR Format</h4>
+                </div>
+                <div class="modal-body mod" style="padding-top: 0;max-height:420px;overflow-y:auto;">
+
+                    <ul class="list-unstyled">
+                        <li>1. Choose separate projects for filling DSR if you have worked on multiple projects.  </li>
+                        <li>2. Please add status carefully as same will be forwarded to client. </li>
+                        <li>3. Please check your spelling and grammar before submitting.</li>
+                        <li>4. You have to use minimum 100 words as description which should include following: </li>
+
+
+                    </ul>
+
+                    <h4 class="mtop0">a. Today I have completed following tasks:</h4>
+                    <ul class="list-unstyled">
+                        <li>1. </li>
+                        <li>2. </li>
+
+                    </ul>
+                    <h4 class="mtop0">b. following tasks are in progress: </h4>
+                    <ul class="list-unstyled">
+                        <li>1. </li>
+                        <li>2. </li>
+
+                    </ul>
+                    <h4 class="mtop0">c. Tomorrow I will continue working on following tasks:  </h4>
+                    <ul class="list-unstyled">
+                        <li>1. </li>
+                        <li>2. </li>
+
+                    </ul>
+                    <h4 class="mtop0">following to be added if required (For Web Developer/designer) </h4>
+
+                    <p>Frontend URL: </p>
+                    <p>Backend/Admin URL: </p>
+                    <p>Username: </p>
+                    <p>Password: </p>
+
+                    <h4 class="mtop0">For iOS/ Android developer:</h4>
+                    <p>Build link:</p>
+                    <p>Username:</p>
+                    <p>Password:</p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.datepicker').datepicker({
+                format: 'dd/mm/yyyy',
+            });
+        });
+        //$(document).on('change', '.ddlDept', function (e) {
+        //    //debugger
+        //    var DepartmentId = $(".ddlDept").val();
+        //    if (typeof DepartmentId != 'undefined') {
+        //        var url = "/api/Management/GetDesignationByDeptId?DepartmentId=" + DepartmentId
+        //        $.ajax({
+        //            type: "GET",
+        //            url: url,
+        //            contentType: "application/json; charset=utf-8",
+        //            dataType: "text",
+        //            success: function (response) {
+        //                var response = JSON.parse(response);
+        //                var listDesignations = response.listDesignations;
+        //                var ddlDesignation = $(".ddlDesignation");
+        //                $(".ddlDesignation > option").remove();
+        //                ddlDesignation.append("<option value=''>Please Select</option>")
+        //                for (var i = 0; i < listDesignations.length; i++) {
+        //                    ddlDesignation.append($("<option />").val(listDesignations[i].DesignationId).text(listDesignations[i].DesignationName));
+        //                }
+        //            },
+        //            failure: function (msg) {
+        //                console.log(error);
+        //            }
+        //        });
+        //    }
+        //});
+    </script>

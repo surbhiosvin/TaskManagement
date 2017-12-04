@@ -174,7 +174,7 @@
             contentType: "application/json; charset=utf-8",
             url: "/Feedback/DeleteFeedback?FeedbackId=" + FeedbackId,
             success: function (response) {
-                $('#dvFeedbackDetails').html(response);                /
+                $('#dvFeedbackDetails').html(response);                
                 TableDatatablesFixedHeader.init();
                 $("#lblMessage").html("Feedback deleted successfully");
                 $(".dvAlert").show();
