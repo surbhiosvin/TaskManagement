@@ -44,7 +44,6 @@ namespace TaskManagementOsvin.Controllers
                             ProjectUrl = response.ProjectUrl,
                             HourlyRate = response.HourlyRate,
                             UploadDocument = response.UploadDocument,
-                            upworkprofiles = response.UpworkProfile,
                             StartDate = response.StartDate,
                             EndDate = response.EndDate,
                             EstimateHours = string.IsNullOrEmpty(response.EstimateHours) ? (decimal?)null : Convert.ToDecimal(response.EstimateHours),
