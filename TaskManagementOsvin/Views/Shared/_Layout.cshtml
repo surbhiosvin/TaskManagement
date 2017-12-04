@@ -40,7 +40,7 @@
     <link href="~/Content/custom.css" rel="stylesheet" />
     <link href="~/Content/cssmenu.css" rel="stylesheet" />
 </head>
-<body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
+<body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white page-full-width">
     <div class="page-wrapper">
         <!-- BEGIN HEADER -->
         @{Html.RenderPartial("_header");}
@@ -51,6 +51,25 @@
         <!-- BEGIN CONTAINER -->
         <div class="page-container">
             <!-- BEGIN CONTENT -->
+
+            <div class="page-sidebar-wrapper">
+                <!-- BEGIN SIDEBAR -->
+                <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
+                <!-- DOC: Change data-auto-speed="200" to adjust the sub menu slide up/down speed -->
+                <div class="page-sidebar navbar-collapse collapse">
+                    <!-- END SIDEBAR MENU -->
+                    <div class="page-sidebar-wrapper">
+                        <!-- BEGIN RESPONSIVE MENU FOR HORIZONTAL & SIDEBAR MENU -->
+                        <ul class="page-sidebar-menu visible-sm visible-xs  page-header-fixed" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+                            @{Html.RenderPartial("_responsiveHeader");}
+                        </ul>
+                        <!-- END RESPONSIVE MENU FOR HORIZONTAL & SIDEBAR MENU -->
+                    </div>
+                </div>
+                <!-- END SIDEBAR -->
+            </div>
+
+
             <div class="page-content-wrapper">
                 <!-- BEGIN CONTENT BODY -->
                 @RenderBody()

@@ -1,264 +1,928 @@
 ﻿@using TaskManagementOsvin.Security;
 @using TaskManagementOsvin.Models;
-<div id='cssmenu' class="page-header navbar navbar-fixed-top">
-    <ul>
-        <li><a href='~/Dashboard/Welcome'><span>Home</span></a></li>
-        @if (UserManager.user.roleType == roleTypeModel.Employee)
+<!-- BEGIN HEADER -->
+<div class="page-header navbar navbar-fixed-top">
+    <!-- BEGIN HEADER INNER -->
+    <div class="page-header-inner ">
+        <!-- BEGIN MEGA MENU -->
+        <!-- DOC: Remove "hor-menu-light" class to have a horizontal menu with theme background instead of white background -->
+        <!-- DOC: This is desktop version of the horizontal menu. The mobile version is defined(duplicated) in the responsive menu below along with sidebar menu. So the horizontal menu has 2 seperate versions -->
+        <div class="hor-menu   hidden-sm hidden-xs">
+            <ul class="nav navbar-nav">
+                <!-- DOC: Remove data-hover="megamenu-dropdown" and data-close-others="true" attributes below to disable the horizontal opening on mouse hover -->
+                <li class="classic-menu-dropdown active" aria-haspopup="true">
+                    <a href="~/Dashboard/Welcome" style="margin-left:10px">
+                        Home
+                        <span class="selected"> </span>
+                    </a>
+                </li>
+                @if (UserManager.user.roleType == roleTypeModel.Employee)
+                {
+                    
+                    <li class="classic-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
+                            User
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="~/Dashboard/ChangePassword">
+                                    <i class="fa fa-puzzle-piece"></i> Change Password
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
+                            Manage Project
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="~/Project/ProjectList">
+                                    <i class="fa fa-bookmark-o"></i> Project List
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
+                            Manage Report
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="javascript:;">
+                                    <i class="fa fa-puzzle-piece"></i> Add /Edit Status report
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="mega-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" class="dropdown-toggle" data-hover="megamenu-dropdown" data-close-others="true">
+                            Others
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu" style="min-width: 500px;">
+                            <li>
+                                <!-- Content container to add padding -->
+                                <div class="mega-menu-content">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <ul class="mega-menu-submenu">
+                                                <li>
+                                                    <h3>Network & Hardware issue</h3>
+                                                </li>
+                                                <li>
+                                                    <a href="~/NetworkIssues/ReportIssue">Network & Hardware issue</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <ul class="mega-menu-submenu">
+                                                <li>
+                                                    <h3>Project Bug</h3>
+                                                </li>
+                                                <li>
+                                                    <a href="~/Bugs/BugsList">Bugs List</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                }
+
+                @if (UserManager.user.roleType == roleTypeModel.NetworkAdmin)
+                {
+
+                    <li class="classic-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
+                            User
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="~/Dashboard/ChangePassword">
+                                    <i class="fa fa-puzzle-piece"></i> Change Password
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
+                            Manage Project
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="~/Project/AddUpdateProject">
+                                    <i class="fa fa-user"></i> Add /Edit Project
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/Project/AddProjectAddendumDetails">
+                                    <i class="fa fa-puzzle-piece"></i> Add /Edit Addendum
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/Project/ProjectTaskCategories">
+                                    <i class="fa fa-puzzle-piece"></i> Add /Edit Project Task Category
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
+                            Manage Client
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="~/Client/Clients">
+                                    <i class="fa fa-bookmark-o"></i> Add /Edit Client
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
+                            Manage Report
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="javascript:;">
+                                    <i class="fa fa-puzzle-piece"></i> Add /Edit Status report
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="mega-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" class="dropdown-toggle" data-hover="megamenu-dropdown" data-close-others="true">
+                            Others
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu" style="min-width: 500px;">
+                            <li>
+                                <!-- Content container to add padding -->
+                                <div class="mega-menu-content">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <ul class="mega-menu-submenu">
+                                                <li>
+                                                    <h3>Network & Hardware issue</h3>
+                                                </li>
+                                                <li>
+                                                    <a href="~/NetworkIssues/ReportIssue">Network & Hardware issue</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <ul class="mega-menu-submenu">
+                                                <li>
+                                                    <h3>Project Bug</h3>
+                                                </li>
+                                                <li>
+                                                    <a href="~/Bugs/BugsList">Bugs List</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                }
+
+                @if (UserManager.user.roleType == roleTypeModel.TeamLeader)
+                {
+                    <li class="classic-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
+                            User
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="~/Management/AddUpdateUser">
+                                    <i class="fa fa-bookmark-o"></i> Add /Edit User
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/Management/Designations">
+                                    <i class="fa fa-user"></i> Add/Edit Designation
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/Dashboard/ChangePassword">
+                                    <i class="fa fa-puzzle-piece"></i> Change Password
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
+                            Manage Project
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="~/Project/ProjectList">
+                                    <i class="fa fa-bookmark-o"></i> Project List
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/Project/AddUpdateProject">
+                                    <i class="fa fa-user"></i> Add /Edit Project
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/Project/AddProjectAddendumDetails">
+                                    <i class="fa fa-puzzle-piece"></i> Add /Edit Addendum
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/Project/AddWorkingHoursOfProjectBeforePMS">
+                                    <i class="fa fa-puzzle-piece"></i> Add working hours of project before PMS
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/Project/ProjectTaskCategories">
+                                    <i class="fa fa-puzzle-piece"></i> Add /Edit Project Task Category
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
+                            Manage Client
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="~/Client/Clients">
+                                    <i class="fa fa-bookmark-o"></i> Add /Edit Client
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
+                            Manage Report
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="javascript:;">
+                                    <i class="fa fa-bookmark-o"></i> Project Report
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <i class="fa fa-user"></i> Employee report
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <i class="fa fa-puzzle-piece"></i> Add /Edit Status report
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <i class="fa fa-puzzle-piece"></i> Add /Edit Status report of employee
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <i class="fa fa-puzzle-piece"></i> Employee DSR filled by Team Leader
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="mega-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" class="dropdown-toggle" data-hover="megamenu-dropdown" data-close-others="true">
+                            Others
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu" style="min-width: 500px;">
+                            <li>
+                                <!-- Content container to add padding -->
+                                <div class="mega-menu-content">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <ul class="mega-menu-submenu">
+                                                <li>
+                                                    <h3>Network & Hardware issue</h3>
+                                                </li>
+                                                <li>
+                                                    <a href="~/NetworkIssues/ReportIssue">Network & Hardware issue</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <ul class="mega-menu-submenu">
+                                                <li>
+                                                    <h3>Project Bug</h3>
+                                                </li>
+                                                <li>
+                                                    <a href="~/Bugs/BugsList">Bugs List</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                }
+
+                @if (UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType == roleTypeModel.HR)
+                {
+                    <li class="mega-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" class="dropdown-toggle" data-hover="megamenu-dropdown" data-close-others="true">
+                            Others
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu" style="min-width: 700px;">
+                            <li>
+                                <!-- Content container to add padding -->
+                                <div class="mega-menu-content">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <ul class="mega-menu-submenu">
+                                                <li>
+                                                    <h3>Feedback</h3>
+                                                </li>
+                                                <li>
+                                                    <a href="~/Feedback/Feedback">Add/Edit Feedback</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <ul class="mega-menu-submenu">
+                                                <li>
+                                                    <h3>Network & Hardware issue</h3>
+                                                </li>
+                                                <li>
+                                                    <a href="~/NetworkIssues/ReportIssue">Network & Hardware issue</a>
+                                                </li>
+                                                <li>
+                                                    <a href="~/NetworkIssues/NetworkIssueReport">Network & Hardware issue graph</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <ul class="mega-menu-submenu">
+                                                <li>
+                                                    <h3>Project Bug</h3>
+                                                </li>
+                                                <li>
+                                                    <a href="~/Bugs/ReportBug">Report Bugs</a>
+                                                </li>
+                                                <li>
+                                                    <a href="~/Bugs/BugsList">Bugs List</a>
+                                                </li>
+                                                <li>
+                                                    <a href="~/Bugs/BugsGraph">Bugs Graph</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
+                            User
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="~/Management/AddUpdateUser">
+                                    <i class="fa fa-bookmark-o"></i> Add /Edit User
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/Dashboard/ChangePassword">
+                                    <i class="fa fa-puzzle-piece"></i> Change Password
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
+                            Department & Designation
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="~/Management/Departments">
+                                    <i class="fa fa-bookmark-o"></i> Add/Edit Department
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/Management/Designations">
+                                    <i class="fa fa-user"></i> Add /Edit Designation
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
+                            Manage Project
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="~/Project/ProjectList">
+                                    <i class="fa fa-bookmark-o"></i> Project List
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/Project/AddUpdateProject">
+                                    <i class="fa fa-user"></i> Add /Edit Project
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/Project/AddProjectAddendumDetails">
+                                    <i class="fa fa-puzzle-piece"></i> Add /Edit Addendum
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/Project/AddWorkingHoursOfProjectBeforePMS">
+                                    <i class="fa fa-puzzle-piece"></i> Add working hours of project before PMS
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/Project/ProjectTaskCategories">
+                                    <i class="fa fa-puzzle-piece"></i> Add /Edit Project Task Category
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/Project/MergeProject">
+                                    <i class="fa fa-bookmark-o"></i> Merge Project
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
+                            Manage Client
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="~/Client/Clients">
+                                    <i class="fa fa-bookmark-o"></i> Add /Edit Client
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
+                            Manage Report
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="javascript:;">
+                                    <i class="fa fa-bookmark-o"></i> Project Report
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <i class="fa fa-user"></i> Employee report
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <i class="fa fa-puzzle-piece"></i> Add /Edit Status report
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <i class="fa fa-puzzle-piece"></i> Add /Edit Status report of employee
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <i class="fa fa-puzzle-piece"></i> Employee DSR filled by Team Leader
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                }
+
+                @if (UserManager.user.roleType == roleTypeModel.ProjectManager)
+                {
+                    <li class="classic-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
+                            User
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="~/Management/AddUpdateUser">
+                                    <i class="fa fa-bookmark-o"></i> Add /Edit User
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/Dashboard/ChangePassword">
+                                    <i class="fa fa-puzzle-piece"></i> Change Password
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
+                            Manage Project
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="~/Project/ProjectList">
+                                    <i class="fa fa-bookmark-o"></i> Project List
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/Project/AddUpdateProject">
+                                    <i class="fa fa-user"></i> Add /Edit Project
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/Project/AddProjectAddendumDetails">
+                                    <i class="fa fa-puzzle-piece"></i> Add /Edit Addendum
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/Project/AddWorkingHoursOfProjectBeforePMS">
+                                    <i class="fa fa-puzzle-piece"></i> Add working hours of project before PMS
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/Project/ProjectTaskCategories">
+                                    <i class="fa fa-puzzle-piece"></i> Add /Edit Project Task Category
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/Project/MergeProject">
+                                    <i class="fa fa-bookmark-o"></i> Merge Project
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
+                            Manage Client
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="~/Client/Clients">
+                                    <i class="fa fa-bookmark-o"></i> Add /Edit Client
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true">
+                            Manage Report
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="javascript:;">
+                                    <i class="fa fa-bookmark-o"></i> Project Report
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <i class="fa fa-user"></i> Employee report
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <i class="fa fa-puzzle-piece"></i> Add /Edit Status report
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <i class="fa fa-puzzle-piece"></i> Add /Edit Status report of employee
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <i class="fa fa-puzzle-piece"></i> Employee DSR filled by Team Leader
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="mega-menu-dropdown" aria-haspopup="true">
+                        <a href="javascript:;" class="dropdown-toggle" data-hover="megamenu-dropdown" data-close-others="true">
+                            Others
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu" style="min-width: 500px;">
+                            <li>
+                                <!-- Content container to add padding -->
+                                <div class="mega-menu-content">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <ul class="mega-menu-submenu">
+                                                <li>
+                                                    <h3>Network & Hardware issue</h3>
+                                                </li>
+                                                <li>
+                                                    <a href="~/NetworkIssues/ReportIssue">Network & Hardware issue</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <ul class="mega-menu-submenu">
+                                                <li>
+                                                    <h3>Project Bug</h3>
+                                                </li>
+                                                <li>
+                                                    <a href="~/Bugs/ReportBug">Report Bugs</a>
+                                                </li>
+                                                <li>
+                                                    <a href="~/Bugs/BugsList">Bugs List</a>
+                                                </li>
+                                                <li>
+                                                    <a href="~/Bugs/BugsGraph">Bugs Graph</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                }
+                
+            </ul>
+        </div>
+        <!-- END MEGA MENU -->
+        <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+        <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
+            <span></span>
+        </a>
+        <!-- END RESPONSIVE MENU TOGGLER -->
+        <!-- BEGIN TOP NAVIGATION MENU -->
+        @if (UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType == roleTypeModel.HR)
         {
-            <li class="has-sub">
-                <a href="#">User</a>
-                <ul>
-                    <li><a href='~/Dashboard/ChangePassword'><span>Change Password</span></a></li>
+            <div class="top-menu">
+                <ul class="nav navbar-nav pull-right">
+                    <!-- BEGIN NOTIFICATION DROPDOWN -->
+                    <!-- DOC: Apply "dropdown-dark" class after "dropdown-extended" to change the dropdown styte -->
+                    <!-- DOC: Apply "dropdown-hoverable" class after below "dropdown" and remove data-toggle="dropdown" data-hover="dropdown" data-close-others="true" attributes to enable hover dropdown mode -->
+                    <!-- DOC: Remove "dropdown-hoverable" and add data-toggle="dropdown" data-hover="dropdown" data-close-others="true" attributes to the below A element with dropdown-toggle class -->
+                    <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                            <i class="icon-bell"></i>
+                            <span class="badge badge-default"> 7 </span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="external">
+                                <h3>
+                                    <span class="bold">12 pending</span> notifications
+                                </h3>
+                                <a href="page_user_profile_1.html">view all</a>
+                            </li>
+                            <li>
+                                <ul class="dropdown-menu-list scroller" style="height: 250px;" data-handle-color="#637283">
+                                    <li>
+                                        <a href="javascript:;">
+                                            <span class="time">just now</span>
+                                            <span class="details">
+                                                <span class="label label-sm label-icon label-success">
+                                                    <i class="fa fa-plus"></i>
+                                                </span> New user registered.
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;">
+                                            <span class="time">3 mins</span>
+                                            <span class="details">
+                                                <span class="label label-sm label-icon label-danger">
+                                                    <i class="fa fa-bolt"></i>
+                                                </span> Server #12 overloaded.
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;">
+                                            <span class="time">10 mins</span>
+                                            <span class="details">
+                                                <span class="label label-sm label-icon label-warning">
+                                                    <i class="fa fa-bell-o"></i>
+                                                </span> Server #2 not responding.
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;">
+                                            <span class="time">14 hrs</span>
+                                            <span class="details">
+                                                <span class="label label-sm label-icon label-info">
+                                                    <i class="fa fa-bullhorn"></i>
+                                                </span> Application error.
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;">
+                                            <span class="time">2 days</span>
+                                            <span class="details">
+                                                <span class="label label-sm label-icon label-danger">
+                                                    <i class="fa fa-bolt"></i>
+                                                </span> Database overloaded 68%.
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;">
+                                            <span class="time">3 days</span>
+                                            <span class="details">
+                                                <span class="label label-sm label-icon label-danger">
+                                                    <i class="fa fa-bolt"></i>
+                                                </span> A user IP blocked.
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;">
+                                            <span class="time">4 days</span>
+                                            <span class="details">
+                                                <span class="label label-sm label-icon label-warning">
+                                                    <i class="fa fa-bell-o"></i>
+                                                </span> Storage Server #4 not responding dfdfdfd.
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;">
+                                            <span class="time">5 days</span>
+                                            <span class="details">
+                                                <span class="label label-sm label-icon label-info">
+                                                    <i class="fa fa-bullhorn"></i>
+                                                </span> System Error.
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;">
+                                            <span class="time">9 days</span>
+                                            <span class="details">
+                                                <span class="label label-sm label-icon label-danger">
+                                                    <i class="fa fa-bolt"></i>
+                                                </span> Storage server failed.
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- END NOTIFICATION DROPDOWN -->
+                    <!-- BEGIN INBOX DROPDOWN -->
+                    <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
+                    <li class="dropdown dropdown-extended dropdown-inbox" id="header_inbox_bar">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                            <i class="fa fa-birthday-cake"></i>
+                            <span class="badge badge-default"> 4 </span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="external">
+                                <h3>
+                                    You have
+                                    <span class="bold">7 New</span> Messages
+                                </h3>
+                                <a href="app_inbox.html">view all</a>
+                            </li>
+                            <li>
+                                <ul class="dropdown-menu-list scroller" style="height: 275px;" data-handle-color="#637283">
+                                    <li>
+                                        <a href="#">
+                                            <span class="photo">
+                                                <img src="../assets/layouts/layout3/img/avatar2.jpg" class="img-circle" alt="">
+                                            </span>
+                                            <span class="subject">
+                                                <span class="from"> Lisa Wong </span>
+                                                <span class="time">Just Now </span>
+                                            </span>
+                                            <span class="message"> Vivamus sed auctor nibh congue nibh. auctor nibh auctor nibh... </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <span class="photo">
+                                                <img src="../assets/layouts/layout3/img/avatar3.jpg" class="img-circle" alt="">
+                                            </span>
+                                            <span class="subject">
+                                                <span class="from"> Richard Doe </span>
+                                                <span class="time">16 mins </span>
+                                            </span>
+                                            <span class="message"> Vivamus sed congue nibh auctor nibh congue nibh. auctor nibh auctor nibh... </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <span class="photo">
+                                                <img src="../assets/layouts/layout3/img/avatar1.jpg" class="img-circle" alt="">
+                                            </span>
+                                            <span class="subject">
+                                                <span class="from"> Bob Nilson </span>
+                                                <span class="time">2 hrs </span>
+                                            </span>
+                                            <span class="message"> Vivamus sed nibh auctor nibh congue nibh. auctor nibh auctor nibh... </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <span class="photo">
+                                                <img src="../assets/layouts/layout3/img/avatar2.jpg" class="img-circle" alt="">
+                                            </span>
+                                            <span class="subject">
+                                                <span class="from"> Lisa Wong </span>
+                                                <span class="time">40 mins </span>
+                                            </span>
+                                            <span class="message"> Vivamus sed auctor 40% nibh congue nibh... </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <span class="photo">
+                                                <img src="../assets/layouts/layout3/img/avatar3.jpg" class="img-circle" alt="">
+                                            </span>
+                                            <span class="subject">
+                                                <span class="from"> Richard Doe </span>
+                                                <span class="time">46 mins </span>
+                                            </span>
+                                            <span class="message"> Vivamus sed congue nibh auctor nibh congue nibh. auctor nibh auctor nibh... </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- END INBOX DROPDOWN -->
+                    <!-- BEGIN TODO DROPDOWN -->
+                    <!-- BEGIN USER LOGIN DROPDOWN -->
+                    <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
+                    <li class="dropdown dropdown-user">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                            <img alt="" class="img-circle" src="../assets/layouts/layout/img/avatar3_small.jpg" />
+                            <span class="username username-hide-on-mobile"> Nick </span>
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-default">
+                            <li>
+                                <a href="page_user_profile_1.html">
+                                    <i class="icon-user"></i> My Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a href="app_calendar.html">
+                                    <i class="icon-calendar"></i> My Calendar
+                                </a>
+                            </li>
+                            <li>
+                                <a href="app_inbox.html">
+                                    <i class="icon-envelope-open"></i> My Inbox
+                                    <span class="badge badge-danger"> 3 </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="app_todo.html">
+                                    <i class="icon-rocket"></i> My Tasks
+                                    <span class="badge badge-success"> 7 </span>
+                                </a>
+                            </li>
+                            <li class="divider"> </li>
+                            <li>
+                                <a href="page_user_lock_1.html">
+                                    <i class="icon-lock"></i> Lock Screen
+                                </a>
+                            </li>
+                            <li>
+                                <a href="page_user_login_1.html">
+                                    <i class="icon-key"></i> Log Out
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- END USER LOGIN DROPDOWN -->
                 </ul>
-            </li>
-            <li class="has-sub">
-                <a href="#">Manage Project</a>
-                <ul>
-                    <li><a href='#'><span>Project List</span></a></li>
-                </ul>
-            </li>
-            <li class="has-sub">
-                <a href='#'><span>Status Report</span></a>
-                <ul>
-                    <li><a href='#'><span>Add/Edit Status Report</span></a></li>
-                </ul>
-            </li>
-            <li class="has-sub">
-                <a href='#'><span>Daily Status Report</span></a>
-                <ul>
-                    <li><a href='#'><span>Daily Status Report By Employee</span></a></li>
-                </ul>
-            </li>
-            <li class="has-sub">
-                <a href='#'><span>Network & Hardware Issue</span></a>
-                <ul>
-                    <li><a href='~/NetworkIssues/ReportIssue'><span>Network and Hardware Issue</span></a></li>
-                </ul>
-            </li>
-            <li class='has-sub last'>
-                <a href='#'><span>Project Bug</span></a>
-                <ul>
-                    <li><a href='~/Bugs/BugsList'><span>Bugs List</span></a></li>
-                </ul>
-            </li>
+            </div>
         }
-        else if (UserManager.user.roleType == roleTypeModel.TeamLeader)
-        {
-            <li class="has-sub">
-                <a href="#">User</a>
-                <ul>
-                    <li><a href='~/Management/AddUpdateUser'><span>Add/Edit User</span></a></li>
-                    <li><a href='~/Management/Designations'><span>Add/Edit Designation</span></a></li>
-                    <li><a href='~/Dashboard/ChangePassword'><span>Change Password</span></a></li>
-                </ul>
-            </li>
-            <li class="has-sub">
-                <a href="#">Manage Project</a>
-                <ul>
-                    <li><a href='~/Project/ProjectList'><span>Project List</span></a></li>
-                    <li><a href='~/Project/AddUpdateProject'><span>Add/Edit Project</span></a></li>
-                    <li><a href='~/Project/AddProjectAddendumDetails'><span>Add/Edit Addendums</span></a></li>
-                    <li><a href='~/Project/AddWorkingHoursOfProjectBeforePMS'><span>Add Working Hour of Project Before PMS</span></a></li>
-                    <li><a href='~/Project/ProjectTaskCategories'><span>Add/Edit Project Task Category</span></a></li>
-                </ul>
-            </li>
-            <li class="has-sub">
-                <a href='#'><span>Manage Client</span></a>
-                <ul>
-                    <li><a href='~/Client/Clients'><span>Add/Edit Client</span></a></li>
-                </ul>
-            </li>
-            <li class="has-sub">
-                <a href="#">Manage Report</a>
-                <ul>
-                    <li><a href='#'><span>Project Report</span></a></li>
-                    <li><a href='#'><span>Employee Report</span></a></li>
-                    <li><a href='#'><span>Add/Edit Status Report</span></a></li>
-                    <li><a href='#'><span>Add Daily Status Report of Employee</span></a></li>
-                    <li><a href='#'><span>Employee Daily Status Report Filed by Team Leader</span></a></li>
-                </ul>
-            </li>
-            <li class="has-sub">
-                <a href='#'><span>Network & Hardware Issue</span></a>
-                <ul>
-                    <li><a href='~/NetworkIssues/ReportIssue'><span>Network and Hardware Issue</span></a></li>
-                </ul>
-            </li>
-            <li class='has-sub last'>
-                <a href='#'><span>Project Bug</span></a>
-                <ul>
-                    <li><a href='~/Bugs/BugsList'><span>Bugs List</span></a></li>
-                </ul>
-            </li>
-        }
-        else if (UserManager.user.roleType == roleTypeModel.NetworkAdmin)
-        {
-            <li class="has-sub">
-                <a href="#">User</a>
-                <ul>
-                    <li><a href='~/Dashboard/ChangePassword'><span>Change Password</span></a></li>
-                </ul>
-            </li>
-            <li class="has-sub">
-                <a href="#">Manage Project</a>
-                <ul>
-                    <li><a href='#'><span>Project List</span></a></li>
-                    <li><a href='~/Project/AddUpdateProject'><span>Add/Edit Project</span></a></li>
-                    <li><a href='~/Project/AddProjectAddendumDetails'><span>Add/Edit Addendums</span></a></li>
-                    <li><a href='~/Project/AddWorkingHoursOfProjectBeforePMS'><span>Add Working Hour of Project Before PMS</span></a></li>
-                    <li><a href='~/Project/ProjectTaskCategories'><span>Add/Edit Project Task Category</span></a></li>
-                </ul>
-            </li>
-            <li class="has-sub">
-                <a href='#'><span>Manage Client</span></a>
-                <ul>
-                    <li><a href='~/Client/Clients'><span>Add/Edit Client</span></a></li>
-                </ul>
-            </li>
-            <li class="has-sub">
-                <a href="#">Manage Report</a>
-                <ul>
-                    <li><a href='#'><span>Project Report</span></a></li>
-                    <li><a href='#'><span>Employee Report</span></a></li>
-                    <li><a href='#'><span>Add/Edit Status Report</span></a></li>
-                    <li><a href='#'><span>Add Daily Status Report of Employee</span></a></li>
-                    <li><a href='#'><span>Employee Daily Status Report Filed by Team Leader</span></a></li>
-                </ul>
-            </li>
-            <li class="has-sub">
-                <a href='#'><span>Network and Hardware Issue</span></a>
-                <ul>
-                    <li><a href='~/NetworkIssues/ReportIssue'><span>Network and Hardware Issue</span></a></li>
-                </ul>
-            </li>
-            <li class='has-sub last'>
-                <a href='#'><span>Project Bug</span></a>
-                <ul>
-                    <li><a href='~/Bugs/BugsList'><span>Bugs List</span></a></li>
-                </ul>
-            </li>
-        }
-        else if (UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType == roleTypeModel.HR)
-        {
-            <li class="has-sub">
-                <a href="#">User</a>
-                <ul>
-                    <li><a href='~/Management/AddUpdateUser'><span>Add/Edit User</span></a></li>
-                    <li><a href='~/Dashboard/ChangePassword'><span>Change Password</span></a></li>
-                </ul>
-            </li>
-            <li class="has-sub">
-                <a href="#">Department & Designation</a>
-                <ul>
-                    <li><a href='~/Management/Departments'><span>Add/Edit Department</span></a></li>
-                    <li><a href='~/Management/Designations'><span>Add/Edit Designation</span></a></li>
-                </ul>
-            </li>
-            <li class="has-sub">
-                <a href="#">Manage Project</a>
-                <ul>
-                    <li><a href='#'><span>Project List</span></a></li>
-                    <li><a href='~/Project/AddUpdateProject'><span>Add/Edit Project</span></a></li>
-                    <li><a href='~/Project/AddProjectAddendumDetails'><span>Add/Edit Addendums</span></a></li>
-                    <li><a href='~/Project/AddWorkingHoursOfProjectBeforePMS'><span>Add Working Hour of Project Before PMS</span></a></li>
-                    <li><a href='~/Project/ProjectTaskCategories'><span>Add/Edit Project Task Category</span></a></li>
-                    <li><a href='~/Project/MergeProject'><span>Merge Project</span></a></li>
-                </ul>
-            </li>
-            <li class="has-sub">
-                <a href='#'><span>Manage Client</span></a>
-                <ul>
-                    <li><a href='~/Client/Clients'><span>Add/Edit Client</span></a></li>
-                </ul>
-            </li>
-            <li class="has-sub">
-                <a href='#'><span>Feedback</span></a>
-                <ul>
-                    <li><a href='~/Feedback/Feedback'><span>Add/Edit Feedback</span></a></li>
-                </ul>
-            </li>
-            <li class="has-sub">
-                <a href="#">Manage Report</a>
-                <ul>
-                    <li><a href='#'><span>Project Report</span></a></li>
-                    <li><a href='#'><span>Employee Report</span></a></li>
-                    <li><a href='#'><span>Search Report</span></a></li>
-                    <li><a href='#'><span>Employee Working Hours in Month</span></a></li>
-                    <li><a href='#'><span>Employee Daily Status Report Filed by Team Leader</span></a></li>
-                </ul>
-            </li>
-            <li class="has-sub">
-                <a href='#'><span>Network & Hardware Issue</span></a>
-                <ul>
-                    <li><a href='~/NetworkIssues/ReportIssue'><span>Network and Hardware Issue</span></a></li>
-                    <li><a href='~/NetworkIssues/NetworkIssueReport'><span>Network and Hardware Issue Graph</span></a></li>
-                </ul>
-            </li>
-            <li class='has-sub last'>
-                <a href='#'><span>Project Bug</span></a>
-                <ul>
-                    <li><a href='~/Bugs/ReportBug'><span>Report Bugs</span></a></li>
-                    <li><a href='~/Bugs/BugsList'><span>Bugs List</span></a></li>
-                    <li><a href='~/Bugs/BugsGraph'><span>Bugs Graph</span></a></li>
-                </ul>
-            </li>
-        }
-        else if (UserManager.user.roleType == roleTypeModel.ProjectManager)
-        {
-            <li class="has-sub">
-                <a href="~/Management/AddUpdateUser">User</a>
-                <ul>
-                    <li><a href='~/Management/AddUpdateUser'><span>Add/Edit User</span></a></li>
-                    <li><a href='~/Dashboard/ChangePassword'><span>Change Password</span></a></li>
-                </ul>
-            </li>
-            <li class="has-sub">
-                <a href="#">Manage Project</a>
-                <ul>
-                    <li><a href='#'><span>Project List</span></a></li>
-                    <li><a href='~/Project/AddUpdateProject'><span>Add/Edit Project</span></a></li>
-                    <li><a href='~/Project/AddProjectAddendumDetails'><span>Add/Edit Addendums</span></a></li>
-                    <li><a href='~/Project/AddWorkingHoursOfProjectBeforePMS'><span>Add Working Hour of Project Before PMS</span></a></li>
-                    <li><a href='~/Project/ProjectTaskCategories'><span>Add/Edit Project Task Category</span></a></li>
-                    <li><a href='~/Project/MergeProject'><span>Merge Project</span></a></li>
-                </ul>
-            </li>
-            <li class="has-sub">
-                <a href='#'><span>Manage Client</span></a>
-                <ul>
-                    <li><a href='~/Client/Clients'><span>Add/Edit Client</span></a></li>
-                </ul>
-            </li>
-            <li class="has-sub">
-                <a href='#'><span>Feedback</span></a>
-                <ul>
-                    <li><a href='~/Feedback/Feedback'><span>Add/Edit Feedback</span></a></li>
-                </ul>
-            </li>
-            <li class="has-sub">
-                <a href="#">Manage Report</a>
-                <ul>
-                    <li><a href='#'><span>Project Report</span></a></li>
-                    <li><a href='#'><span>Employee Report</span></a></li>
-                    <li><a href='#'><span>Search Report</span></a></li>
-                    <li><a href='#'><span>Employee Working Hours in Month</span></a></li>
-                    <li><a href='#'><span>Employee Daily Status Report Filed by Team Leader</span></a></li>
-                </ul>
-            </li>
-            <li class="has-sub">
-                <a href='#'><span>Network & Hardware Issue</span></a>
-                <ul>
-                    <li><a href='~/NetworkIssues/ReportIssue'><span>Network and Hardware Issue</span></a></li>
-                </ul>
-            </li>
-            <li class='has-sub last'>
-                <a href='#'><span>Project Bug</span></a>
-                <ul>
-                    <li><a href='~/Bugs/ReportBug'><span>Report Bugs</span></a></li>
-                    <li><a href='~/Bugs/BugsList'><span>Bugs List</span></a></li>
-                    <li><a href='~/Bugs/BugsGraph'><span>Bugs Graph</span></a></li>
-                </ul>
-            </li>
-        }
-    </ul>
+        
+        <!-- END TOP NAVIGATION MENU -->
+    </div>
+    <!-- END HEADER INNER -->
 </div>
+<!-- END HEADER -->
