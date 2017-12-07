@@ -22,5 +22,9 @@ namespace DomainModel.EntityModel
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public long CreatedBy { get; set; }
+        public string Hours { get; set; }
+        public string Minutes { get; set; }
+        public string ProjectTitle { get; set; }
+        public string CategoryName { get; set; }
     }
 }

@@ -4,7 +4,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @model TaskManagementOsvin.Models.AddEmployeeDailyReportModel
-
 <div class="page-content">
     <!-- BEGIN PAGE BAR -->
     <div class="page-bar">
@@ -72,6 +71,11 @@
                     </button>
                 </div>
                 <div class="portlet-body form">
+                    <div class="alert dvAlert @ViewBag.Class">
+                        @*<button type="button" class="close" data-close="alert"></button>*@
+                        <a class="close" onclick="$('.alert').hide()">×</a>
+                        <span id="lblMessage"> @ViewBag.Message </span>
+                    </div>
                     <div class="row">
                         <div class="text-center margin-bottom-30">
                             <span style="color:red;">If your Project is not found, Please Contact to your Team Leader</span>
@@ -79,168 +83,780 @@
                     </div>
                     @if (Model != null && Model.listEmployeeDailyStatusReport.Count > 0)
                     {
-                        using (Html.BeginForm("AddEmployeeDailyStatusReport", "EmployeeDailyStatusReport", FormMethod.Post, new { enctype = "multipart/form-data", @id = "frmAddEmpStatusReport", @class = "form-horizontal" }))
+                        using (Html.BeginForm("AddEmployeeDailyStatusReport", "EmployeeDailyStatusReport", FormMethod.Post, new { enctype = "multipart/form-data", @id = "frmAddEmpStatusReport" }))
                         {
-                            for (int i = 0; i < Model.listEmployeeDailyStatusReport.Count; i++)
-                            {
-                                @Html.HiddenFor(m =>m.listEmployeeDailyStatusReport[i].DailyReportId)
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <div class="form-group">
+                            <table class="table table-responsive table-bordered">
+                                @for (int i = 0; i < Model.listEmployeeDailyStatusReport.Count; i++)
+                                {
+                                    @Html.HiddenFor(m => m.listEmployeeDailyStatusReport[i].DailyReportId)
+                                    <tr style="height: 40px;">
+                                        <td style="width: 23%; vertical-align: top;">
                                             <label class="control-label">Project Name</label>
-                                            @Html.DropDownListFor(m => m.listEmployeeDailyStatusReport[i].ProjectId, new SelectList(ViewData["ddlProject"] as List<SelectListItem>, "Value", "Text", Model.listEmployeeDailyStatusReport[i].ProjectId), "Please Select", new { @class = "form-control", @required = "required" })
-                                            <div class="text-danger">
-                                                @Html.ValidationMessageFor(m => m.listEmployeeDailyStatusReport[i].ProjectId)
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group">
+                                            @*@Html.DropDownListFor(m => m.listEmployeeDailyStatusReport[i].ProjectId, new SelectList(ViewData["ddlProject"] as List<SelectListItem>, "Value", "Text", Model.listEmployeeDailyStatusReport[i].ProjectId), "Please Select", new { @class = "form-control", @required = "required" })*@
+                                            @Html.DropDownListFor(model => model.listEmployeeDailyStatusReport[i].ProjectId, new SelectList(ViewBag.listProjects, "ProjectId", "ProjectTitle"), "--Select Project--", new { @class = "form-control selectpicker select2-allow-clear" })
+
+                                        </td>
+                                        <td style="width: 22%; vertical-align: top;">
                                             <label class="control-label">SubTask Category</label>
-                                            @Html.DropDownListFor(m => m.listEmployeeDailyStatusReport[i].ReportCategoryId, new SelectList(ViewData["ddlTaskCategories"] as List<SelectListItem>, "Value", "Text", Model.listEmployeeDailyStatusReport[i].ReportCategoryId), "Please Select", new { @class = "form-control", @required = "required" })
-                                            <div class="text-danger">
-                                                @Html.ValidationMessageFor(m => m.listEmployeeDailyStatusReport[i].ReportCategoryId)
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group">
+                                            @Html.DropDownListFor(model => model.listEmployeeDailyStatusReport[i].ReportCategoryId, new SelectList(ViewBag.listTaskCategories, "CategoryId", "CategoryName"), "--Select Report Category--", new { @class = "form-control" })
+
+                                        </td>
+                                        <td style="width: 30%; vertical-align: top;">
+
                                             <label class="control-label">Description</label>
-                                            @Html.TextBoxFor(m => m.listEmployeeDailyStatusReport[i].Description, new { @class = "form-control", @multiline = "multiline", @required = "required" })
-                                            <div class="text-danger">
-                                                @Html.ValidationMessageFor(m => m.listEmployeeDailyStatusReport[i].Description)
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group">
-                                            <label class="control-label">Upload File</label>
-                                            <div class="col-md-6">
+                                            @Html.TextAreaFor(m => m.listEmployeeDailyStatusReport[i].Description, new { @class = "form-control", @rows = "6" })
+
+                                        </td>
+                                        @*<td style="width: 10%; vertical-align: top;">
+                                                <label class="control-label">Upload File</label>
                                                 <div class="fileinput fileinput-new" data-provides="fileinput">
-                                                    <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 200px; height: 150px;"> </div>
-                                                    <div>
-                                                        <span class="btn red btn-outline btn-file">
-                                                            <span class="fileinput-new"> Select image </span>
+                                                    <div class="input-group input-large">
+                                                        <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+                                                            <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                                            <span class="fileinput-filename"> </span>
+                                                        </div>
+                                                        <span class="input-group-addon btn default btn-file">
+                                                            <span class="fileinput-new"> Select file </span>
                                                             <span class="fileinput-exists"> Change </span>
-                                                            @*<input type="file" name="...">*@
-                                                            @*<input accept="image/x-png,image/gif,image/jpeg" id="ImageFile" name="ImageFile" type="file" value="">*@
                                                             @Html.TextBoxFor(m => m.listEmployeeDailyStatusReport[i].PostedFile, new { type = "file", @accept = ".apk, .ipa" })
+                                                            @Html.HiddenFor(m => m.listEmployeeDailyStatusReport[i].Filename)
                                                         </span>
-                                                        <a href="javascript:;" class="btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                                        <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <div class="col-md-6">
+                                            </td>*@
+                                        <td style="width: 10%; vertical-align: top;">
+                                            <label class="control-label">Working Hours</label>
+                                            <div>
                                                 <label>Hours:</label>
-                                                @Html.DropDownListFor(m => m.listEmployeeDailyStatusReport[i].Hours, new SelectList(ViewData["ddlHours"] as List<SelectListItem>, "Value", "Text", Model.listEmployeeDailyStatusReport[i].Hours), "Please Select", new { @class = "form-control", @required = "required" })
-                                                <div class="text-danger">
-                                                    @Html.ValidationMessageFor(m => m.listEmployeeDailyStatusReport[i].Hours)
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
+                                                @Html.DropDownListFor(m => m.listEmployeeDailyStatusReport[i].Hours, new SelectList(ViewData["ddlHours"] as List<SelectListItem>, "Value", "Text", Model.listEmployeeDailyStatusReport[i].Hours), "--Select--", new { @class = "form-control" })
+
                                                 <label>Min:</label>
-                                                @Html.DropDownListFor(m => m.listEmployeeDailyStatusReport[i].Minutes, new SelectList(ViewData["ddlMinutes"] as List<SelectListItem>, "Value", "Text", Model.listEmployeeDailyStatusReport[i].Minutes), "Please Select", new { @class = "form-control", @required = "required" })
-                                                <div class="text-danger">
-                                                    @Html.ValidationMessageFor(m => m.listEmployeeDailyStatusReport[i].Minutes)
-                                                </div>
+                                                @Html.DropDownListFor(m => m.listEmployeeDailyStatusReport[i].Minutes, new SelectList(ViewData["ddlMinutes"] as List<SelectListItem>, "Value", "Text", Model.listEmployeeDailyStatusReport[i].Minutes), "", new { @class = "form-control" })
+                                                <input type="hidden" id="ctime" />
                                             </div>
-                                        </div>
-                                    </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                            <div class="form-actions text-center">
+                                <div class="btn-set">
+                                    <input type="submit" class="btn green" id="btnAdd" value="Save" />
+                                    <button type="button" class="btn green" id="btnUpdate" style="display:none">Update</button>
+                                    <a class="btn blue" href="javascript:;">Show Reports</a>
+                                    <button type="button" class="btn red" id="btnCancel">Cancel</button>
                                 </div>
-                            }
+                            </div>
                         }
                     }
-                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="formatmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1">
-        <div class="modal-dialog" style="margin-top: 0;">
-            <div class="modal-content col-xs-12">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span>&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel1">DSR Format</h4>
-                </div>
-                <div class="modal-body mod" style="padding-top: 0;max-height:420px;overflow-y:auto;">
+    <div id="dvDailyStatusReports">
+        @Html.Action("_EmployeeDailyStatusReport", "EmployeeDailyStatusReport");
+    </div>
+</div>
+<div class="modal fade" id="formatmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1">
+    <div class="modal-dialog" style="margin-top: 0;">
+        <div class="modal-content col-xs-12">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span>&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel1">DSR Format</h4>
+            </div>
+            <div class="modal-body mod" style="padding-top: 0;max-height:420px;overflow-y:auto">
 
-                    <ul class="list-unstyled">
-                        <li>1. Choose separate projects for filling DSR if you have worked on multiple projects.  </li>
-                        <li>2. Please add status carefully as same will be forwarded to client. </li>
-                        <li>3. Please check your spelling and grammar before submitting.</li>
-                        <li>4. You have to use minimum 100 words as description which should include following: </li>
+                <ul class="list-unstyled">
+                    <li>1. Choose separate projects for filling DSR if you have worked on multiple projects.  </li>
+                    <li>2. Please add status carefully as same will be forwarded to client. </li>
+                    <li>3. Please check your spelling and grammar before submitting.</li>
+                    <li>4. You have to use minimum 100 words as description which should include following: </li>
+                </ul>
 
+                <h4 class="mtop0">a. Today I have completed following tasks:</h4>
+                <ul class="list-unstyled">
+                    <li>1. </li>
+                    <li>2. </li>
 
-                    </ul>
+                </ul>
+                <h4 class="mtop0">b. following tasks are in progress: </h4>
+                <ul class="list-unstyled">
+                    <li>1. </li>
+                    <li>2. </li>
 
-                    <h4 class="mtop0">a. Today I have completed following tasks:</h4>
-                    <ul class="list-unstyled">
-                        <li>1. </li>
-                        <li>2. </li>
+                </ul>
+                <h4 class="mtop0">c. Tomorrow I will continue working on following tasks:  </h4>
+                <ul class="list-unstyled">
+                    <li>1. </li>
+                    <li>2. </li>
 
-                    </ul>
-                    <h4 class="mtop0">b. following tasks are in progress: </h4>
-                    <ul class="list-unstyled">
-                        <li>1. </li>
-                        <li>2. </li>
+                </ul>
+                <h4 class="mtop0">following to be added if required (For Web Developer/designer) </h4>
 
-                    </ul>
-                    <h4 class="mtop0">c. Tomorrow I will continue working on following tasks:  </h4>
-                    <ul class="list-unstyled">
-                        <li>1. </li>
-                        <li>2. </li>
+                <p>Frontend URL: </p>
+                <p>Backend/Admin URL: </p>
+                <p>Username: </p>
+                <p>Password: </p>
 
-                    </ul>
-                    <h4 class="mtop0">following to be added if required (For Web Developer/designer) </h4>
+                <h4 class="mtop0">For iOS/ Android developer:</h4>
+                <p>Build link:</p>
+                <p>Username:</p>
+                <p>Password:</p>
 
-                    <p>Frontend URL: </p>
-                    <p>Backend/Admin URL: </p>
-                    <p>Username: </p>
-                    <p>Password: </p>
-
-                    <h4 class="mtop0">For iOS/ Android developer:</h4>
-                    <p>Build link:</p>
-                    <p>Username:</p>
-                    <p>Password:</p>
-
-                </div>
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('.datepicker').datepicker({
-                format: 'dd/mm/yyyy',
-            });
+</div>
+<style>
+    .control-label {
+        font-family: Verdana, Helvetica, sans-serif;
+        font-size: 11px;
+        color: #600012;
+    }
+
+    h4 {
+    font-size: 14px;
+}
+</style>
+@*<script src="~/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js"></script>*@
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#formatmodal").modal('show');
+        $(function () {
+            window.setInterval(function () {
+                $.ajax({
+                    url: "/api/EmployeeDailyStatusReport/GetTime",
+                    type: "get",
+                    async: false,
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        var newtime1 = data;
+                        $("#ctime").val(data);
+                        if ("19:00:00" < newtime1 && newtime1 < "23:59:59") {
+                            $(".dvAlert").removeClass('alert-danger');
+                            $(".dvAlert").addClass('alert-success');
+                            $("#lblMessage").html("<strong>Hey ! </strong> Now You can add your Daily Status Report .");
+                        }
+                        else {
+                            $(".dvAlert").addClass('alert-danger');
+                            $("#lblMessage").html("<strong>Heads Up ! </strong> You can not add your Daily Status Report before 7:00 P.M. , Please wait till 7:00 P.M. <strong> Current Time is : " + newtime1 + "</strong>");
+                            $(".dvAlert").show();
+                        }
+                    },
+                    error: function (error) {
+
+                    }
+                });
+            }, 1000);
+            //  Do whatever in here that happens every 1 seconds
         });
-        //$(document).on('change', '.ddlDept', function (e) {
-        //    //debugger
-        //    var DepartmentId = $(".ddlDept").val();
-        //    if (typeof DepartmentId != 'undefined') {
-        //        var url = "/api/Management/GetDesignationByDeptId?DepartmentId=" + DepartmentId
-        //        $.ajax({
-        //            type: "GET",
-        //            url: url,
-        //            contentType: "application/json; charset=utf-8",
-        //            dataType: "text",
-        //            success: function (response) {
-        //                var response = JSON.parse(response);
-        //                var listDesignations = response.listDesignations;
-        //                var ddlDesignation = $(".ddlDesignation");
-        //                $(".ddlDesignation > option").remove();
-        //                ddlDesignation.append("<option value=''>Please Select</option>")
-        //                for (var i = 0; i < listDesignations.length; i++) {
-        //                    ddlDesignation.append($("<option />").val(listDesignations[i].DesignationId).text(listDesignations[i].DesignationName));
-        //                }
-        //            },
-        //            failure: function (msg) {
-        //                console.log(error);
-        //            }
-        //        });
-        //    }
-        //});
-    </script>
+    });
+
+    $("#btnAdd").on('click', function (e) {
+        debugger;
+        e.preventDefault();
+        var errorCount = 0;
+        var dt = new Date();
+
+        if ('19:00:00' < $("#ctime").val() && $("#ctime").val() < '23:59:59') {
+        var project = $("#listEmployeeDailyStatusReport_0__ProjectId");
+        var project2 = $("#listEmployeeDailyStatusReport_1__ProjectId");
+        var project3 = $("#listEmployeeDailyStatusReport_2__ProjectId");
+        var project4 = $("#listEmployeeDailyStatusReport_3__ProjectId");
+        if ((project.val() == "0" || project.val() == "") && (project2.val() == "0" || project2.val() == "") && (project3.val() == "0" || project3.val() == "") && (project4.val() == "0" || project4.val() == "")) {
+            var span = $("#select2-listEmployeeDailyStatusReport_0__ProjectId-container").parent();
+            span.css("border", "1px solid red");
+            errorCount = errorCount + 1;
+        }
+        else {
+            var span = $("#select2-listEmployeeDailyStatusReport_0__ProjectId-container").parent();
+            span.css("border", "");
+        }
+        var reportcategory = $("#listEmployeeDailyStatusReport_0__ReportCategoryId");
+        var reportcategory2 = $("#listEmployeeDailyStatusReport_1__ReportCategoryId");
+        var reportcategory3 = $("#listEmployeeDailyStatusReport_2__ReportCategoryId");
+        var reportcategory4 = $("#listEmployeeDailyStatusReport_3__ReportCategoryId");
+
+        var description = $("#listEmployeeDailyStatusReport_0__Description");
+        var description2 = $("#listEmployeeDailyStatusReport_1__Description");
+        var description3 = $("#listEmployeeDailyStatusReport_2__Description");
+        var description4 = $("#listEmployeeDailyStatusReport_3__Description");
+
+        var hours = $("#listEmployeeDailyStatusReport_0__Hours");
+        var hours2 = $("#listEmployeeDailyStatusReport_1__Hours");
+        var hours3 = $("#listEmployeeDailyStatusReport_2__Hours");
+        var hours4 = $("#listEmployeeDailyStatusReport_3__Hours");
+        var minutes = $("#listEmployeeDailyStatusReport_0__Minutes");
+        var minutes2 = $("#listEmployeeDailyStatusReport_1__Minutes");
+        var minutes3 = $("#listEmployeeDailyStatusReport_2__Minutes");
+        var minutes4 = $("#listEmployeeDailyStatusReport_3__Minutes");
+
+        if (((reportcategory2.val() != "0" && reportcategory2.val() != "") || description2.val() != "" || (hours2.val() != "-1" && hours2.val() != "")) && (project2.val() == "0" || project2.val() == "")) {
+            var span = $("#select2-listEmployeeDailyStatusReport_1__ProjectId-container").parent();
+            span.css("border", "1px solid red");
+            errorCount = errorCount + 1;
+        }
+        else {
+            var span = $("#select2-listEmployeeDailyStatusReport_1__ProjectId-container").parent();
+            span.css("border", "");
+        }
+        if (((reportcategory3.val() != "0" && reportcategory3.val() != "") || description3.val() != "" || (hours3.val() != "-1" && hours3.val() != "")) && (project3.val() == "0" || project3.val() == "")) {
+
+            var span = $("#select2-listEmployeeDailyStatusReport_2__ProjectId-container").parent();
+            span.css("border", "1px solid red");
+            errorCount = errorCount + 1;
+        }
+        else {
+            var span = $("#select2-listEmployeeDailyStatusReport_2__ProjectId-container").parent();
+            span.css("border", "");
+        }
+        if (((reportcategory4.val() != "0" && reportcategory4.val() != "") || description4.val() != "" || (hours4.val() != "-1" && hours4.val() != "")) && (project4.val() == "0" || project4.val() == "")) {
+
+            var span = $("#select2-listEmployeeDailyStatusReport_3__ProjectId-container").parent();
+            span.css("border", "1px solid red");
+            errorCount = errorCount + 1;
+        }
+        else {
+            var span = $("#select2-listEmployeeDailyStatusReport_3__ProjectId-container").parent();
+            span.css("border", "");
+        }
+
+        if (project.val() != "0" && project.val() != "") {
+            if (description.val() == "") {
+                description.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                description.css("border-color", "");
+            }
+            if (description.val().length < 100) {
+                description.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                description.css("border-color", "");
+            }
+            if (hours.val() == "-1" || hours.val() == "") {
+                hours.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                hours.css("border-color", "");
+            }
+            if (reportcategory.val() == "0" || reportcategory.val() == "") {
+                reportcategory.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                reportcategory.css("border-color", "");
+            }
+        }
+        else {
+            description.css("border-color", "");
+            hours.css("border-color", "");
+            reportcategory.css("border-color", "");
+        }
+
+        if (project2.val() != "0" && project2.val() != "") {
+            if (description2.val() == "") {
+                description2.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                description2.css("border-color", "");
+            }
+            if (description2.val().length < 100) {
+                description2.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                description2.css("border-color", "");
+            }
+            if (hours2.val() == "-1" || hours2.val() == "") {
+                hours2.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                hours2.css("border-color", "");
+            }
+            if (reportcategory2.val() == "0" || reportcategory2.val() == "") {
+                reportcategory2.css("border-color", "red");
+                errorCount = errorCount + 1;
+
+            }
+            else {
+                reportcategory2.css("border-color", "");
+
+            }
+        }
+        else {
+            description2.css("border-color", "");
+            hours2.css("border-color", "");
+            reportcategory2.css("border-color", "");
+        }
+
+        if (project3.val() != "0" && project3.val() != "") {
+            if (description3.val() == "") {
+                description3.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                description3.css("border-color", "");
+            }
+            if (description3.val().length < 100) {
+                description3.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                description3.css("border-color", "");
+            }
+            if (hours3.val() == "-1" || hours3.val() == "") {
+                hours3.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                hours3.css("border-color", "");
+            }
+            if (reportcategory3.val() == "0" || reportcategory3.val() == "") {
+                reportcategory3.css("border-color", "red");
+                errorCount = errorCount + 1;
+
+            }
+            else {
+                reportcategory3.css("border-color", "");
+
+            }
+        }
+        else {
+            description3.css("border-color", "");
+            hours3.css("border-color", "");
+            reportcategory3.css("border-color", "");
+        }
+        if (project4.val() != "0" && project4.val() != "") {
+            if (description4.val() == "") {
+                description4.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                description4.css("border-color", "");
+            }
+            if (description4.val().length < 100) {
+                description4.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                description4.css("border-color", "");
+            }
+            if (hours4.val() == "-1" || hours4.val() == "") {
+                hours4.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                hours4.css("border-color", "");
+            }
+            if (reportcategory4.val() == "0" || reportcategory4.val() == "") {
+                reportcategory4.css("border-color", "red");
+                errorCount = errorCount + 1;
+
+            }
+            else {
+                reportcategory4.css("border-color", "");
+
+            }
+        }
+        else {
+            description4.css("border-color", "");
+            hours4.css("border-color", "");
+            reportcategory4.css("border-color", "");
+        }
+        if (errorCount > 0) {
+            return false;
+        }
+
+        var model = {
+            listEmployeeDailyStatusReport: [
+            { ProjectId: project.val(), ReportCategoryId: reportcategory.val(), Description: description.val(), Hours: hours.val(), Minutes: minutes.val() },
+            { ProjectId: project2.val(), ReportCategoryId: reportcategory2.val(), Description: description2.val(), Hours: hours2.val(), Minutes: minutes2.val() },
+            { ProjectId: project3.val(), ReportCategoryId: reportcategory3.val(), Description: description3.val(), Hours: hours3.val(), Minutes: minutes3.val() },
+            { ProjectId: project4.val(), ReportCategoryId: reportcategory4.val(), Description: description4.val(), Hours: hours4.val(), Minutes: minutes4.val() }
+            ]
+        };
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "/EmployeeDailyStatusReport/AddEmployeeDailyStatusReport",
+            data: JSON.stringify(model),
+            dataType: 'json',
+            beforeSend: function () {
+                $("#lblMessage").html("Please wait...");
+                $(".dvAlert").addClass("alert-success");
+                $(".dvAlert").show();
+            },
+            success: function (response) {
+                $("#lblMessage").html(response.response);
+                if (response.isSuccess) {
+                    $(".dvAlert").addClass("alert-success");
+                }
+                else {
+                    $(".dvAlert").addClass("alert-danger");
+                }
+                $(".dvAlert").show();
+                GetDailyStatusReports();
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+                ClearFields();
+            },
+            error: function (error) {
+                $("#lblMessage").html("Something went wrong, please try again");
+                $(".dvAlert").addClass("alert-danger");
+                $(".dvAlert").show();
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+                console.log(error);
+            }
+        });
+        }
+        else {
+            $(".dvAlert").addClass('alert-danger');
+            $("#lblMessage").html("<strong>Heads Up ! </strong> You can not add your Daily Status Report before 7:00 P.M. , Please wait till 7:00 P.M. <strong> Current Time is : " + $("#ctime").val() + "</strong>");
+            $(".dvAlert").show();
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+            return false;
+        }
+    });
+    function EditStatusReport(Report) {
+        $("#lblMessage").html("");
+        $(".dvAlert").hide();
+        var array = Report.WorkingHours.split('.');
+        $("#listEmployeeDailyStatusReport_0__DailyReportId").val(Report.DailyReportId);
+        $("#listEmployeeDailyStatusReport_0__ProjectId").val(Report.ProjectId);
+        $("#listEmployeeDailyStatusReport_0__ProjectId").trigger("change");
+        $("#listEmployeeDailyStatusReport_0__ReportCategoryId").val(Report.ReportCategoryId);
+        $("#listEmployeeDailyStatusReport_0__Description").val(Report.Description);
+        $("#listEmployeeDailyStatusReport_0__Hours").val(array[0]);
+        $("#listEmployeeDailyStatusReport_0__Minutes").val(array[1]);
+        $("#btnAdd").hide();
+        $("#btnUpdate").show();
+        $("html, body").animate({ scrollTop: 0 }, "slow");
+    }
+    $("#btnUpdate").on('click', function (e) {
+        debugger;
+        var errorCount = 0;
+        var dt = new Date();
+
+        if ('19:00:00' < $("#ctime").val() && $("#ctime").val() < '23:59:59') {
+        var project = $("#listEmployeeDailyStatusReport_0__ProjectId");
+        var project2 = $("#listEmployeeDailyStatusReport_1__ProjectId");
+        var project3 = $("#listEmployeeDailyStatusReport_2__ProjectId");
+        var project4 = $("#listEmployeeDailyStatusReport_3__ProjectId");
+        if ((project.val() == "0" || project.val() == "") && (project2.val() == "0" || project2.val() == "") && (project3.val() == "0" || project3.val() == "") && (project4.val() == "0" || project4.val() == "")) {
+            var span = $("#select2-listEmployeeDailyStatusReport_0__ProjectId-container").parent();
+            span.css("border", "1px solid red");
+            errorCount = errorCount + 1;
+        }
+        else {
+            var span = $("#select2-listEmployeeDailyStatusReport_0__ProjectId-container").parent();
+            span.css("border", "");
+        }
+        var reportcategory = $("#listEmployeeDailyStatusReport_0__ReportCategoryId");
+        var reportcategory2 = $("#listEmployeeDailyStatusReport_1__ReportCategoryId");
+        var reportcategory3 = $("#listEmployeeDailyStatusReport_2__ReportCategoryId");
+        var reportcategory4 = $("#listEmployeeDailyStatusReport_3__ReportCategoryId");
+
+        var description = $("#listEmployeeDailyStatusReport_0__Description");
+        var description2 = $("#listEmployeeDailyStatusReport_1__Description");
+        var description3 = $("#listEmployeeDailyStatusReport_2__Description");
+        var description4 = $("#listEmployeeDailyStatusReport_3__Description");
+
+        var hours = $("#listEmployeeDailyStatusReport_0__Hours");
+        var hours2 = $("#listEmployeeDailyStatusReport_1__Hours");
+        var hours3 = $("#listEmployeeDailyStatusReport_2__Hours");
+        var hours4 = $("#listEmployeeDailyStatusReport_3__Hours");
+        var minutes = $("#listEmployeeDailyStatusReport_0__Minutes");
+        var minutes2 = $("#listEmployeeDailyStatusReport_1__Minutes");
+        var minutes3 = $("#listEmployeeDailyStatusReport_2__Minutes");
+        var minutes4 = $("#listEmployeeDailyStatusReport_3__Minutes");
+
+        if (((reportcategory2.val() != "0" && reportcategory2.val() != "") || description2.val() != "" || (hours2.val() != "-1" && hours2.val() != "")) && (project2.val() == "0" || project2.val() == "")) {
+            var span = $("#select2-listEmployeeDailyStatusReport_1__ProjectId-container").parent();
+            span.css("border", "1px solid red");
+            errorCount = errorCount + 1;
+        }
+        else {
+            var span = $("#select2-listEmployeeDailyStatusReport_1__ProjectId-container").parent();
+            span.css("border", "");
+        }
+        if (((reportcategory3.val() != "0" && reportcategory3.val() != "") || description3.val() != "" || (hours3.val() != "-1" && hours3.val() != "")) && (project3.val() == "0" || project3.val() == "")) {
+
+            var span = $("#select2-listEmployeeDailyStatusReport_2__ProjectId-container").parent();
+            span.css("border", "1px solid red");
+            errorCount = errorCount + 1;
+        }
+        else {
+            var span = $("#select2-listEmployeeDailyStatusReport_2__ProjectId-container").parent();
+            span.css("border", "");
+        }
+        if (((reportcategory4.val() != "0" && reportcategory4.val() != "") || description4.val() != "" || (hours4.val() != "-1" && hours4.val() != "")) && (project4.val() == "0" || project4.val() == "")) {
+
+            var span = $("#select2-listEmployeeDailyStatusReport_3__ProjectId-container").parent();
+            span.css("border", "1px solid red");
+            errorCount = errorCount + 1;
+        }
+        else {
+            var span = $("#select2-listEmployeeDailyStatusReport_3__ProjectId-container").parent();
+            span.css("border", "");
+        }
+
+        if (project.val() != "0" && project.val() != "") {
+            if (description.val() == "") {
+                description.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                description.css("border-color", "");
+            }
+            if (description.val().length < 100) {
+                description.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                description.css("border-color", "");
+            }
+            if (hours.val() == "-1" || hours.val() == "") {
+                hours.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                hours.css("border-color", "");
+            }
+            if (reportcategory.val() == "0" || reportcategory.val() == "") {
+                reportcategory.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                reportcategory.css("border-color", "");
+            }
+        }
+        else {
+            description.css("border-color", "");
+            hours.css("border-color", "");
+            reportcategory.css("border-color", "");
+        }
+
+        if (project2.val() != "0" && project2.val() != "") {
+            if (description2.val() == "") {
+                description2.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                description2.css("border-color", "");
+            }
+            if (description2.val().length < 100) {
+                description2.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                description2.css("border-color", "");
+            }
+            if (hours2.val() == "-1" || hours2.val() == "") {
+                hours2.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                hours2.css("border-color", "");
+            }
+            if (reportcategory2.val() == "0" || reportcategory2.val() == "") {
+                reportcategory2.css("border-color", "red");
+                errorCount = errorCount + 1;
+
+            }
+            else {
+                reportcategory2.css("border-color", "");
+
+            }
+        }
+        else {
+            description2.css("border-color", "");
+            hours2.css("border-color", "");
+            reportcategory2.css("border-color", "");
+        }
+
+        if (project3.val() != "0" && project3.val() != "") {
+            if (description3.val() == "") {
+                description3.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                description3.css("border-color", "");
+            }
+            if (description3.val().length < 100) {
+                description3.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                description3.css("border-color", "");
+            }
+            if (hours3.val() == "-1" || hours3.val() == "") {
+                hours3.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                hours3.css("border-color", "");
+            }
+            if (reportcategory3.val() == "0" || reportcategory3.val() == "") {
+                reportcategory3.css("border-color", "red");
+                errorCount = errorCount + 1;
+
+            }
+            else {
+                reportcategory3.css("border-color", "");
+
+            }
+        }
+        else {
+            description3.css("border-color", "");
+            hours3.css("border-color", "");
+            reportcategory3.css("border-color", "");
+        }
+        if (project4.val() != "0" && project4.val() != "") {
+            if (description4.val() == "") {
+                description4.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                description4.css("border-color", "");
+            }
+            if (description4.val().length < 100) {
+                description4.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                description4.css("border-color", "");
+            }
+            if (hours4.val() == "-1" || hours4.val() == "") {
+                hours4.css("border-color", "red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                hours4.css("border-color", "");
+            }
+            if (reportcategory4.val() == "0" || reportcategory4.val() == "") {
+                reportcategory4.css("border-color", "red");
+                errorCount = errorCount + 1;
+
+            }
+            else {
+                reportcategory4.css("border-color", "");
+
+            }
+        }
+        else {
+            description4.css("border-color", "");
+            hours4.css("border-color", "");
+            reportcategory4.css("border-color", "");
+        }
+        if (errorCount > 0) {
+            return false;
+        }
+        var DailyReportId=  $("#listEmployeeDailyStatusReport_0__DailyReportId").val();
+        var model = {
+            listEmployeeDailyStatusReport: [
+            { DailyReportId: DailyReportId, ProjectId: project.val(), ReportCategoryId: reportcategory.val(), Description: description.val(), Hours: hours.val(), Minutes: minutes.val() }]
+        };
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "/EmployeeDailyStatusReport/AddEmployeeDailyStatusReport",
+            data: JSON.stringify(model),
+            dataType: 'json',
+            beforeSend: function () {
+                $("#lblMessage").html("Please wait...");
+                $(".dvAlert").addClass("alert-success");
+                $(".dvAlert").show();
+            },
+            success: function (response) {
+                $("#lblMessage").html(response.response);
+                if (response.isSuccess) {
+                    $(".dvAlert").addClass("alert-success");
+                }
+                else {
+                    $(".dvAlert").addClass("alert-danger");
+                }
+                $(".dvAlert").show();
+                GetDailyStatusReports();
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+                ClearFields();
+            },
+            error: function (error) {
+                $("#lblMessage").html("Something went wrong, please try again");
+                $(".dvAlert").addClass("alert-danger");
+                $(".dvAlert").show();
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+                console.log(error);
+            }
+        });
+        }
+        else {
+            $(".dvAlert").addClass('alert-danger');
+            $("#lblMessage").html("<strong>Heads Up ! </strong> You can not add your Daily Status Report before 7:00 P.M. , Please wait till 7:00 P.M. <strong> Current Time is : " + $("#ctime").val() + "</strong>");
+            $(".dvAlert").show();
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+          return false;
+        }
+    });
+    $("#btnCancel").click(function () {
+        ClearFields();
+    });
+    function GetDailyStatusReports() {
+        $.ajax({
+            type: "Get",
+            contentType: "application/json; charset=utf-8",
+            url: "/EmployeeDailyStatusReport/_EmployeeDailyStatusReport",
+            beforeSend: function () {
+                //$("#lblMessage").html("Please wait...");
+                //$(".dvAlert").show();
+            },
+            success: function (response) {
+                $('#dvDailyStatusReports').html(response);
+                TableDatatablesFixedHeader.init();
+                //$("#lblMessage").html("Department deleted successfully");
+                //$(".dvAlert").show();
+            },
+            error: function (error) {
+                //$("#lblMessage").html("Something went wrong, please try again");
+                //$(".dvAlert").show();
+                console.log(error);
+            }
+        });
+    }
+    function ClearFields() {
+        $("#listEmployeeDailyStatusReport_0__ProjectId > option").removeAttr("selected");
+        $("#listEmployeeDailyStatusReport_0__ProjectId").trigger("change");
+        $("#listEmployeeDailyStatusReport_1__ProjectId > option").removeAttr("selected");
+        $("#listEmployeeDailyStatusReport_1__ProjectId").trigger("change");
+        $("#listEmployeeDailyStatusReport_2__ProjectId > option").removeAttr("selected");
+        $("#listEmployeeDailyStatusReport_2__ProjectId").trigger("change");
+        $("#listEmployeeDailyStatusReport_3__ProjectId > option").removeAttr("selected");
+        $("#listEmployeeDailyStatusReport_3__ProjectId").trigger("change");
+
+        $("#listEmployeeDailyStatusReport_0__ReportCategoryId").val('');
+        $("#listEmployeeDailyStatusReport_1__ReportCategoryId").val('');
+        $("#listEmployeeDailyStatusReport_2__ReportCategoryId").val('');
+        $("#listEmployeeDailyStatusReport_3__ReportCategoryId").val('');
+
+        $("#listEmployeeDailyStatusReport_0__Description").val('');
+        $("#listEmployeeDailyStatusReport_1__Description").val('');
+        $("#listEmployeeDailyStatusReport_2__Description").val('');
+        $("#listEmployeeDailyStatusReport_3__Description").val('');
+
+        $("#listEmployeeDailyStatusReport_0__Hours").val('');
+        $("#listEmployeeDailyStatusReport_1__Hours").val('');
+        $("#listEmployeeDailyStatusReport_2__Hours").val('');
+        $("#listEmployeeDailyStatusReport_3__Hours").val('');
+        $("#listEmployeeDailyStatusReport_0__Minutes").val('00');
+        $("#listEmployeeDailyStatusReport_1__Minutes").val('00');
+        $("#listEmployeeDailyStatusReport_2__Minutes").val('00');
+        $("#listEmployeeDailyStatusReport_3__Minutes").val('00');
+    }
+</script>

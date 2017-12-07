@@ -1,21 +1,26 @@
 ﻿using DomainModel.EntityModel;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using TaskManagementOsvin.Models;
 using TaskManagementOsvin.Security;
 
 namespace TaskManagementOsvin.Controllers
 {
+    [Authorize]
     public class EmployeeDailyStatusReportController : Controller
     {
         // GET: EmployeeDailyStatusReport
         public ActionResult AddEmployeeDailyStatusReport()
         {
+            ViewBag.Class = "display-hide";
             List<ProjectDomainModel> listProjects = new List<ProjectDomainModel>();
             List<ProjectReportCategoryDomainModel> listTaskCategories = new List<ProjectReportCategoryDomainModel>();
             AddEmployeeDailyReportModel model = new AddEmployeeDailyReportModel();
@@ -39,7 +44,7 @@ namespace TaskManagementOsvin.Controllers
             }
             for (int i = 0; i <= 3; i++)
             {
-                model.listEmployeeDailyStatusReport.Add(new EmployeeDailyReportModel { ReportCategoryId = 0, ProjectId = 0, Minutes = 00, Hours = 0 });
+                model.listEmployeeDailyStatusReport.Add(new EmployeeDailyReportModel { ReportCategoryId = 0, ProjectId = 0, Minutes = "00", Hours = "" });
             }
             var listHours = new List<SelectListItem>();
             for (int i = 0; i < 24; i++)
@@ -60,33 +65,92 @@ namespace TaskManagementOsvin.Controllers
                 new SelectListItem{ Text="50", Value = "50"},
                 new SelectListItem {Text="55", Value="55" }
             };
-
-            ViewData["ddlProject"] = listProjects;
-            ViewData["ddlTaskCategories"] = listTaskCategories;
+            ViewBag.listProjects = listProjects;
+            ViewBag.listTaskCategories = listTaskCategories;
             ViewData["ddlHours"] = listHours;
             ViewData["ddlMinutes"] = listMinutes;
             return View(model);
         }
         [HttpPost]
-        public ActionResult AddEmployeeDailyStatusReport(AddEmployeeDailyReportModel model)
+  
+        public JsonResult AddEmployeeDailyStatusReport(AddEmployeeDailyReportModel model)
         {
+            ResponseDomainModel objRes = new ResponseDomainModel();
             ViewBag.Class = "display-hide";
             try
             {
-                if (ModelState.IsValid)
+                if (model.listEmployeeDailyStatusReport != null && model.listEmployeeDailyStatusReport.Count > 0)
                 {
-                    if (model.listEmployeeDailyStatusReport != null && model.listEmployeeDailyStatusReport.Count > 0)
+                    foreach (var obj in model.listEmployeeDailyStatusReport)
                     {
-
+                        obj.EmployeeId = UserManager.user.UserId;
+                        obj.WorkingHours = obj.Hours + "." + obj.Minutes;
+                        obj.CreatedBy = UserManager.user.UserId;
+                        obj.Filename = string.Empty;
+                    }
+                    var serialized = new JavaScriptSerializer().Serialize(model);
+                    var client = new HttpClient();
+                    var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
+                    client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+                    var result = client.PostAsync("/api/EmployeeDailyStatusReport/AddUpdateEmployeeDailyReport", content).Result;
+                    if (result.StatusCode == HttpStatusCode.OK)
+                    {
+                        var contents = result.Content.ReadAsStringAsync().Result;
+                        objRes = new JavaScriptSerializer().Deserialize<ResponseDomainModel>(contents);
                     }
                 }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("CustomError", ex.Message);
-                ViewBag.Class = "alert-danger";
+                //ModelState.AddModelError("CustomError", ex.Message);
+                //ViewBag.Class = "alert-danger";
             }
+            return Json(objRes);
+        }
+        [HttpGet]
+        public ActionResult _EmployeeDailyStatusReport()
+        {
+            ViewBag.Class = "display-hide";
+            List<EmployeeDailyReportModel> listDailyStatusReports = new List<EmployeeDailyReportModel>();    
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+            var ProjectResult = client.GetAsync("/api/EmployeeDailyStatusReport/GetDailyStatusReportDetailsOfCurrentDate?EmployeeId="+UserManager.user.UserId).Result;
+            if (ProjectResult.StatusCode == HttpStatusCode.OK)
+            {
+                var contents = ProjectResult.Content.ReadAsStringAsync().Result;
+                var response = Newtonsoft.Json.JsonConvert.DeserializeObject<List<EmployeeDailyReportModel>>(contents);
+                listDailyStatusReports = response;
+            }           
+            return PartialView(listDailyStatusReports);
+        }
+        public ActionResult DailystatusReportDetailsByEmployee()
+        {
             return View();
+        }
+        public ActionResult _DailystatusReportDetailsByEmployee(string StartDate, string EndDate)
+        {
+            DateTime date = DateTime.Now;
+            if(!string.IsNullOrWhiteSpace(StartDate))
+            {
+                date = DateTime.ParseExact(StartDate, "dd/MM/yyyy", null);
+                   StartDate = date.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
+            }
+            if (!string.IsNullOrWhiteSpace(EndDate))
+            {
+                date = DateTime.ParseExact(EndDate, "dd/MM/yyyy", null);
+                EndDate = date.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
+            }
+            List<EmployeeTotalWorkingHoursReportDomainModel> listEmployeeTotalWorkingHoursReport = new List<EmployeeTotalWorkingHoursReportDomainModel>();
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+            var res = client.GetAsync("/api/EmployeeDailyStatusReport/GetEmployeeTotalWorkingHoursReport?DepartmentId=" + UserManager.user.DepartmentId +"&EmployeeId=" + UserManager.user.UserId+"&StartDate="+ StartDate + "&EndDate="+EndDate).Result;
+            if (res.StatusCode == HttpStatusCode.OK)
+            {
+                var contents = res.Content.ReadAsStringAsync().Result;
+                var response = Newtonsoft.Json.JsonConvert.DeserializeObject<List<EmployeeTotalWorkingHoursReportDomainModel>>(contents);
+                listEmployeeTotalWorkingHoursReport = response;
+            }
+            return PartialView(listEmployeeTotalWorkingHoursReport);
         }
     }
 }

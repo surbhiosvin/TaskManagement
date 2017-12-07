@@ -10,5 +10,9 @@ namespace Providers.Repositories
     public interface IEmployeeDailyStatusReport
     {
         List<ProjectReportCategoryDomainModel> GetProjectReportCategoryByDeptId(long DepartmentId);
+        ResponseDomainModel AddUpdateEmployeeDailyReport(AddEmployeeDailyStatusReportDomainModel model);
+        List<EmployeeDailyReportDomainModel> GetDailyStatusReportDetailsOfCurrentDate(long employeeid);
+        List<EmployeeTotalWorkingHoursReportDomainModel> GetEmployeeTotalWorkingHoursReport(long DepartmentId, long EmployeeId, string StartDate, string EndDate);
+        List<GetEmployeeDailyStatusReportDomainModel> GetEmployeeDailyReportDetails(long DepartmentId, long EmployeeId, string ReportDate);
     }
 }

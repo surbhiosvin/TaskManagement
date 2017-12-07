@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Web;
-using System.Xml.Serialization;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace TaskManagementOsvin.Models
+namespace DomainModel.EntityModel
 {
-    [Serializable]
-    [XmlRoot("EmployeeDailyReportModel")]
-    public class EmployeeDailyReportModel
+   public class GetEmployeeDailyStatusReportDomainModel
     {
         public long DailyReportId { get; set; }
         public long EmployeeId { get; set; }
@@ -20,12 +17,10 @@ namespace TaskManagementOsvin.Models
         public string Description { get; set; }
         public string WorkingHours { get; set; }
         public int TotalNumberCategoryBy { get; set; }
-        public HttpPostedFileBase PostedFile { get; set; }
         public string Filename { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedDate { get; set; }
-        public DateTime UpdatedDate { get; set; }
-        public long CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
         public string Hours { get; set; }
         public string Minutes { get; set; }
         public string ProjectTitle { get; set; }
