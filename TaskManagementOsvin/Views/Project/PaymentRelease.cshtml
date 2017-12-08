@@ -1,0 +1,101 @@
+﻿
+@{
+    ViewBag.Title = "PaymentRelease";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model TaskManagementOsvin.Models.AddUpdatePaymentReleaseModel
+<div class="page-content">
+    <!-- BEGIN PAGE HEADER-->
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="javascript:">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="javascript:">Add Payment Release</a>
+            </li>
+        </ul>
+    </div>
+    <!-- END PAGE BAR -->
+    <!-- BEGIN PAGE TITLE-->
+    <h1 class="page-title">
+        Add Payment Release
+    </h1>
+    <!-- END PAGE TITLE-->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-social-dribbble font-green"></i>
+                        <span class="caption-subject font-green bold uppercase">Add Payment Release</span>
+                    </div>
+                </div>
+                <div class="alert @ViewBag.Class">
+                    @ViewBag.Message
+                </div>
+                @using (Html.BeginForm())
+                {
+                    @Html.HiddenFor(x=>x.PaymentId)
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Select Project</label>
+                                    <div class="input-group select2-bootstrap-append">
+                                        @Html.DropDownListFor(x => x.ProjectId, new SelectList(ViewBag.listProjects, "ProjectId", "ProjectTitle"), "----Select Project-----", new { @id = "single-append-text", @class = "form-control select2-allow-clear" })
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="button" data-select2-open="single-append-text">
+                                                <span class="glyphicon glyphicon-search"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(x => x.ProjectId)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Amount Released</label>
+                                    @Html.EditorFor(x => x.ReleasedAmount, new { htmlAttributes = new { @class = "form-control", @placeholder = "Released Amount" } })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(x => x.ReleasedAmount)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Next Due Date</label>
+                                    @Html.TextBoxFor(x => x.NextDueDate, new { @class = "form-control datepicker", @placeholder = "Next Due Date" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(x => x.NextDueDate)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <input type="submit" value="Submit" class="btn btn-lg green-meadow" />
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

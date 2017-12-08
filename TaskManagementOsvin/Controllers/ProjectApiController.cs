@@ -250,6 +250,7 @@ namespace TaskManagementOsvin.Controllers
                 });
             }
         }
+
         [Route("~/api/Project/GetProjectList")]
         public HttpResponseMessage GetProjectList()
         {
@@ -277,6 +278,7 @@ namespace TaskManagementOsvin.Controllers
                 });
             }
         }
+
         [HttpPost]
         [Route("~/api/Project/AddProjectWorkingHoursBeforePms")]
         public HttpResponseMessage AddProjectWorkingHoursBeforePms(ProjectWorkingHoursBeforePMSDomainModel model)
@@ -305,6 +307,7 @@ namespace TaskManagementOsvin.Controllers
                 });
             }
         }
+
         [HttpPost]
         [Route("~/api/Project/AddUpdateReportCategory")]
         public HttpResponseMessage AddUpdateReportCategory(ProjectReportCategoryDomainModel model)
@@ -333,6 +336,7 @@ namespace TaskManagementOsvin.Controllers
                 });
             }
         }
+
         [HttpGet]
         [Route("~/api/Project/ActivateDeactivateProjectReportCategory")]
         public HttpResponseMessage ActivateDeactivateProjectReportCategory(long CategoryId, bool IsActive)
@@ -361,6 +365,7 @@ namespace TaskManagementOsvin.Controllers
                 });
             }
         }
+
         [HttpGet]
         [Route("~/api/Project/DeleteProjectReportCategory")]
         public HttpResponseMessage DeleteProjectReportCategory(long CategoryId)
@@ -389,6 +394,7 @@ namespace TaskManagementOsvin.Controllers
                 });
             }
         }
+
         [HttpGet]
         [Route("~/api/Project/GetProjectReportCategories")]
         public HttpResponseMessage GetProjectReportCategories()
@@ -418,6 +424,7 @@ namespace TaskManagementOsvin.Controllers
                 });
             }
         }
+
         [Route("~/api/Project/GetProjectTypeById")]
         public HttpResponseMessage GetProjectTypeById(long ProjectId=0)
         {
@@ -446,6 +453,7 @@ namespace TaskManagementOsvin.Controllers
                 });
             }
         }
+
         [HttpPost]
         [Route("~/api/Project/AddProjectTimeEstimation")]
         public HttpResponseMessage AddProjectTimeEstimation(AddendumDomainModel model)
@@ -474,6 +482,7 @@ namespace TaskManagementOsvin.Controllers
                 });
             }
         }
+
         [HttpGet]
         [Route("~/api/Project/MergeProject")]
         public HttpResponseMessage MergeProject(long projectmergeto, long projectmergefrom)
@@ -524,21 +533,108 @@ namespace TaskManagementOsvin.Controllers
                     var ed = DateTime.ParseExact(model.EndDate, "dd/MM/yyyy", null).ToString("yyyy/MM/dd");
                     model.EndDate = ed;
                 }
-                var respnose = ProjectRepository.AddUpdateProject(model);
-                if (respnose == null)
+                var response = ProjectRepository.AddUpdateProject(model);
+                if (response == null)
                 {
-                    respnose.isSuccess = false;
+                    response.isSuccess = false;
                     httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
                 }
-                else if (respnose.response == "Success")
+                else if (response.response == "Success")
                 {
-                    respnose.isSuccess = true;
-                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, respnose);
+                    response.isSuccess = true;
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, response);
                 }
                 else
                 {
-                    respnose.isSuccess = false;
-                    httpResponse = Request.CreateResponse(HttpStatusCode.NotImplemented, respnose);
+                    response.isSuccess = false;
+                    httpResponse = Request.CreateResponse(HttpStatusCode.NotImplemented, response);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+
+        
+        [Route("~/api/Project/GetProjectPaymentById/{PaymentId}")]
+        public HttpResponseMessage GetProjectPayment(long PaymentId)
+        {
+            HttpResponseMessage httpResponse = new HttpResponseMessage();
+            try
+            {
+                var objRes = ProjectRepository.GetPaymentById(PaymentId);
+                if (objRes == null)
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, objRes);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+
+        [HttpPost]
+        [Route("~/api/Project/AddPaymentRelease")]
+        public HttpResponseMessage AddPaymentRelase(AddUpdatePaymentReleaseDomainModel model)
+        {
+            HttpResponseMessage httpResponse = new HttpResponseMessage();
+            try
+            {
+                var objRes = ProjectRepository.AddPaymentRelease(model);
+                if (objRes == null)
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, objRes);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+
+        [HttpPost]
+        [Route("~/api/Project/UpdatePaymentRelease")]
+        public HttpResponseMessage UpdatePaymentRelease(AddUpdatePaymentReleaseDomainModel model)
+        {
+            HttpResponseMessage httpResponse = new HttpResponseMessage();
+            try
+            {
+                var objRes = ProjectRepository.UpdatePaymentRelease(model);
+                if (objRes == null)
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, objRes);
                 }
                 return httpResponse;
             }

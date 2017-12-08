@@ -26,5 +26,8 @@ namespace Providers.Repositories
         bool UpdateProjectArchive(long projectid);
         ResponseDomainModel UpdateProjectStatus(UpdateProjectStatusDomainModel model);
         GetProjectByIdDomainModel GetProjectDetailsById(long ProjectId);
+        ResponseDomainModel AddPaymentRelease(AddUpdatePaymentReleaseDomainModel model);
+        ResponseDomainModel UpdatePaymentRelease(AddUpdatePaymentReleaseDomainModel model);
+        GetPaymentDomainModel GetPaymentById(long PaymentId);
     }
 }
