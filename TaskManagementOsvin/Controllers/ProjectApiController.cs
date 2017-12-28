@@ -251,6 +251,152 @@ namespace TaskManagementOsvin.Controllers
             }
         }
 
+        [Route("~/api/Project/GetDepartmentAndEmployeeInProject/{ProjectId}")]
+        public HttpResponseMessage GetDepartmentAndEmpInProject(long ProjectId)
+        {
+            HttpResponseMessage httpResponse = new HttpResponseMessage();
+            try
+            {
+                var result = ProjectRepository.GetDepartmentAndEmpInProject(ProjectId);
+                if (result == null)
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, result);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+
+        [Route("~/api/Project/EmployeesWorkedOnProject/{ProjectId}")]
+        [HttpGet]
+        public HttpResponseMessage EmployeesWorkedOnProject(long ProjectId)
+        {
+            HttpResponseMessage httpResponse = new HttpResponseMessage();
+            try
+            {
+                var result = ProjectRepository.EmployeesWorkedOnProject(ProjectId);
+                if (result == null)
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, result);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+
+        [Route("~/api/Project/WeeksBetweenDates/{ProjectId}")]
+        [HttpGet]
+        public HttpResponseMessage WeeksBetweenDates(long ProjectId)
+        {
+            HttpResponseMessage httpResponse = new HttpResponseMessage();
+            try
+            {
+                var result = ProjectRepository.WeeksBetweenDates(ProjectId);
+                if (result == null)
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, result);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+
+        [Route("~/api/Project/GetHoursBetweenTwoDates")]
+        [HttpPost]
+        public HttpResponseMessage GetHoursBetweenTwoDates(GetHrsByDateAndProjDomainModel model)
+        {
+            HttpResponseMessage httpResponse = new HttpResponseMessage();
+            try
+            {
+                model.startdate = DateTime.ParseExact(model.startdate, "dd/MM/yyyy", null).ToString("yyyy/MM/dd");
+                model.enddate = DateTime.ParseExact(model.enddate, "dd/MM/yyyy", null).ToString("yyyy/MM/dd");
+                var result = ProjectRepository.GetHoursBetweenTwoDates(model);
+                if (result == null)
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, result);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+
+        [Route("~/api/Project/GetIndividualWorkingHours")]
+        [HttpPost]
+        public HttpResponseMessage GetIndividualWorkingHours(GetIndividualWorkingHoursDomainModel model)
+        {
+            HttpResponseMessage httpResponse = new HttpResponseMessage();
+            try
+            {
+                var result = ProjectRepository.GetIndividualWorkingHours(model);
+                if (result == null)
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, result);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+
         [Route("~/api/Project/GetProjectList")]
         public HttpResponseMessage GetProjectList()
         {

@@ -29,5 +29,10 @@ namespace Providers.Repositories
         ResponseDomainModel AddPaymentRelease(AddUpdatePaymentReleaseDomainModel model);
         ResponseDomainModel UpdatePaymentRelease(AddUpdatePaymentReleaseDomainModel model);
         GetPaymentDomainModel GetPaymentById(long PaymentId);
+        List<GetDepAndEmpProjDomainModel> GetDepartmentAndEmpInProject(long ProjectId);
+        List<EmpWorkedOnProjDomainModel> EmployeesWorkedOnProject(long ProjectId);
+        List<WeeksBwDateDomainModel> WeeksBetweenDates(long ProjectId);
+        List<HoursByDateAndProjDomainModel> GetHoursBetweenTwoDates(GetHrsByDateAndProjDomainModel model);
+        List<WorkingHoursDomainModel> GetIndividualWorkingHours(GetIndividualWorkingHoursDomainModel model);
     }
 }

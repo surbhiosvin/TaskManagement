@@ -1,0 +1,50 @@
+﻿@model HandleErrorInfo
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="page-content">
+    <!-- BEGIN PAGE HEADER-->
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="javascript:">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="javascript:">Error occurred</a>
+            </li>
+        </ul>
+    </div>
+    <!-- END PAGE BAR -->
+    <!-- BEGIN PAGE TITLE-->
+    <h1 class="page-title">
+       Error occurred
+    </h1>
+    <!-- END PAGE TITLE-->
+    <!-- END PAGE HEADER-->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light bordered">
+                <div class="alert alert-danger">
+                    An unexpected error has occurred. Please contact the system administrator.
+                </div>
+                @if (Model != null && HttpContext.Current.IsDebuggingEnabled)
+                {
+                    <div>
+                        <p>
+                            <b>Exception:</b> @Model.Exception.Message<br />
+                            <b>Controller:</b> @Model.ControllerName<br />
+                            <b>Action:</b> @Model.ActionName
+                        </p>
+                        <div style="overflow:scroll">
+                            <pre>
+                    @Model.Exception.StackTrace
+                </pre>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

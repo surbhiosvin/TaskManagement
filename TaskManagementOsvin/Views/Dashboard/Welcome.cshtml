@@ -1,171 +1,86 @@
-﻿@using TaskManagementOsvin.Models;
+﻿
 @{
     ViewBag.Title = "Welcome";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var MainSummaryList = ViewBag.GetSummaryMain as List<SummaryOfWeekDetailsMainModel>;
+    //var action = "";
+    //var disabled = "";
 }
-
+@using TaskManagementOsvin.Security;
+@using TaskManagementOsvin.Models;
+@model TaskManagementOsvin.Models.GetDSRModel
 <div class="page-content">
     <!-- BEGIN PAGE HEADER-->
     <!-- BEGIN PAGE BAR -->
     <div class="page-bar">
         <ul class="page-breadcrumb">
             <li>
-                <a href="index.html">Home</a>
+                <a href="javascript:">Home</a>
                 <i class="fa fa-circle"></i>
             </li>
             <li>
-                <a href="#">Blank Page</a>
-                <i class="fa fa-circle"></i>
-            </li>
-            <li>
-                <span>Page Layouts</span>
+                <a href="javascript:">Dashboard</a>
             </li>
         </ul>
-        <div class="page-toolbar">
-            <div class="btn-group pull-right">
-                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
-                    Actions
-                    <i class="fa fa-angle-down"></i>
-                </button>
-                <ul class="dropdown-menu pull-right" role="menu">
-                    <li>
-                        <a href="#">
-                            <i class="icon-bell"></i> Action
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="icon-shield"></i> Another action
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="icon-user"></i> Something else here
-                        </a>
-                    </li>
-                    <li class="divider"> </li>
-                    <li>
-                        <a href="#">
-                            <i class="icon-bag"></i> Separated link
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
     </div>
     <!-- END PAGE BAR -->
     <!-- BEGIN PAGE TITLE-->
     <h1 class="page-title">
-        Task Management
+        Reports
     </h1>
     <!-- END PAGE TITLE-->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="m-heading-1 border-green m-bordered">
+                <h3 class="text-center">Summary Of Week Start Date : <span class="label label-info">@DateTime.ParseExact(Model.startdate, "dd/MM/yyyy",null).ToString("dd-MMMM-yyyy")</span>
+                   End Date  <span class="label label-info">@DateTime.ParseExact(Model.enddate, "dd/MM/yyyy", null).ToString("dd-MMMM-yyyy")</span>
+                </h3>
+                @using (Html.BeginForm())
+                {
+                    <div class="col-md-4" style="padding-left:0">
+                        <div class="input-group input-large datepicker input-daterange" data-date-format="dd/mm/yyyy">
+                            @Html.TextBoxFor(x=>x.startdate,new { @class="form-control",@name= "from" })
+                            <span class="input-group-addon"> to </span>
+                            @Html.TextBoxFor(x => x.enddate, new { @class = "form-control", @name = "to" })
+                        </div>
+                    </div>
+                    <div class="col-md-4" style="padding-left:0;padding-top:5px">
+                        <input type="submit" value="Submit" class="btn btn-success" />
+                    </div>
+                }
+               @*<div class="col-md-12" style="padding-left:0">
+                   <ul class="pager">
+                       <li class="previous">
+                           <a href="#" class="btn blue"><i class="fa fa-angle-left"></i>Older</a>
+                       </li>
+                       @if(DateTime.ParseExact(Model.enddate, "dd/MM/yyyy", null).Date.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Friday) == DateTime.Now.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Friday))
+                       {
+                           action = "javascript:";
+                           disabled = "disabled";
+                       }
+                       <li class="next @disabled">
+                           <a href="@action" class="btn blue"><i class="fa fa-angle-right"></i>Next</a>
+                       </li>
+                   </ul>
+               </div>*@
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
     <!-- END PAGE HEADER-->
+    @if (UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType == roleTypeModel.HR)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet light bordered">
+                    @Html.Action("_projectReport")
+                </div>
+            </div>
+        </div>
+    }
     <div class="row">
         <div class="col-md-12">
             <div class="portlet light bordered">
-                <!-- BEGIN EXAMPLE TABLE PORTLET-->
-                <div class="portlet-body">
-                    <table class="table table-striped table-bordered table-hover table-header-fixed" id="sample_2">
-                        <thead>
-                            <tr>
-                                <th> Project </th>
-                                <th> Client </th>
-                                <th> DotNet </th>
-                                <th> PHP </th>
-                                <th> Android </th>
-                                <th> IOS </th>
-                                <th> Design </th>
-                                <th> SEO </th>
-                                <th> QA </th>
-                                <th> Hybrid </th>
-                                <th> Week Total </th>
-                                <th> Total </th>
-                            </tr>
-                        </thead>
-                        @if (MainSummaryList != null && MainSummaryList.Count() > 0)
-                        {
-                        <tfoot>
-                            <tr>
-                                <th></th>
-                                <th></th>
-                                <th>
-                                   <span>@MainSummaryList.FirstOrDefault().TotalDotNetWorkingHours</span>
-                                </th>
-                                <th><span>@MainSummaryList.FirstOrDefault().TotalPhpWorkingHours</span></th>
-                                <th><span>@MainSummaryList.FirstOrDefault().TotalAndroidWorkingHours</span></th>
-                                <th><span>@MainSummaryList.FirstOrDefault().TotalIOSWorkingHours</span></th>
-                                <th><span>@MainSummaryList.FirstOrDefault().TotalDesignWorkingHours</span></th>
-                                <th><span>@MainSummaryList.FirstOrDefault().TotalSeoWorkingHours</span></th>
-                                <th><span>@MainSummaryList.FirstOrDefault().TotalQaWorkingHours</span></th>
-                                <th><span>@MainSummaryList.FirstOrDefault().TotalHybridWorkingHours</span></th>
-                                <th><span>@MainSummaryList.FirstOrDefault().TotalWeeklyWorkingHours</span></th>
-                                <th><span>@MainSummaryList.FirstOrDefault().TotalWeeklyWorkingHours</span></th>
-                            </tr>
-                        </tfoot>
-                        <tbody>
-                            @foreach (var item in MainSummaryList)
-                            {
-                                <tr>
-                                    <td>@item.ProjectTitle</td>
-                                    <td>@item.ClientName</td>
-                                    <td>
-                                        @{ 
-                                            var dotnetHours = item.subweeksummary.Where(x => x.DepartmentName == "Dot Net");
-                                        }
-                                        @(dotnetHours.Count() > 0 ? dotnetHours.FirstOrDefault().WorkingHours.ToString() : "")
-                                    </td>
-                                    <td>
-                                        @{
-                                            var phpHours = item.subweeksummary.Where(x => x.DepartmentName == "Php");
-                                        }
-                                        @(phpHours.Count() > 0 ? phpHours.FirstOrDefault().WorkingHours.ToString() : "")
-                                    </td>
-                                    <td>
-                                        @{
-                                            var AndroidHours = item.subweeksummary.Where(x => x.DepartmentName == "Android");
-                                        }
-                                        @(AndroidHours.Count() > 0 ? AndroidHours.FirstOrDefault().WorkingHours.ToString() : "")
-                                    </td>
-                                    <td>
-                                        @{
-                                            var IPhoneHours = item.subweeksummary.Where(x => x.DepartmentName == "IPhone");
-                                        }
-                                        @(IPhoneHours.Count() > 0 ? IPhoneHours.FirstOrDefault().WorkingHours.ToString() : "")
-                                    </td>
-                                    <td>
-                                        @{
-                                            var DesignHours = item.subweeksummary.Where(x => x.DepartmentName == "Design");
-                                        }
-                                        @(DesignHours.Count() > 0 ? DesignHours.FirstOrDefault().WorkingHours.ToString() : "")
-                                    </td>
-                                    <td>
-                                        @{
-                                            var SEOHours = item.subweeksummary.Where(x => x.DepartmentName == "SEO");
-                                        }
-                                       @(SEOHours.Count() > 0 ? SEOHours.FirstOrDefault().WorkingHours.ToString() : "")
-                                    </td>
-                                    <td>
-                                        @{
-                                            var QAHours = item.subweeksummary.Where(x => x.DepartmentName == "QA");
-                                        }
-                                        @(QAHours.Count() > 0 ? QAHours.FirstOrDefault().WorkingHours.ToString() : "")
-                                    </td>
-                                    <td>
-                                        @{
-                                            var HybridHours = item.subweeksummary.Where(x => x.DepartmentName == "Hybrid App ");
-                                        }
-                                        @(HybridHours.Count() > 0 ? HybridHours.FirstOrDefault().WorkingHours.ToString() : "")
-                                    </td>
-                                    <td>@item.WorkingHours</td>
-                                    <td>@item.TotalWorkingHours</td>
-                                </tr>
-                                  }
-                        </tbody>
-                          }
-                    </table>
-                </div>
-                <!-- END EXAMPLE TABLE PORTLET-->
+                @Html.Action("_employeeReport")
             </div>
         </div>
     </div>

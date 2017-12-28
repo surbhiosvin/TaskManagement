@@ -143,7 +143,7 @@ namespace TaskManagementOsvin.Controllers
             }
         }
 
-        public ActionResult GetProfiles(long ProjectId = 12)
+        public ActionResult GetProfiles(long ProjectId = 0)
         {
             try
             {

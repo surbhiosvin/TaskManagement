@@ -28,7 +28,9 @@
                     <td class="text-center vertical-center"><span class="label label-success">@item.ProjectStatus</span></td>
                     <td class="text-center vertical-center">@(string.IsNullOrEmpty(item.ProjectUrl) ? "NA" : item.ProjectUrl)</td>
                     <td><a href="@Url.Action("ProjectAddendumDetails",new { ProjectId= @item.ProjectId })">Addendums Details</a></td>
-                    <td class="text-center vertical-center"><a href="@Url.Action("AddUpdateProject",new { ProjectId= @item.ProjectId })">Edit</a></td>
+                    <td class="text-center vertical-center"><a title="edit" class="btn green-dark" href="@Url.Action("AddUpdateProject",new { ProjectId= @item.ProjectId })">
+                        <i class="fa fa-edit"></i>
+                        </a></td>
                     <td><a href="@Url.Action("UpdateProjectStatus",new { ProjectId= @item.ProjectId })">Update Status</a></td>
                     <td class="text-center vertical-center"><a href="javascript:" onclick="confirm(@item.ProjectId)" title="Click here to Archive" style="font-size:20px"><i class="fa fa-archive"></i></a></td>
                 </tr>

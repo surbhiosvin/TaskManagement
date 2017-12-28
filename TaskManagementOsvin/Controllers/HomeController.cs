@@ -59,5 +59,41 @@ namespace TaskManagementOsvin.Controllers
             }
             return View();
         }
+
+        [ChildActionOnly]
+        public ActionResult _notifications()
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+            var result = client.GetAsync("/api/Notification/ProfileNotifications").Result;
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                var contents = result.Content.ReadAsStringAsync().Result;
+                var notifications = new JavaScriptSerializer().Deserialize<List<EmployeeModel>>(contents);
+                return PartialView(notifications);
+            }
+            return PartialView();
+        }
+
+        [ChildActionOnly]
+        public ActionResult _birthdayNotifications()
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+            var result = client.GetAsync("/api/Notification/BirthDayNotifications").Result;
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                var contents = result.Content.ReadAsStringAsync().Result;
+                var notifications = new JavaScriptSerializer().Deserialize<List<BirthDayNotificationModel>>(contents);
+                return PartialView(notifications);
+            }
+            return PartialView();
+        }
+
+        public ActionResult SignOut()
+        {
+            UserManager.SignOut();
+            return RedirectToAction("Login");
+        }
     }
 }

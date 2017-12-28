@@ -31,6 +31,83 @@ namespace Providers.Providers.SP.Repositories
                 return null;
             }
         }
+
+        public List<GetDepAndEmpProjDomainModel> GetDepartmentAndEmpInProject(long ProjectId)
+        {
+            try
+            {
+                var records = objHelper.Query<GetDepAndEmpProjDomainModel>("GET_DEPARTMENT_AND_COUNT_OF_EMPLOYEE_IN_THE_DEPARTMENT", new { ProjectId = ProjectId }).ToList();
+                return records;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public List<EmpWorkedOnProjDomainModel> EmployeesWorkedOnProject(long ProjectId)
+        {
+            try
+            {
+                var records = objHelper.Query<EmpWorkedOnProjDomainModel>("GET_EMPLOYEENAME_IN_DEPARTMENT_WORKED_ON_PROJECT", new { ProjectId = ProjectId }).ToList();
+                return records;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public List<WeeksBwDateDomainModel> WeeksBetweenDates(long ProjectId)
+        {
+            try
+            {
+                var records = objHelper.Query<WeeksBwDateDomainModel>("GET_WEEKS_BETWEEN_TWO_DATES", new { ProjectId = ProjectId }).ToList();
+                return records;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public List<HoursByDateAndProjDomainModel> GetHoursBetweenTwoDates(GetHrsByDateAndProjDomainModel model)
+        {
+            try
+            {
+                var records = objHelper.Query<HoursByDateAndProjDomainModel>("GET_HOURS_BETWEEN_TWO_DATES", new
+                {
+                    ProjectId = model.Projectid,
+                    startdate = Convert.ToDateTime(model.startdate),
+                    enddate = Convert.ToDateTime(model.enddate)
+                }).ToList();
+                return records;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public List<WorkingHoursDomainModel> GetIndividualWorkingHours(GetIndividualWorkingHoursDomainModel model)
+        {
+            try
+            {
+                var records = objHelper.Query<WorkingHoursDomainModel>("GET_INDIVIDUAL_WORKING_HOURS_ACCORDING_TO_EMPLOYEE", new
+                {
+                    employeeId = model.UserId,
+                    ProjectId = model.ProjectId,
+                    startdate = model.StartDate,
+                    enddate = model.EndDate
+                }).ToList();
+                return records;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public ProjectFullDetailsDomainModel GetProjectFullDetails(long ProjectId)
         {
             try

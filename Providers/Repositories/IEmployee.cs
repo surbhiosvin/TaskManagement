@@ -14,5 +14,8 @@ namespace Providers.Repositories
         ResponseDomainModel ChangePassword(ChangePassword model);
         List<SummaryOfWeekDetailsMainDomainModel> SummaryOfWeekDetailsMain(GetSummaryDomainModel model);
         List<EmployeesDomainModel> GetEmployees();
+        List<GetWeeklyEmployeeDSRDomainModel> GetSummaryOfWeekDetails(GetDSRDomainModel model);
+        List<SummaryOfWeekSubDetailsMainDomainModel> SummaryOfWeekSubDetails(long ProjectId, GetSummaryDomainModel model);
+        List<GetWeekelySummaryOfEmpDomainModel> GetWeekelySummaryOfEmpDetails(GetDSRDomainModel model);
     }
 }

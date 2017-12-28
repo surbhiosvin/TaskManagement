@@ -1,0 +1,107 @@
+﻿@using TaskManagementOsvin.Models;
+@model List<WeekelyEmployeeReportModel> 
+@using TaskManagementOsvin.Controllers
+@{ 
+    DashboardController dc = new DashboardController();
+    decimal TotalWorkingMinsOfMon = 0, TotalWorkingMinsOfTue = 0, TotalWorkingMinsOfWed = 0, TotalWorkingMinsOfThu = 0, TotalWorkingMinsOfFri = 0, TotalWorkingMinsOfSat = 0, TotalWorkingMinsOfSun = 0, OverallTotalWorkinginMins = 0;
+}
+<!-- BEGIN EXAMPLE TABLE PORTLET-->
+<div class="portlet-title">
+    <div class="caption">
+        <i class="icon-settings font-red"></i>
+        <span class="caption-subject font-red sbold uppercase">Employee week report</span>
+    </div>
+</div>
+<div class="portlet-body">
+    <table class="table table-striped table-bordered table-hover table-header-fixed nosort-table">
+        <thead>
+            <tr>
+                <th> Department </th>
+                <th> Employee </th>
+                <th> Mon </th>
+                <th> Tue </th>
+                <th> Wed </th>
+                <th> Thur </th>
+                <th> Fri </th>
+                <th> Sat </th>
+                <th> Sun </th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        @if (Model != null && Model.Count() > 0)
+        {
+            <tbody>
+                @foreach (var item in Model.GroupBy(x => x.EmployeeId))
+                {
+                    decimal TotalWorkingHoursInMins = 0;
+                    var MonWorkingHours = Model.FirstOrDefault(x => x.DayOfWeek == DayOfWeek.Monday && x.EmployeeId == item.FirstOrDefault().EmployeeId);
+                    var TueWorkingHours = Model.FirstOrDefault(x => x.DayOfWeek == DayOfWeek.Tuesday && x.EmployeeId == item.FirstOrDefault().EmployeeId);
+                    var WedWorkingHours = Model.FirstOrDefault(x => x.DayOfWeek == DayOfWeek.Wednesday && x.EmployeeId == item.FirstOrDefault().EmployeeId);
+                    var ThuWorkingHours = Model.FirstOrDefault(x => x.DayOfWeek == DayOfWeek.Thursday && x.EmployeeId == item.FirstOrDefault().EmployeeId);
+                    var FriWorkingHours = Model.FirstOrDefault(x => x.DayOfWeek == DayOfWeek.Friday && x.EmployeeId == item.FirstOrDefault().EmployeeId);
+                    var SatWorkingHours = Model.FirstOrDefault(x => x.DayOfWeek == DayOfWeek.Saturday && x.EmployeeId == item.FirstOrDefault().EmployeeId);
+                    var SunWorkingHours = Model.FirstOrDefault(x => x.DayOfWeek == DayOfWeek.Sunday && x.EmployeeId == item.FirstOrDefault().EmployeeId);
+
+                    var MondayMins = dc.ConversionInMinute((MonWorkingHours != null ? MonWorkingHours.WorkingHours : 0).ToString());
+                    TotalWorkingMinsOfMon = MondayMins + TotalWorkingMinsOfMon;
+
+                    var TuesdayMins = dc.ConversionInMinute((TueWorkingHours != null ? TueWorkingHours.WorkingHours : 0).ToString());
+                    TotalWorkingMinsOfTue = TuesdayMins + TotalWorkingMinsOfTue;
+
+                    var WednesdayMins = dc.ConversionInMinute((WedWorkingHours != null ? WedWorkingHours.WorkingHours : 0).ToString());
+                    TotalWorkingMinsOfWed = WednesdayMins + TotalWorkingMinsOfWed;
+
+                    var ThursdayMins = dc.ConversionInMinute((ThuWorkingHours != null ? ThuWorkingHours.WorkingHours : 0).ToString());
+                    TotalWorkingMinsOfThu = ThursdayMins + TotalWorkingMinsOfThu;
+
+                    var FridayMins = dc.ConversionInMinute((FriWorkingHours != null ? FriWorkingHours.WorkingHours : 0).ToString());
+                    TotalWorkingMinsOfFri = FridayMins + TotalWorkingMinsOfFri;
+
+                    var SaturdayMins = dc.ConversionInMinute((SatWorkingHours != null ? SatWorkingHours.WorkingHours : 0).ToString());
+                    TotalWorkingMinsOfSat = SaturdayMins + TotalWorkingMinsOfSat;
+
+                    var SundayMins = dc.ConversionInMinute((SunWorkingHours != null ? SunWorkingHours.WorkingHours : 0).ToString());
+                    TotalWorkingMinsOfSun = SundayMins + TotalWorkingMinsOfSun;
+
+
+                    TotalWorkingHoursInMins = MondayMins + TotalWorkingHoursInMins;
+                    TotalWorkingHoursInMins = TuesdayMins + TotalWorkingHoursInMins;
+                    TotalWorkingHoursInMins = WednesdayMins + TotalWorkingHoursInMins;
+                    TotalWorkingHoursInMins = ThursdayMins + TotalWorkingHoursInMins;
+                    TotalWorkingHoursInMins = FridayMins + TotalWorkingHoursInMins;
+                    TotalWorkingHoursInMins = SaturdayMins + TotalWorkingHoursInMins;
+                    TotalWorkingHoursInMins = SundayMins + TotalWorkingHoursInMins;
+                    OverallTotalWorkinginMins += TotalWorkingHoursInMins;
+                    <tr>
+                        <td>@item.FirstOrDefault().DepartmentName</td>
+                        <td>@item.FirstOrDefault().Name</td>
+                        <td>@(MonWorkingHours != null ? MonWorkingHours.WorkingHours : 0)</td>
+                        <td>@(TueWorkingHours != null ? TueWorkingHours.WorkingHours : 0)</td>
+                        <td>@(WedWorkingHours != null ? WedWorkingHours.WorkingHours : 0)</td>
+                        <td>@(ThuWorkingHours != null ? ThuWorkingHours.WorkingHours : 0)</td>
+                        <td>@(FriWorkingHours != null ? FriWorkingHours.WorkingHours : 0)</td>
+                        <td>@(SatWorkingHours != null ? SatWorkingHours.WorkingHours : 0)</td>
+                        <td>@(SunWorkingHours != null ? SunWorkingHours.WorkingHours : 0)</td>
+                        <td>@dc.ConversionInHour(TotalWorkingHoursInMins)</td>
+                    </tr>
+                }
+                
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th><span>@dc.ConversionInHour(TotalWorkingMinsOfMon)</span></th>
+                    <th><span>@dc.ConversionInHour(TotalWorkingMinsOfTue)</span></th>
+                    <th><span>@dc.ConversionInHour(TotalWorkingMinsOfWed)</span></th>
+                    <th><span>@dc.ConversionInHour(TotalWorkingMinsOfThu)</span></th>
+                    <th><span>@dc.ConversionInHour(TotalWorkingMinsOfFri)</span></th>
+                    <th><span>@dc.ConversionInHour(TotalWorkingMinsOfSat)</span></th>
+                    <th><span>@dc.ConversionInHour(TotalWorkingMinsOfSun)</span></th>
+                    <th><span>@dc.ConversionInHour(OverallTotalWorkinginMins)</span></th>
+                </tr>
+           </tfoot>
+        }
+    </table>
+</div>
+<!-- END EXAMPLE TABLE PORTLET-->

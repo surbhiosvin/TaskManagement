@@ -9,6 +9,7 @@ using System.Data.SqlClient;
 using System.Data;
 using Providers.Helper;
 using System.Web;
+using System.Globalization;
 
 namespace Providers.Providers.SP.Repositories
 {
@@ -123,6 +124,38 @@ namespace Providers.Providers.SP.Repositories
             return objRes;
         }
 
+        public List<GetWeeklyEmployeeDSRDomainModel> GetSummaryOfWeekDetails(GetDSRDomainModel model)
+        {
+            try
+            {
+                var StartDate = DateTime.ParseExact(model.startdate, "dd/MM/yyyy", CultureInfo.InvariantCulture).ToString("yyyy-MM-dd");
+                var EndDate = DateTime.ParseExact(model.enddate, "dd/MM/yyyy", CultureInfo.InvariantCulture).ToString("yyyy-MM-dd");
+                SqlHelper objHelper = new SqlHelper();
+                var summaries = objHelper.Query<GetWeeklyEmployeeDSRDomainModel>("GetSummaryOfWeekDetails", new { startdate = Convert.ToDateTime(StartDate), enddate = Convert.ToDateTime(EndDate) }).ToList();
+                return summaries;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public List<GetWeekelySummaryOfEmpDomainModel> GetWeekelySummaryOfEmpDetails(GetDSRDomainModel model)
+        {
+            try
+            {
+                var StartDate = DateTime.ParseExact(model.startdate, "dd/MM/yyyy", CultureInfo.InvariantCulture).ToString("yyyy-MM-dd");
+                var EndDate = DateTime.ParseExact(model.enddate, "dd/MM/yyyy", CultureInfo.InvariantCulture).ToString("yyyy-MM-dd");
+                SqlHelper objHelper = new SqlHelper();
+                var summaries = objHelper.Query<GetWeekelySummaryOfEmpDomainModel>("GetWeekelySummaryOfEmployees", new { startdate = Convert.ToDateTime(StartDate), enddate = Convert.ToDateTime(EndDate) }).ToList();
+                return summaries;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public List<SummaryOfWeekDetailsMainDomainModel> SummaryOfWeekDetailsMain(GetSummaryDomainModel model)
         {
             try
@@ -131,7 +164,7 @@ namespace Providers.Providers.SP.Repositories
                 var summaries = objHelper.Query<SummaryOfWeekDetailsMainDomainModel>("GET_SUMMARY_OF_WEEK_DETAILS_MAIN", new { startday = model.startday, endday = model.endday }).ToList();
                 if (summaries.Count() > 0 && summaries != null)
                 {
-                    var GetDistinctProjects = summaries.GroupBy(x => x.ProjectId).Select(g => new { ProjectId = g.Key });
+                    var GetDistinctProjects = summaries.GroupBy(x => x.ProjectId).Select(g => new { ProjectId = g.Key }).ToList();
                     //get subdetails for each summary
                     foreach (var item in GetDistinctProjects)
                     {
@@ -146,6 +179,12 @@ namespace Providers.Providers.SP.Repositories
             {
                 return null;
             }
+        }
+
+        public List<SummaryOfWeekSubDetailsMainDomainModel> SummaryOfWeekSubDetails(long ProjectId, GetSummaryDomainModel model)
+        {
+            var summary = objHelper.Query<SummaryOfWeekSubDetailsMainDomainModel>("GET_SUMMARY_OF_WEEK_SUBDETAILS", new { projectId = ProjectId, startday = model.startday, endday = model.endday }).ToList();
+            return summary;
         }
 
         public List<EmployeesDomainModel> GetEmployees()
