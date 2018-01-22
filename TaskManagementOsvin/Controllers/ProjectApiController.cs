@@ -776,6 +776,7 @@ namespace TaskManagementOsvin.Controllers
                 var objRes = ProjectRepository.UpdatePaymentRelease(model);
                 if (objRes == null)
                 {
+                    respnose.isSuccess = false;
                     httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
                 }
                 else
