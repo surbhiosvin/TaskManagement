@@ -1,0 +1,29 @@
+﻿@model List<ProjectFullDetailsDomainModel>
+
+<table class="table table-striped table-bordered table-hover table-header-fixed" id="sample_3">
+    <thead>
+        <tr class="">
+            <th class="text-center"> Project Title </th>
+            <th class="text-center"> Project Type </th>
+            <th class="text-center"> Start Date </th>
+            <th class="text-center"> End Date </th>
+            <th class="text-center"> Employee Worked Hours </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var Project in @Model)
+            {
+                <tr id="row_@Project.ClientId">
+                    <td class="text-center"><a href="~/Project/ProjectFullDetails?ProjectId=@Project.ProjectId">@Project.ProjectTitle</a></td>
+                    <td class="text-center"> @Project.ProjectType</td>
+                    <td class="text-center"> @Project.Startdate1</td>
+                    <td class="text-center"> @Project.Enddate1</td>
+                    <td class="text-center"> @Project.TotalWorkingHours</td>                 
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+

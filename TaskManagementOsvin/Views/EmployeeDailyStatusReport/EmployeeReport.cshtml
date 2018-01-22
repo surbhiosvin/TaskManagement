@@ -1,0 +1,127 @@
+﻿
+@{
+    ViewBag.Title = "EmployeeReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using TaskManagementOsvin.Security;
+@using TaskManagementOsvin.Models;
+@model ClientModel
+<div class="page-content">
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="~/Dashboard/Welcome">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="#">Employee Report</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            @*<li>
+                    <span>Page Layouts</span>
+                </li>*@
+        </ul>
+        <div class="page-toolbar">
+            <div class="btn-group pull-right">
+                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li>
+                        <a href="#">
+                            <i class="icon-bell"></i> Action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-shield"></i> Another action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-user"></i> Something else here
+                        </a>
+                    </li>
+                    <li class="divider"> </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-bag"></i> Separated link
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE BAR -->
+    <!-- BEGIN PAGE TITLE-->
+    <h1 class="page-title">
+        Employee Report
+        @*<small>blank page layout</small>*@
+    </h1>
+    <!-- END PAGE TITLE-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN EXAMPLE TABLE PORTLET-->
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption font-green">
+                        <i class="icon-layers font-green"></i>
+                        <span class="caption-subject font-green bold uppercase">Developer Specific Report</span>
+                    </div>
+                    @if (UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType == roleTypeModel.HR || UserManager.user.roleType == roleTypeModel.ProjectManager)
+                    {
+                        <div class="col-sm-offset-3 col-sm-6">
+                            <div class="actions actions-padding">
+                                <div class="action-inline">
+                                    <label for="ddlArchived" class="control-label">Department</label>
+                                    @Html.DropDownList("ddlDepartment", ViewBag.listDepartment as SelectList, "Select Department", new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="portlet-body">
+                    <div class="alert alert-success dvAlert @ViewBag.Class">
+                        <a class="close" onclick="$('.alert').hide()">×</a>
+                        <span id="lblMessage"> @ViewBag.Message </span>
+                    </div>
+              
+                    <div class="row" id="dvReport">
+                        @Html.Action("_EmployeeReport", "EmployeeDailyStatusReport")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    jQuery(document).on('ready', function () {
+        $("#ddlDepartment").val("");
+        $(document).on('change', '#ddlDepartment', function () {
+            var _this = $(this);
+            var DepartmentId = _this.val();
+            if (typeof DepartmentId != 'undefined') {
+                $.ajax({
+                    type: "GET",
+                    url: "/EmployeeDailyStatusReport/_EmployeeReport?DepartmentId=" + DepartmentId,
+                    //data: { sortBy: sortByval },
+                    contentType: "application/text; charset=utf-8",
+                    dataType: "text",
+                    async: false,
+                    success: function (response) {
+                        $('#dvReport').html(response);
+                        var table = $('#sample_3').DataTable();
+                        table.state.clear();
+                        table.destroy();
+                        TableDatatablesFixedHeader.init();
+                    },
+                    failure: function (msg) {
+                        html = false;
+                    }
+                });
+            }
+        });
+    });
+</script>

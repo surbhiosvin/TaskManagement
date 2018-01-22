@@ -45,19 +45,24 @@
                     {
                         if (Emp.IsActive)
                         {
-                            <td id="StatusActive_@Emp.UserId"><a id="StatusActiveLink_@Emp.UserId" href="#" onclick="ActivateDeactivateUser(@Emp.UserId, false)"><img alt='Active' src='~/assets/global/img/Guiimages/Active.png' width='30px' height='30px' /></a></td>
+                            <td id="StatusActive_@Emp.UserId" class="text-center vertical-center"><a id="StatusActiveLink_@Emp.UserId" href="javascript:" title="Active" onclick="ActivateDeactivateUser(@Emp.UserId, false)"><i class="fa fa-check-circle" style="font-size:20px;color:forestgreen"></i></a></td>
                             @*<td class="text-center"><a href="~/Management/ActivateDeactivateUser?UserId=@Emp.UserId"><img alt='Active' src='~/assets/global/img/Guiimages/Active.png' width='30px' height='30px' /></a></td>*@
                         }
                         else
                         {
-                            <td id="StatusActive_@Emp.UserId"><a id="StatusActiveLink_@Emp.UserId" href="#" onclick="ActivateDeactivateUser(@Emp.UserId, true)"><img alt='In Active Slip' src='~/assets/global/img/Guiimages/InActive.png' width='30px' height='30px' /></a></td>
+                            <td id="StatusActive_@Emp.UserId" class="text-center vertical-center"><a id="StatusActiveLink_@Emp.UserId" href="javascript:" title="Inactive" onclick="ActivateDeactivateUser(@Emp.UserId, true)"><i class="fa fa-times-circle" style="font-size:20px;color:red"></i></a></td>
                             @*<td class="text-center"><a href="~/Management/ActivateDeactivateUser?UserId=@Emp.UserId"><img alt='In Active Slip' src='~/assets/global/img/Guiimages/InActive.png' width='30px' height='30px' /></a></td>*@
                         }
                         <td class="text-center"><a title="Edit" class="btn blue" href="~/Management/AddEmployee?UserId=@Emp.UserId"><i class="fa fa-edit"></i></a> </td>
                         <td class="text-center"><a title="Delete" class="btn red" href="#" onclick="DeleteUser(@Emp.UserId)"><i class="fa fa-trash"></i></a></td>
-                        <td class="text-center"><a title="View Employee Details" href="~/Management/EmployeeDetails?UserId=@Emp.UserId"><img alt="View Full Details" src="~/assets/global/img/Guiimages/View_Details.png" width="30px" height="30px" /></a></td>
-                        <td class="text-center"><a title="Generate Salary slip" href="~/Management/GenerateSalarySlip?UserId=@Emp.UserId"><img alt="Generate Salary Slip" src="~/assets/global/img/Guiimages/Payslip_icon.png" width="30px" height="30px" /></a> </td>
-                        <td class="text-center"><a href="#" onclick="ArchiveEmployee(@Emp.UserId)"><img alt="Archive/NonArchive" src="~/assets/global/img/Guiimages/archive-image.png" width="30px" height="30px" /></a> </td>
+                        <td class="text-center vertical-center"><a title="View Employee Details" href="~/Management/EmployeeDetails?UserId=@Emp.UserId">
+                            <i class="fa fa-eye" style="font-size:20px;"></i></a></td>
+                        <td class="text-center vertical-center"><a title="Generate Salary slip" href="~/Management/GenerateSalarySlip?UserId=@Emp.UserId">
+                                                                    <i class="fa fa-file" style="font-size:20px;color:cornflowerblue"></i>
+                            </a> </td>
+                        <td class="text-center vertical-center"><a href="javascript:" onclick="ArchiveEmployee(@Emp.UserId)">
+                                                                    <i class="fa fa-archive" style="font-size:20px;"></i>
+                            </a> </td>
                     }
                 </tr>
             }

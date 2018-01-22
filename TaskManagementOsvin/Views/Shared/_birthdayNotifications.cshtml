@@ -1,0 +1,36 @@
+﻿@model List<TaskManagementOsvin.Models.BirthDayNotificationModel>
+<li class="dropdown dropdown-extended dropdown-inbox" id="header_inbox_bar">
+    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+        <i class="fa fa-birthday-cake"></i>
+        <span class="badge badge-default"> @Model.Count() </span>
+    </a>
+    <ul class="dropdown-menu">
+        <li class="external">
+            <h3>
+                <span class="bold">@Model.Count() </span> Employee(s) birthday this week
+            </h3>
+        </li>
+        <li>
+            <ul class="dropdown-menu-list scroller" style="height: 275px;" data-handle-color="#637283">
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        <li>
+                            <a href="#">
+                                <span class="photo">
+                                    <img src="~/Images/UserImages/@item.Image" class="img-circle" alt="image" />
+                                </span>
+                                <span class="subject">
+                                    <span class="from"> @(item.FirstName + " " + item.LastName) </span>
+                                </span>
+                                <span class="message"> Department : @item.DepartmentName</span>
+                                <span class="message"> Birth Date : @item.DateOfBirth.ToString("dd-MMMM-yyyy")</span>
+                            </a>
+                        </li>
+                    }
+                }
+            </ul>
+        </li>
+    </ul>
+</li>

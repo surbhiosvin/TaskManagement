@@ -15,6 +15,8 @@ namespace DomainModel.EntityModel
         public string CreatedDate { get; set; }
         public string FirstName { get; set; }
         public string TotalWorking { get; set; }
+        public string EmployeeTotalWorkingHoursTillDate { get; set; }
+        public long UserId { get; set; }
         public List<GetEmployeeDailyStatusReportDomainModel> listEmployeeDailyReportDetails { get; set; }
     }
 }

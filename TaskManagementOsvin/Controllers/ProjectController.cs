@@ -12,6 +12,7 @@ using DomainModel.EntityModel;
 using Providers.Helper;
 using Newtonsoft.Json;
 using System.IO;
+using System.Globalization;
 
 namespace TaskManagementOsvin.Controllers
 {
@@ -55,7 +56,8 @@ namespace TaskManagementOsvin.Controllers
                             MaintainenceHours = string.IsNullOrEmpty(response.MaintainenceHours) ? (decimal?)null : Convert.ToDecimal(response.MaintainenceHours),
                             NetworkSupportHours = string.IsNullOrEmpty(response.NetworkSupprotHours) ? (decimal?)null : Convert.ToDecimal(response.NetworkSupprotHours),
                             QualityAnalystHours = string.IsNullOrEmpty(response.QAHours) ? (decimal?)null : Convert.ToDecimal(response.QAHours),
-                            UploadDetailsDocument = response.UploadDetailsDocument };
+                            UploadDetailsDocument = response.UploadDetailsDocument
+                        };
                         return View(model);
                     }
                     else
@@ -140,6 +142,120 @@ namespace TaskManagementOsvin.Controllers
                 return View();
             }
         }
+
+        public ActionResult GetProfiles(long ProjectId = 0)
+        {
+            try
+            {
+                if (ProjectId > 0)
+                {
+                    var client = new HttpClient();
+                    client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+                    var Clientresult = client.GetAsync("/api/Profile/GetProfilesByProjectId/" + ProjectId).Result;
+                    if (Clientresult.StatusCode == HttpStatusCode.OK)
+                    {
+                        var contents = Clientresult.Content.ReadAsStringAsync().Result;
+                        var response = new JavaScriptSerializer().Deserialize<List<GetProfilesModel>>(contents);
+                        return View(response);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                
+            }
+            return View();
+        }
+
+        //[HttpPost]
+        //public ActionResult GetProfiles(AddUpdateUpworkProfileModel model)
+        //{
+        //    return View();
+        //}
+
+        public ActionResult AddUpdateProfile(long ProjectId = 0)
+        {
+            GetProjectTypeAndProjects();
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult AddUpdateProfile(List<UpdateUpworkProfileModel> ProfileList = null)
+        {
+            var result = "Successful <br />";
+            try
+            {
+                if (ProfileList != null)
+                {
+                    ProfileList.ForEach(x => { x.createdBy = UserManager.user.UserId; });
+                    var qs = Request.UrlReferrer.Query;
+                    if (qs != "")
+                    {
+                        var ProjectId = Convert.ToUInt64(qs.Split('=')[1]);
+                        if (ProjectId > 0)
+                        {
+                            var client = new HttpClient();
+                            client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+                            var Clientresult = client.GetAsync("/api/Profile/GetProfilesByProjectId/" + ProjectId).Result;
+                            if (Clientresult.StatusCode == HttpStatusCode.OK)
+                            {
+                                var contents = Clientresult.Content.ReadAsStringAsync().Result;
+                                var response = new JavaScriptSerializer().Deserialize<List<GetProfilesModel>>(contents);
+                                var selectIds = ProfileList.Select(x => x.ProfileId);
+                                var idsToDel = response.Where(x => !selectIds.Contains(x.ProfileId)).Select(x=>x.ProfileId).ToArray();
+                                string joinedIdsToDel = string.Join(",", idsToDel);
+
+                                if (joinedIdsToDel != "")
+                                {
+                                    var Getresult = client.PostAsync("/api/Profile/DeleteProfiles/" + joinedIdsToDel, null).Result;
+                                    if (Getresult.StatusCode == HttpStatusCode.InternalServerError)
+                                    {
+                                        return Json(new { isSuccess = false, reason = "Error occurred" });
+                                    }
+                                }
+                                var idsNotToInsert = response.Where(x => selectIds.Contains(x.ProfileId)).Select(x => x.ProfileId).ToArray();
+                                ProfileList.RemoveAll(x => idsNotToInsert.Contains(x.ProfileId));
+
+                            }
+                            else if (Clientresult.StatusCode == HttpStatusCode.InternalServerError)
+                            {
+                                return Json(new { isSuccess = false, reason = "Error occurred" });
+                            }
+                        }
+                    }
+                    
+                    foreach (var model in ProfileList)
+                    {
+                        var client = new HttpClient();
+                        client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+                        var serialized = new JavaScriptSerializer().Serialize(model);
+                        var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
+                        client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+                        var Clientresult = client.PostAsync("/api/Profile/AddProfile", content).Result;
+                        if (Clientresult.StatusCode == HttpStatusCode.OK)
+                        {
+                            var contents = Clientresult.Content.ReadAsStringAsync().Result;
+                            var response = new JavaScriptSerializer().Deserialize<ResponseModel>(contents);
+                            if (response.isSuccess)
+                            {
+                                result += "Profile with " + model.ProfileName + " is created <br />";
+                            }
+                        }
+                        else if (Clientresult.StatusCode == HttpStatusCode.NotImplemented || Clientresult.StatusCode == HttpStatusCode.InternalServerError)
+                        {
+                            result += "Profile with " + model.ProfileName + " is not created <br />";
+                        }
+                    }
+                    return Json(new { isSuccess = true, reason = result });
+                }
+                return Json(new { isSuccess = false, reason = "List is empty" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { isSuccess = false, reason = "Error occurred" });
+            }
+        }
+
         private void PopulateStatusList()
         {
             var list = new List<SelectListItem>
@@ -194,6 +310,74 @@ namespace TaskManagementOsvin.Controllers
             return View();
         }
 
+        public ActionResult PaymentRelease(long ProfileID = 0)
+        {
+            ViewBag.Class = "display-hide";
+            ViewBag.listProjects = GetProjectList();
+            if (ProfileID > 0)
+            {
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+                var Clientresult = client.GetAsync("/api/Project/GetProjectPaymentById/"+ ProfileID).Result;
+                if (Clientresult.StatusCode == HttpStatusCode.OK)
+                {
+                    var contents = Clientresult.Content.ReadAsStringAsync().Result;
+                    var response = new JavaScriptSerializer().Deserialize<GetPaymentModel>(contents);
+                    AddUpdatePaymentReleaseModel model = new AddUpdatePaymentReleaseModel() { NextDueDate = response.PaymentDueDate, ProjectId = response.ProjectId, PaymentId = response.PaymentId, ReleasedAmount = response.ReleasedAmount };
+                    return View(model);
+                }
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult PaymentRelease(AddUpdatePaymentReleaseModel model)
+        {
+            ViewBag.Class = "display-hide";
+            ViewBag.listProjects = GetProjectList();
+            try
+            {
+                if(ModelState.IsValid)
+                {
+                    model.CreatedBy = UserManager.user.UserId;
+                    var dt = DateTime.ParseExact(model.NextDueDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    var serialized = new JavaScriptSerializer().Serialize(model);
+                    var client = new HttpClient();
+                    var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
+                    client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+                    HttpResponseMessage Clientresult = null;
+                    if (model.PaymentId > 0)
+                    {
+                        Clientresult = client.PostAsync("/api/Project/UpdatePaymentRelease", content).Result;
+                    }
+                    else
+                    {
+                        Clientresult = client.PostAsync("/api/Project/AddPaymentRelease", content).Result;
+                    }
+                    if (Clientresult.StatusCode == HttpStatusCode.OK)
+                    {
+                        var contents = Clientresult.Content.ReadAsStringAsync().Result;
+                        var response = new JavaScriptSerializer().Deserialize<ResponseModel>(contents);
+                        if (response.isSuccess)
+                        {
+                            ViewBag.Class = "alert-success";
+                            ViewBag.Message = "Updated Successfully";
+                            ModelState.Clear();
+                            return View();
+                        }
+                    }
+                }
+                ViewBag.Class = "alert-danger";
+                ViewBag.Message = "Not Valid";
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Class = "alert-danger";
+                ViewBag.Message = ex.Message;
+            }
+            return View();
+        }
+
         private void GetProjectTypeAndClients()
         {
             var client = new HttpClient();
@@ -212,6 +396,21 @@ namespace TaskManagementOsvin.Controllers
                 var response = new JavaScriptSerializer().Deserialize<List<ProjectTypeModel>>(contents);
                 ViewBag.ProjectType = response;
             }
+        }
+
+        private void GetProjectTypeAndProjects()
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+            var Clientresult = client.GetAsync("/api/Client/GetClients").Result;
+            var ProjectTypeResult = client.GetAsync("/api/Project/GetProjectType").Result;
+            if (ProjectTypeResult.StatusCode == HttpStatusCode.OK)
+            {
+                var contents = ProjectTypeResult.Content.ReadAsStringAsync().Result;
+                var response = new JavaScriptSerializer().Deserialize<List<ProjectTypeModel>>(contents);
+                ViewBag.ProjectType = response;
+            }
+            ViewBag.listProjects = GetProjectList();
         }
 
         [HttpGet]
@@ -297,27 +496,22 @@ namespace TaskManagementOsvin.Controllers
             }
             return PartialView(listProjectAssignToUser);
         }
+
         [HttpGet]
         public ActionResult AddWorkingHoursOfProjectBeforePMS()
         {
-            ProjectWorkingHoursBeforePMSModel objModel = new ProjectWorkingHoursBeforePMSModel();
-            List<ProjectDomainModel> listProjects = new List<ProjectDomainModel>();
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var ProjectResult = client.GetAsync("/api/Project/GetProjectList").Result;
-            if (ProjectResult.StatusCode == HttpStatusCode.OK)
-            {
-                var contents = ProjectResult.Content.ReadAsStringAsync().Result;
-                var response = JsonConvert.DeserializeObject<List<ProjectDomainModel>>(contents);
-                listProjects = response;
-            }
+            var listProjects = GetProjectList();
             ViewBag.listProjects = new SelectList(listProjects, "ProjectId", "ProjectTitle");
+            ProjectWorkingHoursBeforePMSModel objModel = new ProjectWorkingHoursBeforePMSModel();
             ViewBag.Class = "display-hide";
             return View(objModel);
         }
+
         [HttpPost]
         public ActionResult AddWorkingHoursOfProjectBeforePMS(ProjectWorkingHoursBeforePMSModel model)
         {
+            var listProjects = GetProjectList();
+            ViewBag.listProjects = new SelectList(listProjects, "ProjectId", "ProjectTitle");
             ViewBag.Class = "display-hide";
             try
             {
@@ -363,17 +557,6 @@ namespace TaskManagementOsvin.Controllers
                 ModelState.AddModelError("CustomError", ex.Message);
                 ViewBag.AlertType = "alert-danger";
             }
-            List<ProjectDomainModel> listProjects = new List<ProjectDomainModel>();
-            var client1 = new HttpClient();
-            client1.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var ProjectResult = client1.GetAsync("/api/Project/GetProjectList").Result;
-            if (ProjectResult.StatusCode == HttpStatusCode.OK)
-            {
-                var contents = ProjectResult.Content.ReadAsStringAsync().Result;
-                var response = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ProjectDomainModel>>(contents);
-                listProjects = response;
-            }
-            ViewBag.listProjects = new SelectList(listProjects, "ProjectId", "ProjectTitle");
             return View(model);
         }
         [HttpGet]
@@ -464,8 +647,7 @@ namespace TaskManagementOsvin.Controllers
         public ActionResult AddProjectAddendumDetails()
         {
             ViewBag.Class = "display-hide";
-            List<ProjectDomainModel> listProjects = new List<ProjectDomainModel>();
-            listProjects = GetProjectList();
+            var listProjects = GetProjectList();
             ViewBag.listProjects = new SelectList(listProjects, "ProjectId", "ProjectTitle");
             return View();
         }
@@ -530,8 +712,7 @@ namespace TaskManagementOsvin.Controllers
                 ModelState.AddModelError("CustomError", ex.Message);
                 ViewBag.AlertType = "alert-danger";
             }
-            List<ProjectDomainModel> listProjects = new List<ProjectDomainModel>();
-            listProjects = GetProjectList();
+            var listProjects = GetProjectList();
             ViewBag.listProjects = new SelectList(listProjects, "ProjectId", "ProjectTitle");
             return View(model);
         }
@@ -539,8 +720,7 @@ namespace TaskManagementOsvin.Controllers
         public ActionResult MergeProject()
         {
             ViewBag.Class = "display-hide";
-            List<ProjectDomainModel> listProjects = new List<ProjectDomainModel>();
-            listProjects = GetProjectList();
+            var listProjects = GetProjectList();
             ViewBag.listProjects = new SelectList(listProjects, "ProjectId", "ProjectTitle");
             return View();
         }
@@ -580,18 +760,64 @@ namespace TaskManagementOsvin.Controllers
             return View();
         }
 
-
-        #region User Defined Functions
-        public List<ProjectDomainModel> GetProjectList()
+        public ActionResult ProjectListReport(GetAllProjectsModel model)
+        {            
+            return View();
+        }
+        public ActionResult _ProjectListReport(string StartDate, string EndDate)
         {
-            List<ProjectDomainModel> listProjects = new List<ProjectDomainModel>();
+            List<ProjectFullDetailsDomainModel> list = new List<ProjectFullDetailsDomainModel>();
+            DateTime date = DateTime.Now;
+            if (!string.IsNullOrWhiteSpace(StartDate))
+            {
+                date = DateTime.ParseExact(StartDate, "dd/MM/yyyy", null);
+                StartDate = date.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
+            }
+            if (!string.IsNullOrWhiteSpace(EndDate))
+            {
+                date = DateTime.ParseExact(EndDate, "dd/MM/yyyy", null);
+                EndDate = date.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
+            }
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+            var result = client.GetAsync("/api/Project/GetProjectReportDetails?&StartDate=" + StartDate + "&EndDate=" + EndDate).Result;
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                var contents = result.Content.ReadAsStringAsync().Result;
+                var Response = JsonConvert.DeserializeObject<List<ProjectFullDetailsDomainModel>>(contents);
+                list = Response;
+            }
+            if (list != null && list.Count > 0)
+            {
+                foreach (var obj in list)
+                {
+                    if (!string.IsNullOrWhiteSpace(obj.StartDate))
+                    {
+                        obj.Startdate1 = Convert.ToDateTime(obj.StartDate).ToString("d MMMM yyyy", CultureInfo.CreateSpecificCulture("en-US"));
+                    }
+                    if (!string.IsNullOrWhiteSpace(obj.EndDate))
+                    {
+                        obj.Enddate1 = Convert.ToDateTime(obj.EndDate).ToString("d MMMM yyyy", CultureInfo.CreateSpecificCulture("en-US"));
+                    }
+                }
+            }         
+            return PartialView(list);
+        }
+        public ActionResult FullProjectReport()
+        {
+            return View();
+        }
+        #region User Defined Functions
+        public List<ProjectModel> GetProjectList()
+        {
+            List<ProjectModel> listProjects = new List<ProjectModel>();
             var client1 = new HttpClient();
             client1.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
             var ProjectResult = client1.GetAsync("/api/Project/GetProjectList").Result;
             if (ProjectResult.StatusCode == HttpStatusCode.OK)
             {
                 var contents = ProjectResult.Content.ReadAsStringAsync().Result;
-                var response = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ProjectDomainModel>>(contents);
+                var response = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ProjectModel>>(contents);
                 listProjects = response;
             }
             return listProjects;

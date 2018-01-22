@@ -153,6 +153,149 @@ namespace TaskManagementOsvin.Controllers
                     StatusCode = HttpStatusCode.InternalServerError
                 });
             }
-        }        
+        }
+        [Route("~/api/EmployeeDailyStatusReport/AddUpdateEmployeeDailyReportByTeamLeader")]
+        [HttpPost]
+        public HttpResponseMessage AddUpdateEmployeeDailyReportByTeamLeader(EmployeeDailyReportDomainModel model)
+        {
+            HttpResponseMessage httpResponse = new HttpResponseMessage();
+            ResponseDomainModel response = new ResponseDomainModel();
+            try
+            {
+                response = employeeDailyStatusReportRepository.AddDailyStatusReportByTeamLeader(model);
+                if (response == null)
+                {
+                    response.isSuccess = false;
+                    httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
+                }
+                else if (response.isSuccess == true)
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, response);
+                }
+                else
+                {
+                    response.isSuccess = false;
+                    httpResponse = Request.CreateResponse(HttpStatusCode.NotImplemented, response);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+        [Route("~/api/EmployeeDailyStatusReport/GetEmployeeReportFilledByTeamLeaderWithTotalWorkingHours")]
+        public HttpResponseMessage GetEmployeeReportFilledByTeamLeaderWithTotalWorkingHours(long DepartmentId, long TLEmployeeId)
+        {
+            HttpResponseMessage httpResponse = new HttpResponseMessage();
+            try
+            {
+                var listEmployeeTotalWorkingHoursReport = employeeDailyStatusReportRepository.GetEmployeeReportFilledByTeamLeaderWithTotalWorkingHours(DepartmentId, TLEmployeeId);
+                if (listEmployeeTotalWorkingHoursReport == null)
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, listEmployeeTotalWorkingHoursReport);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+        [Route("~/api/EmployeeDailyStatusReport/GetEmployeeReportFilledByTeamLeaderAccToEmployeeId")]
+        public HttpResponseMessage GetEmployeeReportFilledByTeamLeaderAccToEmployeeId(long TLEmployeeId, long EmployeeId)
+        {
+            HttpResponseMessage httpResponse = new HttpResponseMessage();
+            try
+            {
+                var listEmployeeTotalWorkingHoursReport = employeeDailyStatusReportRepository.GetEmployeeReportFilledByTeamLeaderAccToEmployeeId(TLEmployeeId, EmployeeId);
+                if (listEmployeeTotalWorkingHoursReport == null)
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, listEmployeeTotalWorkingHoursReport);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+        [Route("~/api/EmployeeDailyStatusReport/GetDailyStatusReportDetailsById")]
+        public HttpResponseMessage GetDailyStatusReportDetailsById(long DailyReportId)
+        {
+            HttpResponseMessage httpResponse = new HttpResponseMessage();
+            try
+            {
+                var DailyStatusReport = employeeDailyStatusReportRepository.GetDailyStatusReportDetailsById(DailyReportId);
+                if (DailyStatusReport == null)
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, DailyStatusReport);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+        [Route("~/api/EmployeeDailyStatusReport/GetEmployeeTotalWorkingHours")]
+        public HttpResponseMessage GetEmployeeTotalWorkingHours(string StartDate, string EndDate)
+        {
+            HttpResponseMessage httpResponse = new HttpResponseMessage();
+            try
+            {
+                var listEmployeeTotalWorkingHours = employeeDailyStatusReportRepository.GetEmployeeTotalWorkingHours(StartDate,EndDate);
+                if (listEmployeeTotalWorkingHours == null)
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, listEmployeeTotalWorkingHours);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
     }
 }

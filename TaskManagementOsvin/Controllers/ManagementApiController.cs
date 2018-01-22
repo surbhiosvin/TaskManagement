@@ -538,5 +538,67 @@ namespace TaskManagementOsvin.Controllers
                 });
             }
         }
+        [HttpGet]
+        [Route("~/api/Management/GetAllTeamLeaders")]
+        public HttpResponseMessage GetAllTeamLeaders()
+        {
+            HttpResponseMessage httpResponse = new HttpResponseMessage();
+            try
+            {
+                var listTeamLeaders = managementRepository.GetAllTeamLeaders();
+                if (listTeamLeaders == null)
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, listTeamLeaders);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+        [HttpGet]
+        [Route("~/api/Management/GetEmployeeByTeamLeaderId")]
+        public HttpResponseMessage GetEmployeeByTeamLeaderId(long TeamLeaderId)
+        {
+            HttpResponseMessage httpResponse = new HttpResponseMessage();
+            try
+            {
+                var Employee = managementRepository.GetEmployeeDataById(TeamLeaderId);
+                long DepartmentId = 0;
+                if(Employee!=null)
+                {
+                    DepartmentId = Employee.DepartmentId;
+                }
+                var listEmployees = managementRepository.GetEmployeeByTeamLeaderDepartmentId(DepartmentId);
+                if (listEmployees == null)
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, listEmployees);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }       
     }
 }

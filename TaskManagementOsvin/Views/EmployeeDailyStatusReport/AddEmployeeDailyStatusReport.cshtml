@@ -3,6 +3,8 @@
     ViewBag.Title = "AddEmployeeDailyStatusReport";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@using TaskManagementOsvin.Security;
+@using TaskManagementOsvin.Models;
 @model TaskManagementOsvin.Models.AddEmployeeDailyReportModel
 <div class="page-content">
     <!-- BEGIN PAGE BAR -->
@@ -73,7 +75,7 @@
                 <div class="portlet-body form">
                     <div class="alert dvAlert @ViewBag.Class">
                         @*<button type="button" class="close" data-close="alert"></button>*@
-                        <a class="close" onclick="$('.alert').hide()">×</a>
+                        <a class="close" onclick="$('.alert').fadeOut(1000)">×</a>
                         <span id="lblMessage"> @ViewBag.Message </span>
                     </div>
                     <div class="row">
@@ -143,7 +145,10 @@
                                 <div class="btn-set">
                                     <input type="submit" class="btn green" id="btnAdd" value="Save" />
                                     <button type="button" class="btn green" id="btnUpdate" style="display:none">Update</button>
-                                    <a class="btn blue" href="javascript:;">Show Reports</a>
+                                    @if (UserManager.user.roleType == roleTypeModel.Employee)
+                                    {
+                                        <a class="btn blue" href="~/EmployeeDailyStatusReport/DailystatusReportDetailsByEmployee">Show Reports</a>
+                                    }
                                     <button type="button" class="btn red" id="btnCancel">Cancel</button>
                                 </div>
                             </div>
@@ -154,7 +159,7 @@
         </div>
     </div>
     <div id="dvDailyStatusReports">
-        @Html.Action("_EmployeeDailyStatusReport", "EmployeeDailyStatusReport");
+        @Html.Action("_EmployeeDailyStatusReport", "EmployeeDailyStatusReport")
     </div>
 </div>
 <div class="modal fade" id="formatmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1">
@@ -208,321 +213,349 @@
     </div>
 </div>
 <style>
-    .control-label {
-        font-family: Verdana, Helvetica, sans-serif;
-        font-size: 11px;
-        color: #600012;
-    }
+        .control-label {
+            font-family: Verdana, Helvetica, sans-serif;
+            font-size: 11px;
+            color: #600012;
+        }
 
-    h4 {
-    font-size: 14px;
-}
+        h4 {
+        font-size: 14px;
+    }
 </style>
 @*<script src="~/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js"></script>*@
 <script type="text/javascript">
     $(document).ready(function () {
         $("#formatmodal").modal('show');
-        $(function () {
-            window.setInterval(function () {
-                $.ajax({
-                    url: "/api/EmployeeDailyStatusReport/GetTime",
-                    type: "get",
-                    async: false,
-                    dataType: "json",
-                    contentType: "application/json; charset=utf-8",
-                    success: function (data) {
-                        var newtime1 = data;
-                        $("#ctime").val(data);
-                        if ("19:00:00" < newtime1 && newtime1 < "23:59:59") {
-                            $(".dvAlert").removeClass('alert-danger');
-                            $(".dvAlert").addClass('alert-success');
-                            $("#lblMessage").html("<strong>Hey ! </strong> Now You can add your Daily Status Report .");
-                        }
-                        else {
-                            $(".dvAlert").addClass('alert-danger');
-                            $("#lblMessage").html("<strong>Heads Up ! </strong> You can not add your Daily Status Report before 7:00 P.M. , Please wait till 7:00 P.M. <strong> Current Time is : " + newtime1 + "</strong>");
-                            $(".dvAlert").show();
-                        }
-                    },
-                    error: function (error) {
+        var DailyReportId = getParameterByName("DailyReportId");
+        var EmployeeId = getParameterByName("EmployeeId");
+        if (DailyReportId > 0 && EmployeeId > 0) {
+            $.ajax({
+                type: "Get",
+                url: "/api/EmployeeDailyStatusReport/GetDailyStatusReportDetailsById?DailyReportId=" + DailyReportId,
+                contentType: "application/json; charset=utf-8;",
+                dataType: "json",
+                success: function (response) {
+                    $("#lblMessage").html("");
+                    $(".dvAlert").hide();
+                    var array = response.WorkingHours.split('.');
+                    $("#listEmployeeDailyStatusReport_0__DailyReportId").val(response.DailyReportId);
+                    $("#listEmployeeDailyStatusReport_0__ProjectId").val(response.ProjectId);
+                    $("#listEmployeeDailyStatusReport_0__ProjectId").trigger("change");
+                    $("#listEmployeeDailyStatusReport_0__ReportCategoryId").val(response.ReportCategoryId);
+                    $("#listEmployeeDailyStatusReport_0__Description").val(response.Description);
+                    $("#listEmployeeDailyStatusReport_0__Hours").val(array[0]);
+                    $("#listEmployeeDailyStatusReport_0__Minutes").val(array[1]);
+                    $("#btnAdd").hide();
+                    $("#btnUpdate").show();
+                    $("html, body").animate({ scrollTop: 0 }, "slow");
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+        //$(function () {
+        //    window.setInterval(function () {
+        //        $.ajax({
+        //            url: "/api/EmployeeDailyStatusReport/GetTime",
+        //            type: "get",
+        //            async: false,
+        //            dataType: "json",
+        //            contentType: "application/json; charset=utf-8",
+        //            success: function (data) {
+        //                var newtime1 = data;
+        //                $("#ctime").val(data);
+        //                if ("19:00:00" < newtime1 && newtime1 < "23:59:59") {
+        //                    $(".dvAlert").removeClass('alert-danger');
+        //                    $(".dvAlert").addClass('alert-success');
+        //                    $("#lblMessage").html("<strong>Hey ! </strong> Now You can add your Daily Status Report .");
+        //                    $(".dvAlert").show();
+        //                }
+        //                else {
+        //                    $(".dvAlert").addClass('alert-danger');
+        //                    $("#lblMessage").html("<strong>Heads Up ! </strong> You can not add your Daily Status Report before 7:00 P.M. , Please wait till 7:00 P.M. <strong> Current Time is : " + newtime1 + "</strong>");
+        //                    $(".dvAlert").show();
+        //                }
+        //            },
+        //            error: function (error) {
 
-                    }
-                });
-            }, 1000);
-            //  Do whatever in here that happens every 1 seconds
-        });
+        //            }
+        //        });
+        //    }, 1000);
+        //    //  Do whatever in here that happens every 1 seconds
+        //});
     });
-
     $("#btnAdd").on('click', function (e) {
         debugger;
         e.preventDefault();
         var errorCount = 0;
         var dt = new Date();
 
-        if ('19:00:00' < $("#ctime").val() && $("#ctime").val() < '23:59:59') {
-        var project = $("#listEmployeeDailyStatusReport_0__ProjectId");
-        var project2 = $("#listEmployeeDailyStatusReport_1__ProjectId");
-        var project3 = $("#listEmployeeDailyStatusReport_2__ProjectId");
-        var project4 = $("#listEmployeeDailyStatusReport_3__ProjectId");
-        if ((project.val() == "0" || project.val() == "") && (project2.val() == "0" || project2.val() == "") && (project3.val() == "0" || project3.val() == "") && (project4.val() == "0" || project4.val() == "")) {
-            var span = $("#select2-listEmployeeDailyStatusReport_0__ProjectId-container").parent();
-            span.css("border", "1px solid red");
-            errorCount = errorCount + 1;
-        }
-        else {
-            var span = $("#select2-listEmployeeDailyStatusReport_0__ProjectId-container").parent();
-            span.css("border", "");
-        }
-        var reportcategory = $("#listEmployeeDailyStatusReport_0__ReportCategoryId");
-        var reportcategory2 = $("#listEmployeeDailyStatusReport_1__ReportCategoryId");
-        var reportcategory3 = $("#listEmployeeDailyStatusReport_2__ReportCategoryId");
-        var reportcategory4 = $("#listEmployeeDailyStatusReport_3__ReportCategoryId");
-
-        var description = $("#listEmployeeDailyStatusReport_0__Description");
-        var description2 = $("#listEmployeeDailyStatusReport_1__Description");
-        var description3 = $("#listEmployeeDailyStatusReport_2__Description");
-        var description4 = $("#listEmployeeDailyStatusReport_3__Description");
-
-        var hours = $("#listEmployeeDailyStatusReport_0__Hours");
-        var hours2 = $("#listEmployeeDailyStatusReport_1__Hours");
-        var hours3 = $("#listEmployeeDailyStatusReport_2__Hours");
-        var hours4 = $("#listEmployeeDailyStatusReport_3__Hours");
-        var minutes = $("#listEmployeeDailyStatusReport_0__Minutes");
-        var minutes2 = $("#listEmployeeDailyStatusReport_1__Minutes");
-        var minutes3 = $("#listEmployeeDailyStatusReport_2__Minutes");
-        var minutes4 = $("#listEmployeeDailyStatusReport_3__Minutes");
-
-        if (((reportcategory2.val() != "0" && reportcategory2.val() != "") || description2.val() != "" || (hours2.val() != "-1" && hours2.val() != "")) && (project2.val() == "0" || project2.val() == "")) {
-            var span = $("#select2-listEmployeeDailyStatusReport_1__ProjectId-container").parent();
-            span.css("border", "1px solid red");
-            errorCount = errorCount + 1;
-        }
-        else {
-            var span = $("#select2-listEmployeeDailyStatusReport_1__ProjectId-container").parent();
-            span.css("border", "");
-        }
-        if (((reportcategory3.val() != "0" && reportcategory3.val() != "") || description3.val() != "" || (hours3.val() != "-1" && hours3.val() != "")) && (project3.val() == "0" || project3.val() == "")) {
-
-            var span = $("#select2-listEmployeeDailyStatusReport_2__ProjectId-container").parent();
-            span.css("border", "1px solid red");
-            errorCount = errorCount + 1;
-        }
-        else {
-            var span = $("#select2-listEmployeeDailyStatusReport_2__ProjectId-container").parent();
-            span.css("border", "");
-        }
-        if (((reportcategory4.val() != "0" && reportcategory4.val() != "") || description4.val() != "" || (hours4.val() != "-1" && hours4.val() != "")) && (project4.val() == "0" || project4.val() == "")) {
-
-            var span = $("#select2-listEmployeeDailyStatusReport_3__ProjectId-container").parent();
-            span.css("border", "1px solid red");
-            errorCount = errorCount + 1;
-        }
-        else {
-            var span = $("#select2-listEmployeeDailyStatusReport_3__ProjectId-container").parent();
-            span.css("border", "");
-        }
-
-        if (project.val() != "0" && project.val() != "") {
-            if (description.val() == "") {
-                description.css("border-color", "red");
+        //if ('19:00:00' < $("#ctime").val() && $("#ctime").val() < '23:59:59') {
+            var project = $("#listEmployeeDailyStatusReport_0__ProjectId");
+            var project2 = $("#listEmployeeDailyStatusReport_1__ProjectId");
+            var project3 = $("#listEmployeeDailyStatusReport_2__ProjectId");
+            var project4 = $("#listEmployeeDailyStatusReport_3__ProjectId");
+            if ((project.val() == "0" || project.val() == "") && (project2.val() == "0" || project2.val() == "") && (project3.val() == "0" || project3.val() == "") && (project4.val() == "0" || project4.val() == "")) {
+                var span = $("#select2-listEmployeeDailyStatusReport_0__ProjectId-container").parent();
+                span.css("border", "1px solid red");
                 errorCount = errorCount + 1;
             }
             else {
-                description.css("border-color", "");
+                var span = $("#select2-listEmployeeDailyStatusReport_0__ProjectId-container").parent();
+                span.css("border", "");
             }
-            if (description.val().length < 100) {
-                description.css("border-color", "red");
-                errorCount = errorCount + 1;
-            }
-            else {
-                description.css("border-color", "");
-            }
-            if (hours.val() == "-1" || hours.val() == "") {
-                hours.css("border-color", "red");
-                errorCount = errorCount + 1;
-            }
-            else {
-                hours.css("border-color", "");
-            }
-            if (reportcategory.val() == "0" || reportcategory.val() == "") {
-                reportcategory.css("border-color", "red");
-                errorCount = errorCount + 1;
-            }
-            else {
-                reportcategory.css("border-color", "");
-            }
-        }
-        else {
-            description.css("border-color", "");
-            hours.css("border-color", "");
-            reportcategory.css("border-color", "");
-        }
+            var reportcategory = $("#listEmployeeDailyStatusReport_0__ReportCategoryId");
+            var reportcategory2 = $("#listEmployeeDailyStatusReport_1__ReportCategoryId");
+            var reportcategory3 = $("#listEmployeeDailyStatusReport_2__ReportCategoryId");
+            var reportcategory4 = $("#listEmployeeDailyStatusReport_3__ReportCategoryId");
 
-        if (project2.val() != "0" && project2.val() != "") {
-            if (description2.val() == "") {
-                description2.css("border-color", "red");
-                errorCount = errorCount + 1;
-            }
-            else {
-                description2.css("border-color", "");
-            }
-            if (description2.val().length < 100) {
-                description2.css("border-color", "red");
-                errorCount = errorCount + 1;
-            }
-            else {
-                description2.css("border-color", "");
-            }
-            if (hours2.val() == "-1" || hours2.val() == "") {
-                hours2.css("border-color", "red");
-                errorCount = errorCount + 1;
-            }
-            else {
-                hours2.css("border-color", "");
-            }
-            if (reportcategory2.val() == "0" || reportcategory2.val() == "") {
-                reportcategory2.css("border-color", "red");
-                errorCount = errorCount + 1;
+            var description = $("#listEmployeeDailyStatusReport_0__Description");
+            var description2 = $("#listEmployeeDailyStatusReport_1__Description");
+            var description3 = $("#listEmployeeDailyStatusReport_2__Description");
+            var description4 = $("#listEmployeeDailyStatusReport_3__Description");
 
-            }
-            else {
-                reportcategory2.css("border-color", "");
+            var hours = $("#listEmployeeDailyStatusReport_0__Hours");
+            var hours2 = $("#listEmployeeDailyStatusReport_1__Hours");
+            var hours3 = $("#listEmployeeDailyStatusReport_2__Hours");
+            var hours4 = $("#listEmployeeDailyStatusReport_3__Hours");
+            var minutes = $("#listEmployeeDailyStatusReport_0__Minutes");
+            var minutes2 = $("#listEmployeeDailyStatusReport_1__Minutes");
+            var minutes3 = $("#listEmployeeDailyStatusReport_2__Minutes");
+            var minutes4 = $("#listEmployeeDailyStatusReport_3__Minutes");
 
-            }
-        }
-        else {
-            description2.css("border-color", "");
-            hours2.css("border-color", "");
-            reportcategory2.css("border-color", "");
-        }
-
-        if (project3.val() != "0" && project3.val() != "") {
-            if (description3.val() == "") {
-                description3.css("border-color", "red");
+            if (((reportcategory2.val() != "0" && reportcategory2.val() != "") || description2.val() != "" || (hours2.val() != "-1" && hours2.val() != "")) && (project2.val() == "0" || project2.val() == "")) {
+                var span = $("#select2-listEmployeeDailyStatusReport_1__ProjectId-container").parent();
+                span.css("border", "1px solid red");
                 errorCount = errorCount + 1;
             }
             else {
-                description3.css("border-color", "");
+                var span = $("#select2-listEmployeeDailyStatusReport_1__ProjectId-container").parent();
+                span.css("border", "");
             }
-            if (description3.val().length < 100) {
-                description3.css("border-color", "red");
-                errorCount = errorCount + 1;
-            }
-            else {
-                description3.css("border-color", "");
-            }
-            if (hours3.val() == "-1" || hours3.val() == "") {
-                hours3.css("border-color", "red");
-                errorCount = errorCount + 1;
-            }
-            else {
-                hours3.css("border-color", "");
-            }
-            if (reportcategory3.val() == "0" || reportcategory3.val() == "") {
-                reportcategory3.css("border-color", "red");
-                errorCount = errorCount + 1;
+            if (((reportcategory3.val() != "0" && reportcategory3.val() != "") || description3.val() != "" || (hours3.val() != "-1" && hours3.val() != "")) && (project3.val() == "0" || project3.val() == "")) {
 
-            }
-            else {
-                reportcategory3.css("border-color", "");
-
-            }
-        }
-        else {
-            description3.css("border-color", "");
-            hours3.css("border-color", "");
-            reportcategory3.css("border-color", "");
-        }
-        if (project4.val() != "0" && project4.val() != "") {
-            if (description4.val() == "") {
-                description4.css("border-color", "red");
+                var span = $("#select2-listEmployeeDailyStatusReport_2__ProjectId-container").parent();
+                span.css("border", "1px solid red");
                 errorCount = errorCount + 1;
             }
             else {
-                description4.css("border-color", "");
+                var span = $("#select2-listEmployeeDailyStatusReport_2__ProjectId-container").parent();
+                span.css("border", "");
             }
-            if (description4.val().length < 100) {
-                description4.css("border-color", "red");
+            if (((reportcategory4.val() != "0" && reportcategory4.val() != "") || description4.val() != "" || (hours4.val() != "-1" && hours4.val() != "")) && (project4.val() == "0" || project4.val() == "")) {
+
+                var span = $("#select2-listEmployeeDailyStatusReport_3__ProjectId-container").parent();
+                span.css("border", "1px solid red");
                 errorCount = errorCount + 1;
             }
             else {
-                description4.css("border-color", "");
+                var span = $("#select2-listEmployeeDailyStatusReport_3__ProjectId-container").parent();
+                span.css("border", "");
             }
-            if (hours4.val() == "-1" || hours4.val() == "") {
-                hours4.css("border-color", "red");
-                errorCount = errorCount + 1;
-            }
-            else {
-                hours4.css("border-color", "");
-            }
-            if (reportcategory4.val() == "0" || reportcategory4.val() == "") {
-                reportcategory4.css("border-color", "red");
-                errorCount = errorCount + 1;
 
-            }
-            else {
-                reportcategory4.css("border-color", "");
-
-            }
-        }
-        else {
-            description4.css("border-color", "");
-            hours4.css("border-color", "");
-            reportcategory4.css("border-color", "");
-        }
-        if (errorCount > 0) {
-            return false;
-        }
-
-        var model = {
-            listEmployeeDailyStatusReport: [
-            { ProjectId: project.val(), ReportCategoryId: reportcategory.val(), Description: description.val(), Hours: hours.val(), Minutes: minutes.val() },
-            { ProjectId: project2.val(), ReportCategoryId: reportcategory2.val(), Description: description2.val(), Hours: hours2.val(), Minutes: minutes2.val() },
-            { ProjectId: project3.val(), ReportCategoryId: reportcategory3.val(), Description: description3.val(), Hours: hours3.val(), Minutes: minutes3.val() },
-            { ProjectId: project4.val(), ReportCategoryId: reportcategory4.val(), Description: description4.val(), Hours: hours4.val(), Minutes: minutes4.val() }
-            ]
-        };
-
-        $.ajax({
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            url: "/EmployeeDailyStatusReport/AddEmployeeDailyStatusReport",
-            data: JSON.stringify(model),
-            dataType: 'json',
-            beforeSend: function () {
-                $("#lblMessage").html("Please wait...");
-                $(".dvAlert").addClass("alert-success");
-                $(".dvAlert").show();
-            },
-            success: function (response) {
-                $("#lblMessage").html(response.response);
-                if (response.isSuccess) {
-                    $(".dvAlert").addClass("alert-success");
+            if (project.val() != "0" && project.val() != "") {
+                if (description.val() == "") {
+                    description.css("border-color", "red");
+                    errorCount = errorCount + 1;
                 }
                 else {
-                    $(".dvAlert").addClass("alert-danger");
+                    description.css("border-color", "");
                 }
-                $(".dvAlert").show();
-                GetDailyStatusReports();
-                $("html, body").animate({ scrollTop: 0 }, "slow");
-                ClearFields();
-            },
-            error: function (error) {
-                $("#lblMessage").html("Something went wrong, please try again");
-                $(".dvAlert").addClass("alert-danger");
-                $(".dvAlert").show();
-                $("html, body").animate({ scrollTop: 0 }, "slow");
-                console.log(error);
+                if (description.val().length < 100) {
+                    description.css("border-color", "red");
+                    errorCount = errorCount + 1;
+                }
+                else {
+                    description.css("border-color", "");
+                }
+                if (hours.val() == "-1" || hours.val() == "") {
+                    hours.css("border-color", "red");
+                    errorCount = errorCount + 1;
+                }
+                else {
+                    hours.css("border-color", "");
+                }
+                if (reportcategory.val() == "0" || reportcategory.val() == "") {
+                    reportcategory.css("border-color", "red");
+                    errorCount = errorCount + 1;
+                }
+                else {
+                    reportcategory.css("border-color", "");
+                }
             }
-        });
-        }
-        else {
-            $(".dvAlert").addClass('alert-danger');
-            $("#lblMessage").html("<strong>Heads Up ! </strong> You can not add your Daily Status Report before 7:00 P.M. , Please wait till 7:00 P.M. <strong> Current Time is : " + $("#ctime").val() + "</strong>");
-            $(".dvAlert").show();
-            $("html, body").animate({ scrollTop: 0 }, "slow");
-            return false;
-        }
+            else {
+                description.css("border-color", "");
+                hours.css("border-color", "");
+                reportcategory.css("border-color", "");
+            }
+
+            if (project2.val() != "0" && project2.val() != "") {
+                if (description2.val() == "") {
+                    description2.css("border-color", "red");
+                    errorCount = errorCount + 1;
+                }
+                else {
+                    description2.css("border-color", "");
+                }
+                if (description2.val().length < 100) {
+                    description2.css("border-color", "red");
+                    errorCount = errorCount + 1;
+                }
+                else {
+                    description2.css("border-color", "");
+                }
+                if (hours2.val() == "-1" || hours2.val() == "") {
+                    hours2.css("border-color", "red");
+                    errorCount = errorCount + 1;
+                }
+                else {
+                    hours2.css("border-color", "");
+                }
+                if (reportcategory2.val() == "0" || reportcategory2.val() == "") {
+                    reportcategory2.css("border-color", "red");
+                    errorCount = errorCount + 1;
+
+                }
+                else {
+                    reportcategory2.css("border-color", "");
+
+                }
+            }
+            else {
+                description2.css("border-color", "");
+                hours2.css("border-color", "");
+                reportcategory2.css("border-color", "");
+            }
+
+            if (project3.val() != "0" && project3.val() != "") {
+                if (description3.val() == "") {
+                    description3.css("border-color", "red");
+                    errorCount = errorCount + 1;
+                }
+                else {
+                    description3.css("border-color", "");
+                }
+                if (description3.val().length < 100) {
+                    description3.css("border-color", "red");
+                    errorCount = errorCount + 1;
+                }
+                else {
+                    description3.css("border-color", "");
+                }
+                if (hours3.val() == "-1" || hours3.val() == "") {
+                    hours3.css("border-color", "red");
+                    errorCount = errorCount + 1;
+                }
+                else {
+                    hours3.css("border-color", "");
+                }
+                if (reportcategory3.val() == "0" || reportcategory3.val() == "") {
+                    reportcategory3.css("border-color", "red");
+                    errorCount = errorCount + 1;
+
+                }
+                else {
+                    reportcategory3.css("border-color", "");
+
+                }
+            }
+            else {
+                description3.css("border-color", "");
+                hours3.css("border-color", "");
+                reportcategory3.css("border-color", "");
+            }
+            if (project4.val() != "0" && project4.val() != "") {
+                if (description4.val() == "") {
+                    description4.css("border-color", "red");
+                    errorCount = errorCount + 1;
+                }
+                else {
+                    description4.css("border-color", "");
+                }
+                if (description4.val().length < 100) {
+                    description4.css("border-color", "red");
+                    errorCount = errorCount + 1;
+                }
+                else {
+                    description4.css("border-color", "");
+                }
+                if (hours4.val() == "-1" || hours4.val() == "") {
+                    hours4.css("border-color", "red");
+                    errorCount = errorCount + 1;
+                }
+                else {
+                    hours4.css("border-color", "");
+                }
+                if (reportcategory4.val() == "0" || reportcategory4.val() == "") {
+                    reportcategory4.css("border-color", "red");
+                    errorCount = errorCount + 1;
+
+                }
+                else {
+                    reportcategory4.css("border-color", "");
+
+                }
+            }
+            else {
+                description4.css("border-color", "");
+                hours4.css("border-color", "");
+                reportcategory4.css("border-color", "");
+            }
+            if (errorCount > 0) {
+                return false;
+            }
+
+            var model = {
+                listEmployeeDailyStatusReport: [
+                { ProjectId: project.val(), ReportCategoryId: reportcategory.val(), Description: description.val(), Hours: hours.val(), Minutes: minutes.val() },
+                { ProjectId: project2.val(), ReportCategoryId: reportcategory2.val(), Description: description2.val(), Hours: hours2.val(), Minutes: minutes2.val() },
+                { ProjectId: project3.val(), ReportCategoryId: reportcategory3.val(), Description: description3.val(), Hours: hours3.val(), Minutes: minutes3.val() },
+                { ProjectId: project4.val(), ReportCategoryId: reportcategory4.val(), Description: description4.val(), Hours: hours4.val(), Minutes: minutes4.val() }
+                ]
+            };
+
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "/EmployeeDailyStatusReport/AddEmployeeDailyStatusReport",
+                data: JSON.stringify(model),
+                dataType: 'json',
+                beforeSend: function () {
+                    $("#lblMessage").html("Please wait...");
+                    $(".dvAlert").addClass("alert-success");
+                    $(".dvAlert").show();
+                },
+                success: function (response) {
+                    $("#lblMessage").html(response.response);
+                    if (response.isSuccess) {
+                        $(".dvAlert").addClass("alert-success");
+                    }
+                    else {
+                        $(".dvAlert").addClass("alert-danger");
+                    }
+                    $(".dvAlert").show();
+                    GetDailyStatusReports();
+                    $("html, body").animate({ scrollTop: 0 }, "slow");
+                    ClearFields();
+                },
+                error: function (error) {
+                    $("#lblMessage").html("Something went wrong, please try again");
+                    $(".dvAlert").addClass("alert-danger");
+                    $(".dvAlert").show();
+                    $("html, body").animate({ scrollTop: 0 }, "slow");
+                    console.log(error);
+                }
+            });
+        //}
+        //else {
+        //    $(".dvAlert").addClass('alert-danger');
+        //    $("#lblMessage").html("<strong>Heads Up ! </strong> You can not add your Daily Status Report before 7:00 P.M. , Please wait till 7:00 P.M. <strong> Current Time is : " + $("#ctime").val() + "</strong>");
+        //    $(".dvAlert").show();
+        //    $("html, body").animate({ scrollTop: 0 }, "slow");
+        //    return false;
+        //}
     });
     function EditStatusReport(Report) {
         $("#lblMessage").html("");
@@ -544,266 +577,267 @@
         var errorCount = 0;
         var dt = new Date();
 
-        if ('19:00:00' < $("#ctime").val() && $("#ctime").val() < '23:59:59') {
-        var project = $("#listEmployeeDailyStatusReport_0__ProjectId");
-        var project2 = $("#listEmployeeDailyStatusReport_1__ProjectId");
-        var project3 = $("#listEmployeeDailyStatusReport_2__ProjectId");
-        var project4 = $("#listEmployeeDailyStatusReport_3__ProjectId");
-        if ((project.val() == "0" || project.val() == "") && (project2.val() == "0" || project2.val() == "") && (project3.val() == "0" || project3.val() == "") && (project4.val() == "0" || project4.val() == "")) {
-            var span = $("#select2-listEmployeeDailyStatusReport_0__ProjectId-container").parent();
-            span.css("border", "1px solid red");
-            errorCount = errorCount + 1;
-        }
-        else {
-            var span = $("#select2-listEmployeeDailyStatusReport_0__ProjectId-container").parent();
-            span.css("border", "");
-        }
-        var reportcategory = $("#listEmployeeDailyStatusReport_0__ReportCategoryId");
-        var reportcategory2 = $("#listEmployeeDailyStatusReport_1__ReportCategoryId");
-        var reportcategory3 = $("#listEmployeeDailyStatusReport_2__ReportCategoryId");
-        var reportcategory4 = $("#listEmployeeDailyStatusReport_3__ReportCategoryId");
+        //if ('19:00:00' < $("#ctime").val() && $("#ctime").val() < '23:59:59') {
+            var project = $("#listEmployeeDailyStatusReport_0__ProjectId");
+            var project2 = $("#listEmployeeDailyStatusReport_1__ProjectId");
+            var project3 = $("#listEmployeeDailyStatusReport_2__ProjectId");
+            var project4 = $("#listEmployeeDailyStatusReport_3__ProjectId");
+            if ((project.val() == "0" || project.val() == "") && (project2.val() == "0" || project2.val() == "") && (project3.val() == "0" || project3.val() == "") && (project4.val() == "0" || project4.val() == "")) {
+                var span = $("#select2-listEmployeeDailyStatusReport_0__ProjectId-container").parent();
+                span.css("border", "1px solid red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                var span = $("#select2-listEmployeeDailyStatusReport_0__ProjectId-container").parent();
+                span.css("border", "");
+            }
+            var reportcategory = $("#listEmployeeDailyStatusReport_0__ReportCategoryId");
+            var reportcategory2 = $("#listEmployeeDailyStatusReport_1__ReportCategoryId");
+            var reportcategory3 = $("#listEmployeeDailyStatusReport_2__ReportCategoryId");
+            var reportcategory4 = $("#listEmployeeDailyStatusReport_3__ReportCategoryId");
 
-        var description = $("#listEmployeeDailyStatusReport_0__Description");
-        var description2 = $("#listEmployeeDailyStatusReport_1__Description");
-        var description3 = $("#listEmployeeDailyStatusReport_2__Description");
-        var description4 = $("#listEmployeeDailyStatusReport_3__Description");
+            var description = $("#listEmployeeDailyStatusReport_0__Description");
+            var description2 = $("#listEmployeeDailyStatusReport_1__Description");
+            var description3 = $("#listEmployeeDailyStatusReport_2__Description");
+            var description4 = $("#listEmployeeDailyStatusReport_3__Description");
 
-        var hours = $("#listEmployeeDailyStatusReport_0__Hours");
-        var hours2 = $("#listEmployeeDailyStatusReport_1__Hours");
-        var hours3 = $("#listEmployeeDailyStatusReport_2__Hours");
-        var hours4 = $("#listEmployeeDailyStatusReport_3__Hours");
-        var minutes = $("#listEmployeeDailyStatusReport_0__Minutes");
-        var minutes2 = $("#listEmployeeDailyStatusReport_1__Minutes");
-        var minutes3 = $("#listEmployeeDailyStatusReport_2__Minutes");
-        var minutes4 = $("#listEmployeeDailyStatusReport_3__Minutes");
+            var hours = $("#listEmployeeDailyStatusReport_0__Hours");
+            var hours2 = $("#listEmployeeDailyStatusReport_1__Hours");
+            var hours3 = $("#listEmployeeDailyStatusReport_2__Hours");
+            var hours4 = $("#listEmployeeDailyStatusReport_3__Hours");
+            var minutes = $("#listEmployeeDailyStatusReport_0__Minutes");
+            var minutes2 = $("#listEmployeeDailyStatusReport_1__Minutes");
+            var minutes3 = $("#listEmployeeDailyStatusReport_2__Minutes");
+            var minutes4 = $("#listEmployeeDailyStatusReport_3__Minutes");
 
-        if (((reportcategory2.val() != "0" && reportcategory2.val() != "") || description2.val() != "" || (hours2.val() != "-1" && hours2.val() != "")) && (project2.val() == "0" || project2.val() == "")) {
-            var span = $("#select2-listEmployeeDailyStatusReport_1__ProjectId-container").parent();
-            span.css("border", "1px solid red");
-            errorCount = errorCount + 1;
-        }
-        else {
-            var span = $("#select2-listEmployeeDailyStatusReport_1__ProjectId-container").parent();
-            span.css("border", "");
-        }
-        if (((reportcategory3.val() != "0" && reportcategory3.val() != "") || description3.val() != "" || (hours3.val() != "-1" && hours3.val() != "")) && (project3.val() == "0" || project3.val() == "")) {
+            if (((reportcategory2.val() != "0" && reportcategory2.val() != "") || description2.val() != "" || (hours2.val() != "-1" && hours2.val() != "")) && (project2.val() == "0" || project2.val() == "")) {
+                var span = $("#select2-listEmployeeDailyStatusReport_1__ProjectId-container").parent();
+                span.css("border", "1px solid red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                var span = $("#select2-listEmployeeDailyStatusReport_1__ProjectId-container").parent();
+                span.css("border", "");
+            }
+            if (((reportcategory3.val() != "0" && reportcategory3.val() != "") || description3.val() != "" || (hours3.val() != "-1" && hours3.val() != "")) && (project3.val() == "0" || project3.val() == "")) {
 
-            var span = $("#select2-listEmployeeDailyStatusReport_2__ProjectId-container").parent();
-            span.css("border", "1px solid red");
-            errorCount = errorCount + 1;
-        }
-        else {
-            var span = $("#select2-listEmployeeDailyStatusReport_2__ProjectId-container").parent();
-            span.css("border", "");
-        }
-        if (((reportcategory4.val() != "0" && reportcategory4.val() != "") || description4.val() != "" || (hours4.val() != "-1" && hours4.val() != "")) && (project4.val() == "0" || project4.val() == "")) {
+                var span = $("#select2-listEmployeeDailyStatusReport_2__ProjectId-container").parent();
+                span.css("border", "1px solid red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                var span = $("#select2-listEmployeeDailyStatusReport_2__ProjectId-container").parent();
+                span.css("border", "");
+            }
+            if (((reportcategory4.val() != "0" && reportcategory4.val() != "") || description4.val() != "" || (hours4.val() != "-1" && hours4.val() != "")) && (project4.val() == "0" || project4.val() == "")) {
 
-            var span = $("#select2-listEmployeeDailyStatusReport_3__ProjectId-container").parent();
-            span.css("border", "1px solid red");
-            errorCount = errorCount + 1;
-        }
-        else {
-            var span = $("#select2-listEmployeeDailyStatusReport_3__ProjectId-container").parent();
-            span.css("border", "");
-        }
+                var span = $("#select2-listEmployeeDailyStatusReport_3__ProjectId-container").parent();
+                span.css("border", "1px solid red");
+                errorCount = errorCount + 1;
+            }
+            else {
+                var span = $("#select2-listEmployeeDailyStatusReport_3__ProjectId-container").parent();
+                span.css("border", "");
+            }
 
-        if (project.val() != "0" && project.val() != "") {
-            if (description.val() == "") {
-                description.css("border-color", "red");
-                errorCount = errorCount + 1;
-            }
-            else {
-                description.css("border-color", "");
-            }
-            if (description.val().length < 100) {
-                description.css("border-color", "red");
-                errorCount = errorCount + 1;
-            }
-            else {
-                description.css("border-color", "");
-            }
-            if (hours.val() == "-1" || hours.val() == "") {
-                hours.css("border-color", "red");
-                errorCount = errorCount + 1;
-            }
-            else {
-                hours.css("border-color", "");
-            }
-            if (reportcategory.val() == "0" || reportcategory.val() == "") {
-                reportcategory.css("border-color", "red");
-                errorCount = errorCount + 1;
-            }
-            else {
-                reportcategory.css("border-color", "");
-            }
-        }
-        else {
-            description.css("border-color", "");
-            hours.css("border-color", "");
-            reportcategory.css("border-color", "");
-        }
-
-        if (project2.val() != "0" && project2.val() != "") {
-            if (description2.val() == "") {
-                description2.css("border-color", "red");
-                errorCount = errorCount + 1;
-            }
-            else {
-                description2.css("border-color", "");
-            }
-            if (description2.val().length < 100) {
-                description2.css("border-color", "red");
-                errorCount = errorCount + 1;
-            }
-            else {
-                description2.css("border-color", "");
-            }
-            if (hours2.val() == "-1" || hours2.val() == "") {
-                hours2.css("border-color", "red");
-                errorCount = errorCount + 1;
-            }
-            else {
-                hours2.css("border-color", "");
-            }
-            if (reportcategory2.val() == "0" || reportcategory2.val() == "") {
-                reportcategory2.css("border-color", "red");
-                errorCount = errorCount + 1;
-
-            }
-            else {
-                reportcategory2.css("border-color", "");
-
-            }
-        }
-        else {
-            description2.css("border-color", "");
-            hours2.css("border-color", "");
-            reportcategory2.css("border-color", "");
-        }
-
-        if (project3.val() != "0" && project3.val() != "") {
-            if (description3.val() == "") {
-                description3.css("border-color", "red");
-                errorCount = errorCount + 1;
-            }
-            else {
-                description3.css("border-color", "");
-            }
-            if (description3.val().length < 100) {
-                description3.css("border-color", "red");
-                errorCount = errorCount + 1;
-            }
-            else {
-                description3.css("border-color", "");
-            }
-            if (hours3.val() == "-1" || hours3.val() == "") {
-                hours3.css("border-color", "red");
-                errorCount = errorCount + 1;
-            }
-            else {
-                hours3.css("border-color", "");
-            }
-            if (reportcategory3.val() == "0" || reportcategory3.val() == "") {
-                reportcategory3.css("border-color", "red");
-                errorCount = errorCount + 1;
-
-            }
-            else {
-                reportcategory3.css("border-color", "");
-
-            }
-        }
-        else {
-            description3.css("border-color", "");
-            hours3.css("border-color", "");
-            reportcategory3.css("border-color", "");
-        }
-        if (project4.val() != "0" && project4.val() != "") {
-            if (description4.val() == "") {
-                description4.css("border-color", "red");
-                errorCount = errorCount + 1;
-            }
-            else {
-                description4.css("border-color", "");
-            }
-            if (description4.val().length < 100) {
-                description4.css("border-color", "red");
-                errorCount = errorCount + 1;
-            }
-            else {
-                description4.css("border-color", "");
-            }
-            if (hours4.val() == "-1" || hours4.val() == "") {
-                hours4.css("border-color", "red");
-                errorCount = errorCount + 1;
-            }
-            else {
-                hours4.css("border-color", "");
-            }
-            if (reportcategory4.val() == "0" || reportcategory4.val() == "") {
-                reportcategory4.css("border-color", "red");
-                errorCount = errorCount + 1;
-
-            }
-            else {
-                reportcategory4.css("border-color", "");
-
-            }
-        }
-        else {
-            description4.css("border-color", "");
-            hours4.css("border-color", "");
-            reportcategory4.css("border-color", "");
-        }
-        if (errorCount > 0) {
-            return false;
-        }
-        var DailyReportId=  $("#listEmployeeDailyStatusReport_0__DailyReportId").val();
-        var model = {
-            listEmployeeDailyStatusReport: [
-            { DailyReportId: DailyReportId, ProjectId: project.val(), ReportCategoryId: reportcategory.val(), Description: description.val(), Hours: hours.val(), Minutes: minutes.val() }]
-        };
-
-        $.ajax({
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            url: "/EmployeeDailyStatusReport/AddEmployeeDailyStatusReport",
-            data: JSON.stringify(model),
-            dataType: 'json',
-            beforeSend: function () {
-                $("#lblMessage").html("Please wait...");
-                $(".dvAlert").addClass("alert-success");
-                $(".dvAlert").show();
-            },
-            success: function (response) {
-                $("#lblMessage").html(response.response);
-                if (response.isSuccess) {
-                    $(".dvAlert").addClass("alert-success");
+            if (project.val() != "0" && project.val() != "") {
+                if (description.val() == "") {
+                    description.css("border-color", "red");
+                    errorCount = errorCount + 1;
                 }
                 else {
-                    $(".dvAlert").addClass("alert-danger");
+                    description.css("border-color", "");
                 }
-                $(".dvAlert").show();
-                GetDailyStatusReports();
-                $("html, body").animate({ scrollTop: 0 }, "slow");
-                ClearFields();
-            },
-            error: function (error) {
-                $("#lblMessage").html("Something went wrong, please try again");
-                $(".dvAlert").addClass("alert-danger");
-                $(".dvAlert").show();
-                $("html, body").animate({ scrollTop: 0 }, "slow");
-                console.log(error);
+                if (description.val().length < 100) {
+                    description.css("border-color", "red");
+                    errorCount = errorCount + 1;
+                }
+                else {
+                    description.css("border-color", "");
+                }
+                if (hours.val() == "-1" || hours.val() == "") {
+                    hours.css("border-color", "red");
+                    errorCount = errorCount + 1;
+                }
+                else {
+                    hours.css("border-color", "");
+                }
+                if (reportcategory.val() == "0" || reportcategory.val() == "") {
+                    reportcategory.css("border-color", "red");
+                    errorCount = errorCount + 1;
+                }
+                else {
+                    reportcategory.css("border-color", "");
+                }
             }
-        });
-        }
-        else {
-            $(".dvAlert").addClass('alert-danger');
-            $("#lblMessage").html("<strong>Heads Up ! </strong> You can not add your Daily Status Report before 7:00 P.M. , Please wait till 7:00 P.M. <strong> Current Time is : " + $("#ctime").val() + "</strong>");
-            $(".dvAlert").show();
-            $("html, body").animate({ scrollTop: 0 }, "slow");
-          return false;
-        }
+            else {
+                description.css("border-color", "");
+                hours.css("border-color", "");
+                reportcategory.css("border-color", "");
+            }
+
+            if (project2.val() != "0" && project2.val() != "") {
+                if (description2.val() == "") {
+                    description2.css("border-color", "red");
+                    errorCount = errorCount + 1;
+                }
+                else {
+                    description2.css("border-color", "");
+                }
+                if (description2.val().length < 100) {
+                    description2.css("border-color", "red");
+                    errorCount = errorCount + 1;
+                }
+                else {
+                    description2.css("border-color", "");
+                }
+                if (hours2.val() == "-1" || hours2.val() == "") {
+                    hours2.css("border-color", "red");
+                    errorCount = errorCount + 1;
+                }
+                else {
+                    hours2.css("border-color", "");
+                }
+                if (reportcategory2.val() == "0" || reportcategory2.val() == "") {
+                    reportcategory2.css("border-color", "red");
+                    errorCount = errorCount + 1;
+
+                }
+                else {
+                    reportcategory2.css("border-color", "");
+
+                }
+            }
+            else {
+                description2.css("border-color", "");
+                hours2.css("border-color", "");
+                reportcategory2.css("border-color", "");
+            }
+
+            if (project3.val() != "0" && project3.val() != "") {
+                if (description3.val() == "") {
+                    description3.css("border-color", "red");
+                    errorCount = errorCount + 1;
+                }
+                else {
+                    description3.css("border-color", "");
+                }
+                if (description3.val().length < 100) {
+                    description3.css("border-color", "red");
+                    errorCount = errorCount + 1;
+                }
+                else {
+                    description3.css("border-color", "");
+                }
+                if (hours3.val() == "-1" || hours3.val() == "") {
+                    hours3.css("border-color", "red");
+                    errorCount = errorCount + 1;
+                }
+                else {
+                    hours3.css("border-color", "");
+                }
+                if (reportcategory3.val() == "0" || reportcategory3.val() == "") {
+                    reportcategory3.css("border-color", "red");
+                    errorCount = errorCount + 1;
+
+                }
+                else {
+                    reportcategory3.css("border-color", "");
+
+                }
+            }
+            else {
+                description3.css("border-color", "");
+                hours3.css("border-color", "");
+                reportcategory3.css("border-color", "");
+            }
+            if (project4.val() != "0" && project4.val() != "") {
+                if (description4.val() == "") {
+                    description4.css("border-color", "red");
+                    errorCount = errorCount + 1;
+                }
+                else {
+                    description4.css("border-color", "");
+                }
+                if (description4.val().length < 100) {
+                    description4.css("border-color", "red");
+                    errorCount = errorCount + 1;
+                }
+                else {
+                    description4.css("border-color", "");
+                }
+                if (hours4.val() == "-1" || hours4.val() == "") {
+                    hours4.css("border-color", "red");
+                    errorCount = errorCount + 1;
+                }
+                else {
+                    hours4.css("border-color", "");
+                }
+                if (reportcategory4.val() == "0" || reportcategory4.val() == "") {
+                    reportcategory4.css("border-color", "red");
+                    errorCount = errorCount + 1;
+
+                }
+                else {
+                    reportcategory4.css("border-color", "");
+
+                }
+            }
+            else {
+                description4.css("border-color", "");
+                hours4.css("border-color", "");
+                reportcategory4.css("border-color", "");
+            }
+            if (errorCount > 0) {
+                return false;
+            }
+            var DailyReportId = $("#listEmployeeDailyStatusReport_0__DailyReportId").val();
+            var EmployeeId = getParameterByName("EmployeeId");
+            var model = {
+                listEmployeeDailyStatusReport: [
+                { DailyReportId: DailyReportId, EmployeeId: EmployeeId, ProjectId: project.val(), ReportCategoryId: reportcategory.val(), Description: description.val(), Hours: hours.val(), Minutes: minutes.val() }]
+            };
+
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "/EmployeeDailyStatusReport/AddEmployeeDailyStatusReport",
+                data: JSON.stringify(model),
+                dataType: 'json',
+                beforeSend: function () {
+                    $("#lblMessage").html("Please wait...");
+                    $(".dvAlert").addClass("alert-success");
+                    $(".dvAlert").show();
+                },
+                success: function (response) {
+                    $("#lblMessage").html(response.response);
+                    if (response.isSuccess) {
+                        $(".dvAlert").addClass("alert-success");
+                        ClearFields();
+                        GetDailyStatusReports();
+                    }
+                    else {
+                        $(".dvAlert").addClass("alert-danger");
+                    }
+                    $(".dvAlert").show();
+                    $("html, body").animate({ scrollTop: 0 }, "slow");
+                },
+                error: function (error) {
+                    $("#lblMessage").html("Something went wrong, please try again");
+                    $(".dvAlert").addClass("alert-danger");
+                    $(".dvAlert").show();
+                    $("html, body").animate({ scrollTop: 0 }, "slow");
+                    console.log(error);
+                }
+            });
+        //}
+        //else {
+        //    $(".dvAlert").addClass('alert-danger');
+        //    $("#lblMessage").html("<strong>Heads Up ! </strong> You can not add your Daily Status Report before 7:00 P.M. , Please wait till 7:00 P.M. <strong> Current Time is : " + $("#ctime").val() + "</strong>");
+        //    $(".dvAlert").show();
+        //    $("html, body").animate({ scrollTop: 0 }, "slow");
+        //    return false;
+        //}
     });
     $("#btnCancel").click(function () {
         ClearFields();
@@ -858,5 +892,14 @@
         $("#listEmployeeDailyStatusReport_1__Minutes").val('00');
         $("#listEmployeeDailyStatusReport_2__Minutes").val('00');
         $("#listEmployeeDailyStatusReport_3__Minutes").val('00');
+    }
+    function getParameterByName(name) {
+        var url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
 </script>

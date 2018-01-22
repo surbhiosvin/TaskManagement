@@ -1,0 +1,406 @@
+﻿@using TaskManagementOsvin.Models;
+@{
+    ViewBag.Title = "AddUpdateProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var clients = ViewBag.Clients as List<ClientModel>;
+    var projectType = ViewBag.ProjectType as List<ProjectTypeModel>;
+    var profileList = ViewBag.ProfileList as List<GetProfilesModel>;
+}
+
+<div class="page-content">
+    <!-- BEGIN PAGE HEADER-->
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="javascript:">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="javascript:">Add/Update Project Profile</a>
+            </li>
+        </ul>
+    </div>
+    <!-- END PAGE BAR -->
+    <!-- BEGIN PAGE TITLE-->
+    <h1 class="page-title">
+        Add/Update Project Profile
+    </h1>
+    <!-- END PAGE TITLE-->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light form-fit bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-social-dribbble font-green"></i>
+                        <span class="caption-subject font-green bold uppercase">Add/Update Project Profile</span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Selected Profile</label>
+                                    <div class="bootstrap-tagsinput" id="showTags">
+                                        @if (profileList != null && profileList.Count() > 0)
+                                        {
+                                            foreach (var item in profileList)
+                                            {
+                                                <span class="tag label label-success">
+                                                    @item.ProfileName
+                                                    <span data-id="@item.ProfileId" onclick="removeItem(this)" data-role="remove"></span>
+                                                </span>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <form id="profileform" name="profileform">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Profile Name</label>
+                                        <input type="text" class="form-control" placeholder="Enter Profile Name" id="profiles"  />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Select Project</label>
+                                        @Html.DropDownList("ProjectId", new SelectList(ViewBag.listProjects ,"ProjectId", "ProjectTitle"), "----Select Project-----", new { @id = "single-append-text", @class = "form-control select2-allow-clear",@required="required" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Project Type</label>
+                                        @Html.DropDownList("ProjectTypeId", new SelectList(ViewBag.ProjectType, "TypeId", "TypeName"), "----Select Project Type-----", new { @class = "form-control", @required = "required" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="display:none" id="HourlyDiv">
+                                    <div class="form-group">
+                                        <label>Hourly Rate</label>
+                                        <input type="text" value="" class="form-control" id="HourlyRate" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Logged Hours</label>
+                                        <input type="text" value="" class="form-control" id="loggedHours" required  />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Amount (In Dollars)</label>
+                                        <input type="text" value="" class="form-control" id="amount" required />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input type="submit" class="btn red" value="Add Profile" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input type="button" class="btn purple btn-block" value="Save" onclick="SaveInDB()" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var counter = 1;
+    var userProfiles = [];
+    var addedProfiles = [];
+    $(document).ready(function () {
+
+        var getProjectId = getUrlVars()["ProjectId"];
+        if (getProjectId != undefined && getProjectId > 0) {
+            $.ajax({
+                type: "GET",
+                url: "/api/Profile/GetProfilesByProjectId/" + getProjectId,
+                content: "application/json;",
+                dataType: "json",
+                success: function (data, textStatus, xhr) {
+                    for (var i = 0; i < data.length; i++) {
+                        addedProfiles.push({
+                            ProfileId: data[i].ProfileId,
+                            profilename: data[i].ProfileName,
+                            projectId: data[i].ProjectId,
+                            projectTypeId: data[i].ProjectTypeId,
+                            hourlyRate: data[i].HourlyRate,
+                            loggedHours: data[i].LoggedHours,
+                            amount: data[i].TotalAmount
+                        });
+                    }
+                    $('#single-append-text').select2({
+                        disabled: true
+                    });
+                    BindArrayToHtml();
+                },
+                error: function () {
+                    swal("Error!", 'Error occurred', "error");
+                }
+            });
+        }
+
+
+        $.ajax({
+            type: "GET",
+            url: "/api/Employee/GetEmployees",
+            content: "application/json;",
+            dataType: "json",
+            success: function (data, textStatus, xhr) {
+                for (var i = 0; i < data.length; i++) {
+                    userProfiles.push(data[i].EmployeeName);
+                }
+            }
+        });
+
+        $('#profiles').tagsinput({
+            typeahead: {
+                source: userProfiles,
+                afterSelect: () => {
+                    $("#profiles").tagsinput('input').val('');
+                }
+            },
+            //freeInput: false,
+            tagClass: 'label label-info',
+            maxTags: 1
+        });
+    })
+
+    //$(document).click(function () {
+    //    FillAmount();
+    //})
+
+    // Read a page's GET URL variables and return them as an associative array.
+    function getUrlVars() {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for (var i = 0; i < hashes.length; i++) {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    }
+
+    $('#ProjectTypeId').change(function () {
+        ShowHideDiv();
+    })
+
+    function ShowHideDiv() {
+        var value = $('#ProjectTypeId option:selected').text().toLowerCase();
+        if (value.indexOf("hourly") >= 0) {
+            $('#HourlyDiv').show();
+            $('#amount').val('');
+            //$('#amount').prop('readonly', true);
+            $('#HourlyRate').prop('required', true);
+        }
+        else {
+            $('#amount').val('');
+            //$('#amount').prop('readonly', false);
+            $('#HourlyRate').val('');
+            $('#HourlyDiv').hide();
+            $('#HourlyRate').prop('required', false);
+        }
+    }
+
+    $(document).on("input", "#HourlyRate,#loggedHours,#amount", function () {
+        this.value = this.value.replace(/\D/g, '');
+    });
+
+    //function calculatePrice() {
+    //    var loggedHours = $('#loggedHours').val();
+    //    var HourlyRate = $('#HourlyRate').val();
+    //    if (loggedHours != '' && HourlyRate != '') {
+    //        var isNumeric = /^\d+$/.test(HourlyRate);
+    //        if (isNumeric) {
+    //            $('#amount').val(HourlyRate * loggedHours);
+    //        }
+    //    }
+    //    else {
+    //        $('#amount').val('');
+    //    }
+    //}
+
+    //function FillAmount() {
+    //    var loggedHours = $('#loggedHours').val();
+    //    var HourlyRate = $('#HourlyRate').val();
+    //    if (loggedHours != '' && HourlyRate != '') {
+    //        var isNumeric = /^\d+$/.test(HourlyRate);
+    //        if (isNumeric) {
+    //            $('#amount').val(HourlyRate * loggedHours);
+    //        }
+    //    }
+    //}
+
+    function removeItem(span) {
+        var uID = $(span).data('id');
+        var index = addedProfiles.map(function (x) { return x.ProfileId; }).indexOf(uID);
+        addedProfiles.splice(index, 1);
+        counter += 1;
+        initiateProfileField();
+        BindArrayToHtml();
+    }
+
+    $('#profileform').submit(function (e) {
+        e.preventDefault();
+        if ($('#profiles').parent('.form-group').find('.bootstrap-tagsinput span').length <= 0) {
+            $('#profiles').parent('.form-group').find('.bootstrap-tagsinput input[type=text]').val('');
+            $("#profileform")[0].reportValidity();
+        }
+        else {
+            var profilename = $("#profiles").val();
+            var projectId = $('#single-append-text option:selected').val();
+            var projectTypeId = $('#ProjectTypeId option:selected').val();
+            var hourlyRate = $('#HourlyRate').val() == '' ? 0 : $('#HourlyRate').val();
+            var loggedHours = $('#loggedHours').val();
+            var amount = $('#amount').val();
+            addedProfiles.push({
+                ProfileId: getId(),
+                profilename: profilename,
+                projectId: projectId,
+                projectTypeId: projectTypeId,
+                hourlyRate: hourlyRate,
+                loggedHours: loggedHours,
+                amount: amount
+            });
+            BindArrayToHtml();
+            initializeform();
+        }
+    });
+
+    $('#profiles').on('itemRemoved', function (event) {
+        // event.item: contains the item
+        initiateProfileField();
+    });
+
+    $('#profiles').on('itemAdded', function (event) {
+        // event.item: contains the item
+        $("#profiles").tagsinput('input').val('');
+        initiateProfileField();
+    });
+
+    $(window).load(function () {
+        initiateProfileField();
+    })
+
+    function initiateProfileField() {
+        if ($('#profiles').parent('.form-group').find('.bootstrap-tagsinput span').length <= 0) {
+            $('.bootstrap-tagsinput input[type=text]').prop('required', true);
+        }
+        else {
+            $('.bootstrap-tagsinput input[type=text]').prop('required', false);
+        }
+    }
+
+    function SaveInDB() {
+        if (addedProfiles.length > 0) {
+            $.ajax({
+                type: "POST",
+                url: "/Project/AddUpdateProfile",
+                dataType: 'json',
+                data: { ProfileList: addedProfiles },
+                success: function (response) {
+                    if (response.isSuccess) {
+                        BindArrayToHtmlWithoutRemoveButton();
+                        addedProfiles = [];
+                        console.log($('<div/>').html(response.reason).text())
+                        swal("Success!", $('<div/>').html(response.reason).text(), "success");
+                    }
+                    else {
+                        swal("Error!", response.reason, "error");
+                    }
+                },
+                error: function (response) {
+                    swal("Error!", 'Error occurred', "error");
+                }
+            });
+        }
+        else {
+            swal("Error!", "No Profile Added!", "error");
+        }
+    }
+
+    function initializeform() {
+        $('#profiles').tagsinput('removeAll');
+        initiateProfileField();
+        $('#ProjectTypeId').val('');
+        var getProjectId = getUrlVars()["ProjectId"];
+        if (getProjectId === undefined) {
+            $('#single-append-text').val("").trigger("change.select2");
+        }
+        $('#HourlyRate').val('');
+        $('#loggedHours').val('');
+        $('#amount').val('');
+        $('#amount').prop('readonly', false);
+        $('#HourlyDiv').hide();
+    }
+
+    function BindArrayToHtml() {
+        if (addedProfiles.length > 0) {
+            console.log(addedProfiles)
+            $('#showTags').html('');
+            addedProfiles.forEach(function (item) {
+                var html = '<span class="tag label label-success">' + item.profilename  +
+                    '<span data-role="remove" onclick="removeItem(this)" data-id="' + item.ProfileId + '"></span>' +
+                    '</span>';
+                $('#showTags').append(html);
+            })
+        }
+        else {
+            $('#showTags').html('');
+        }
+    }
+
+    function BindArrayToHtmlWithoutRemoveButton() {
+        if (addedProfiles.length > 0) {
+            $('#showTags').html('');
+            addedProfiles.forEach(function (item) {
+                var html = '<span class="tag label label-success">' + item.profilename +
+                    '</span>';
+                $('#showTags').append(html);
+            })
+        }
+        else {
+            $('#showTags').html('');
+        }
+    }
+
+    function getId() {
+        if (addedProfiles.length == 0) {
+            return 1;
+        }
+        else {
+            return addedProfiles[addedProfiles.length - 1].ProfileId + counter;
+        }
+    }
+</script>
+

@@ -19,7 +19,7 @@ namespace TaskManagementOsvin.Controllers
     public class BugsController : Controller
     {
         // GET: Bugs
-        public ActionResult ReportBug(long BugId=0)
+        public ActionResult ReportBug(long BugId = 0)
         {
             var client = new HttpClient();
             BugsModel model = new BugsModel();
@@ -37,8 +37,8 @@ namespace TaskManagementOsvin.Controllers
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;
                     var Response = JsonConvert.DeserializeObject<List<BugsModel>>(contents);
-                    if(Response.Count>0)
-                    model = Response.FirstOrDefault();
+                    if (Response.Count > 0)
+                        model = Response.FirstOrDefault();
                 }
             }
             client = new HttpClient();
@@ -71,7 +71,7 @@ namespace TaskManagementOsvin.Controllers
                 new SelectListItem {Text="Closed", Value="Closed" }
             };
             ViewData["ddlPriority"] = listPriority;
-            ViewData["ddlStatus"] = listStatus;            
+            ViewData["ddlStatus"] = listStatus;
             ViewBag.Class = "display-hide";
             return View(model);
         }
@@ -99,7 +99,7 @@ namespace TaskManagementOsvin.Controllers
                         if (Response.isSuccess == true)
                         {
                             if (Response.response == "Bug added successfully.")
-                            { 
+                            {
                                 //String Email = GetUserEmail(model.UserId);                                
                                 ////Session["Email1"] = Email;
                                 ////Session["ProjectName"] = model.ProjectId;
@@ -238,6 +238,57 @@ namespace TaskManagementOsvin.Controllers
             ViewData["ddlStatus"] = listStatus;
             return View(model);
         }
+        public ActionResult BugsList()
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+            var Clientresult = client.GetAsync("/api/Bugs/GetEmployees").Result;
+            if (Clientresult.StatusCode == HttpStatusCode.OK)
+            {
+                var contents = Clientresult.Content.ReadAsStringAsync().Result;
+                var response = new JavaScriptSerializer().Deserialize<List<EmployeesDomainModel>>(contents);
+                ViewBag.listEmployees = new SelectList(response, "UserId", "EmployeeName");
+            }
+            var ClientResult1 = client.GetAsync("/api/Project/GetProjectList").Result;
+            if (ClientResult1.StatusCode == HttpStatusCode.OK)
+            {
+                var contents = ClientResult1.Content.ReadAsStringAsync().Result;
+                var response = new JavaScriptSerializer().Deserialize<List<ProjectDomainModel>>(contents);
+                ViewBag.listProjects = new SelectList(response, "ProjectId", "ProjectTitle");
+            }
+            return View();
+        }
+        public ActionResult _BugsList(long UserId = 0, long ProjectId = 0)
+        {
+            BugsDomainModel model = new BugsDomainModel();
+            List<BugsDomainModel> listBugs = new List<BugsDomainModel>();
+            if (UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType == roleTypeModel.HR || UserManager.user.roleType == roleTypeModel.ProjectManager)
+            {
+                model.BugId = 0;
+                model.Mode = "QA";
+                model.UserId = UserId;
+                model.ProjectId = ProjectId;
+            }
+            else
+            {
+                model.BugId = 0;
+                model.Mode = "Employee";
+                model.UserId = UserManager.user.UserId;
+                model.ProjectId = ProjectId;
+            }
+            var client = new HttpClient();
+            var serialized = JsonConvert.SerializeObject(model);
+            var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
+            client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+            var result = client.PostAsync("/api/Bugs/GetBugDetails", content).Result;
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                var contents = result.Content.ReadAsStringAsync().Result;
+                var Response = JsonConvert.DeserializeObject<List<BugsDomainModel>>(contents);
+                listBugs = Response;
+            }
+            return PartialView(listBugs);
+        }
         #region UserDefined Functions
         public string AddBugFiles(string Files)
         {
@@ -257,13 +308,13 @@ namespace TaskManagementOsvin.Controllers
         }
         public string UpdateBugFiles(long BugId, string Files)
         {
-            BugFilesDomainModel model = new BugFilesDomainModel() {BugId=BugId, Files = Files };
+            BugFilesDomainModel model = new BugFilesDomainModel() { BugId = BugId, Files = Files };
             string Response = string.Empty;
             var client = new HttpClient();
             var serialized = JsonConvert.SerializeObject(model);
             var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var result = client.PostAsync("/api/Bugs/UpdateBugFiles",content).Result;
+            var result = client.PostAsync("/api/Bugs/UpdateBugFiles", content).Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;
@@ -285,14 +336,14 @@ namespace TaskManagementOsvin.Controllers
                     {
                         var contents = result.Content.ReadAsStringAsync().Result;
                         var Response = JsonConvert.DeserializeObject<EmployeeDomainModel>(contents);
-                        if(Response!=null && Response.UserId>0)
+                        if (Response != null && Response.UserId > 0)
                         {
                             Email = Response.Email;
                         }
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ErrorLog.LogError(ex);
             }
@@ -306,7 +357,7 @@ namespace TaskManagementOsvin.Controllers
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
                 var result = client.GetAsync("/api/Project/GetProjectFullDetails?ProjectId=" + ProjectId).Result;
-                if(result.StatusCode==HttpStatusCode.OK)
+                if (result.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;
                     var Response = JsonConvert.DeserializeObject<ProjectFullDetailsDomainModel>(contents);
@@ -316,7 +367,7 @@ namespace TaskManagementOsvin.Controllers
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ErrorLog.LogError(ex);
             }

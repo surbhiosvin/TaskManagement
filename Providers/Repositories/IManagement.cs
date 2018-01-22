@@ -27,5 +27,7 @@ namespace Providers.Repositories
         ResponseDomainModel AddUpdateDesignation(DesignationDomainModel model);
         PaySlipDomainModel AddUpdateEmployeePaySlip(PaySlipDomainModel model);
         List<EmployeeDomainModel> GetEmployeeList();
+        List<EmployeeDomainModel> GetAllTeamLeaders();
+        List<EmployeeDomainModel> GetEmployeeByTeamLeaderDepartmentId(long DepartmentId);
     }
 }

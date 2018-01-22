@@ -14,6 +14,7 @@ namespace TaskManagementOsvin.Models
         public long DailyReportId { get; set; }
         public long EmployeeId { get; set; }
         public DateTime ReportDate { get; set; }
+        public string ReportDateStr { get; set; }
         public long ProjectId { get; set; }
         public int ReportCategoryId { get; set; }
         public string TaskName { get; set; }

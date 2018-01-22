@@ -1,0 +1,91 @@
+﻿@using TaskManagementOsvin.Security;
+@using TaskManagementOsvin.Models;
+@model List<EmployeeTotalWorkingHoursReportDomainModel>
+<div class="text-center">
+    <h4 class="bold" style="color:#600012">@ViewBag.EmpInfo</h4>
+</div>
+<div class="row">
+    <div style="padding-bottom:40px;">
+        <div class="col-md-12">
+            <div style="width:20px;height:20px;float:left" class="blink"></div>
+            <span style="display: inline;margin:0 5px 0 5px;float:left;"><strong>: Reports of previous day Filled by Team Leader</strong></span>
+        </div>
+    </div>
+</div>
+<hr />
+@if (Model != null && Model.Count > 0)
+{
+    int i = 1;
+    <table class="table table-striped table-bordered table-hover table-header-fixed" id="sample_3">
+        <thead>
+            <tr class="">
+                <th class="text-center" style="min-width:50px;"> Date </th>
+                <th class="text-center"> Details </th>
+                <th class="text-center"> Total Working Hours </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var report in Model)
+            {
+                if (report.listEmployeeDailyReportDetails != null && report.listEmployeeDailyReportDetails.Count > 0)
+                {
+                    <tr>
+                        <td class="text-center vertical-center"> @report.CreatedDate </td>
+                        <td>
+                            <table class="table table-responsive">
+                                <tbody>
+                                    @if (i == 1)
+                                    {
+                                    <tr>
+                                        <th class="text-center" style="min-width:70px;"> Time </th>
+                                        <th class="text-center"> Project </th>
+                                        <th class="text-center"> Task Category </th>
+                                        <th class="text-center"> Description </th>
+                                        <th class="text-center"> Working Hours </th>
+                                        @if (UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType == roleTypeModel.HR)
+                                            {
+                                            <th class="text-center"> Edit </th>
+                                            }
+                                        <th class="text-center"> </th>
+                                    </tr>
+                                    }
+                                    @foreach (var obj in report.listEmployeeDailyReportDetails)
+                                    {
+                                    <tr>
+                                        <td class="text-center" style="min-width:70px;"> @obj.Time </td>
+                                        <td class="text-center"> @obj.ProjectTitle </td>
+                                        <td class="text-center"> @obj.CategoryName </td>
+                                        <td class="text-center"> @obj.Description </td>
+                                        <td class="text-center"> @obj.WorkingHours </td>
+                                        @if (UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType == roleTypeModel.HR)
+                                            {
+                                            <td class="text-center"><a title="Edit" class="btn green" href="~/EmployeeDailyStatusReport/AddEmployeeDailyStatusReport?DailyReportId=@obj.DailyReportId&EmployeeId=@ViewBag.EmployeeId"><i class="fa fa-edit"></i></a> </td>
+                                            }
+                                        @if (!string.IsNullOrWhiteSpace(obj.CreatedBy) && obj.EmployeeName != obj.CreatedBy)
+                                            {
+                                            <td class="text-center"><div style="width:35px;height:35px;" class="blink"></div></td>
+                                            }
+                                            else
+                                            {
+                                            <td class="text-center"><div style="width:35px;height:35px;"></div></td>
+                                            }
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </td>
+                        <td class="text-center vertical-center"> @report.TotalWorking</td>
+                    </tr>
+                    i++;
+                }
+            }         
+        </tbody>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td class="text-center">@Model[0].EmployeeTotalWorkingHoursTillDate</td>
+            </tr>
+        </tfoot>        
+    </table>
+}

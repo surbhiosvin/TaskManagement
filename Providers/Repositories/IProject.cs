@@ -26,5 +26,15 @@ namespace Providers.Repositories
         bool UpdateProjectArchive(long projectid);
         ResponseDomainModel UpdateProjectStatus(UpdateProjectStatusDomainModel model);
         GetProjectByIdDomainModel GetProjectDetailsById(long ProjectId);
+        List<ProjectFullDetailsDomainModel> GetProjectReportDetails(string StartDate, string EndDate);
+        string GetProjectTotalWorkingHoursTillDate(long ProjectId);
+        ResponseDomainModel AddPaymentRelease(AddUpdatePaymentReleaseDomainModel model);
+        ResponseDomainModel UpdatePaymentRelease(AddUpdatePaymentReleaseDomainModel model);
+        GetPaymentDomainModel GetPaymentById(long PaymentId);
+        List<GetDepAndEmpProjDomainModel> GetDepartmentAndEmpInProject(long ProjectId);
+        List<EmpWorkedOnProjDomainModel> EmployeesWorkedOnProject(long ProjectId);
+        List<WeeksBwDateDomainModel> WeeksBetweenDates(long ProjectId);
+        List<HoursByDateAndProjDomainModel> GetHoursBetweenTwoDates(GetHrsByDateAndProjDomainModel model);
+        List<WorkingHoursDomainModel> GetIndividualWorkingHours(GetIndividualWorkingHoursDomainModel model);
     }
 }

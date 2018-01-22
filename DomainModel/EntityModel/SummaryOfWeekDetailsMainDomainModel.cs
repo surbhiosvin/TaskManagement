@@ -17,17 +17,7 @@ namespace DomainModel.EntityModel
         public string ProjectTitle { get; set; }
         public decimal WorkingHours { get; set; }
         public string ClientName { get; set; }
-        public decimal TotalWorkingHours { get; set; }
-        public decimal TotalDotNetWorkingHours { get; set; }
-        public decimal TotalPhpWorkingHours { get; set; }
-        public decimal TotalAndroidWorkingHours { get; set; }
-        public decimal TotalIOSWorkingHours { get; set; }
-        public decimal TotalDesignWorkingHours { get; set; }
-        public decimal TotalSeoWorkingHours { get; set; }
-        public decimal TotalQaWorkingHours { get; set; }
-        public decimal TotalHybridWorkingHours { get; set; }
-        public decimal TotalWeeklyWorkingHours { get; set; }
-        public decimal OverallTotalWorkingHours { get; set; }
+        
     }
 
     public class SummaryOfWeekSubDetailsMainDomainModel
@@ -36,7 +26,7 @@ namespace DomainModel.EntityModel
         public int DepartmentId { get; set; }
         public string DepartmentName { get; set; }
         public decimal WorkingHours { get; set; }
-        public DepartmentNameDomainModel DepartmentType { get; set; }
+        //public DepartmentNameDomainModel DepartmentType { get; set; }
     }
 
     public enum DepartmentNameDomainModel

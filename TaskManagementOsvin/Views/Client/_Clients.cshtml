@@ -42,10 +42,11 @@
                         {
                             <td class="text-center" id="StatusActive_@client.DepartmentId"><a title="InActive" id="StatusActiveLink_@client.DepartmentId" href="#" onclick="ActivateDeactivateDepartment(@Dept.DepartmentId, true)"><img alt='In Active Slip' src='~/assets/global/img/Guiimages/InActive.png' width='30px' height='30px' /></a></td>
                         }*@
-                    <td class="text-center"><a class="btn green-dark" href="#" onclick="EditClient(@Json.Encode(client))"><i class="fa fa-edit"></i></a> </td>
+                    <td class="text-center"><a  title="edit" class="btn green-dark" href="javascript:" onclick="EditClient(@Json.Encode(client))"><i class="fa fa-edit"></i></a> 
+                    </td>
                     @if (UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType == roleTypeModel.HR)
                     {
-                        <td class="text-center"><a class="red" href="#" onclick="ArchiveClient(@client.ClientId)"><img alt="Archive/NonArchive" src="~/assets/global/img/Guiimages/archive-image.png" width="30px" height="30px" /></a> </td>
+                        <td class="text-center vertical-center"><a class="red" href="javascript:" onclick="ArchiveClient(@client.ClientId)" title="archive"><i class="fa fa-archive" style="font-size:20px"></i> </a> </td>
                     }
                 </tr>
             }

@@ -8,12 +8,15 @@ using System.Web.Http;
 using Providers.Providers.SP.Repositories;
 using DomainModel.EntityModel;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Globalization;
 
 namespace TaskManagementOsvin.Controllers
 {
     public class EmployeeController : ApiController
     {
-        decimal TotalDotNetWorkingHours, TotalPhpWorkingHours, TotalAndroidWorkingHours, TotalIOSWorkingHours, TotalDesignWorkingHours, TotalSeoWorkingHours, TotalQaWorkingHours, TotalHybridHours = 0;
+        
+        decimal TotalDotNetWorkingHours, TotalPhpWorkingHours, TotalAndroidWorkingHours, TotalIOSWorkingHours, TotalDesignWorkingHours, TotalSeoWorkingHours, TotalQaWorkingHours, TotalHybridHours = 0, TotalWorkingHoursOfProject = 0, OverAllTotalWorkingHoursOfProject = 0;
         static readonly IEmployee EmployeeRepository = new EmployeeRepository();
         // GET api/<controller>
         [HttpPost]
@@ -121,10 +124,108 @@ namespace TaskManagementOsvin.Controllers
         }
 
         [HttpPost]
+        [Route("~/api/Employee/GetSummaryOfWeekDetails")]
+        public HttpResponseMessage GetSummaryOfWeekDetails(GetDSRDomainModel model)
+        {
+            try
+            {
+                SummaryDSRDomainModel SummaryModel = null;
+                HttpResponseMessage httpResponse = new HttpResponseMessage();
+                if (model != null)
+                {
+                   
+                    var dsrs = EmployeeRepository.GetSummaryOfWeekDetails(model);
+                    if (dsrs == null)
+                    {
+                        httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
+                    }
+                    else if (dsrs.Count() == 0)
+                    {
+                        httpResponse = Request.CreateResponse(HttpStatusCode.OK, SummaryModel);
+                    }
+                    else
+                    {
+                        SummaryModel = new SummaryDSRDomainModel();
+
+                        Parallel.ForEach(dsrs, d =>
+                        {
+                            var mins = ConversionInMinute(d.WorkingHoursOfProject);
+                            var finalmins = ConversionInMinute(TotalWorkingHoursOfProject.ToString());
+                            var overAllMins = mins + finalmins;
+                            var finalhrs = ConversionInHour(overAllMins);
+                            TotalWorkingHoursOfProject = finalhrs;
+
+                            var overAllWorkingHoursMins = ConversionInMinute(d.TotalWorkingHoursOfProject);
+                            var overAllWorkingHourfinalmins = ConversionInMinute(OverAllTotalWorkingHoursOfProject.ToString());
+                            var overAllWorkingHourMins = overAllWorkingHoursMins + overAllWorkingHourfinalmins;
+                            OverAllTotalWorkingHoursOfProject = ConversionInHour(overAllWorkingHourMins);
+                        });
+                        SummaryModel.dsr = dsrs;
+                        SummaryModel.OverallTotalWorkingHours = TotalWorkingHoursOfProject;
+                        SummaryModel.OverallWeekTotalWorkingHours = OverAllTotalWorkingHoursOfProject;
+                        httpResponse = Request.CreateResponse(HttpStatusCode.OK, SummaryModel);
+                    }
+                }
+                else
+                {
+                    httpResponse = Request.CreateErrorResponse(HttpStatusCode.NotFound, "Not Found");
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+
+        [HttpPost]
+        [Route("~/api/Employee/GetWeekelySummaryOfEmpDetails")]
+        public HttpResponseMessage GetWeekelySummaryOfEmpDetails(GetDSRDomainModel model)
+        {
+            try
+            {
+                HttpResponseMessage httpResponse = new HttpResponseMessage();
+                if (model != null)
+                {
+
+                    var dsrs = EmployeeRepository.GetWeekelySummaryOfEmpDetails(model);
+                    if (dsrs == null)
+                    {
+                        httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
+                    }
+                    else
+                    {
+                        httpResponse = Request.CreateResponse(HttpStatusCode.OK, dsrs);
+                    }
+                }
+                else
+                {
+                    httpResponse = Request.CreateErrorResponse(HttpStatusCode.NotFound, "Not Found");
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+
+        [HttpPost]
         [Route("~/api/Employee/SummaryOfWeekDetails")]
         public HttpResponseMessage SummaryOfWeekDetails(GetSummaryDomainModel model)
         {
-            decimal hours = 0; decimal finalHours = 0;
+            decimal hours, finalHours = 0;
+            OverAllSummaryOfWeekDetailsMainDomainModel OverAllSummaryOfWeekDetailsModel = new OverAllSummaryOfWeekDetailsMainDomainModel();
             List<SummaryOfWeekDetailsMainDomainModel> SummaryOfWeekDetailsMainModelList = new List<SummaryOfWeekDetailsMainDomainModel>();
             try
             {
@@ -169,6 +270,8 @@ namespace TaskManagementOsvin.Controllers
                                     var finalmins = ConversionInMinute(TotalDotNetWorkingHours.ToString());
                                     var finalhrs = ConversionInHour(finalmins);
                                     TotalDotNetWorkingHours = finalhrs;
+                                    //var TotalWeeklyHoursMins = ConversionInMinute(TotalWeeklyHours.ToString()) + finalmins;
+                                    //TotalWeeklyHours = ConversionInHour(TotalWeeklyHoursMins);
                                 }
 
                                 var PhpHours = item.subweeksummary.FirstOrDefault(x => x.DepartmentName == "Php");
@@ -180,6 +283,8 @@ namespace TaskManagementOsvin.Controllers
                                     var finalmins = ConversionInMinute(TotalPhpWorkingHours.ToString());
                                     var finalhrs = ConversionInHour(finalmins);
                                     TotalPhpWorkingHours = finalhrs;
+                                    //var TotalWeeklyHoursMins = ConversionInMinute(TotalWeeklyHours.ToString()) + finalmins;
+                                    //TotalWeeklyHours = ConversionInHour(TotalWeeklyHoursMins);
                                 }
 
                                 var AndroidHours = item.subweeksummary.FirstOrDefault(x => x.DepartmentName == "Android");
@@ -191,6 +296,8 @@ namespace TaskManagementOsvin.Controllers
                                     var finalmins = ConversionInMinute(TotalAndroidWorkingHours.ToString());
                                     var finalhrs = ConversionInHour(finalmins);
                                     TotalAndroidWorkingHours = finalhrs;
+                                    //var TotalWeeklyHoursMins = ConversionInMinute(TotalWeeklyHours.ToString()) + finalmins;
+                                    //TotalWeeklyHours = ConversionInHour(TotalWeeklyHoursMins);
                                 }
 
                                 var IOSHours = item.subweeksummary.FirstOrDefault(x => x.DepartmentName == "IPhone");
@@ -202,6 +309,8 @@ namespace TaskManagementOsvin.Controllers
                                     var finalmins = ConversionInMinute(TotalIOSWorkingHours.ToString());
                                     var finalhrs = ConversionInHour(finalmins);
                                     TotalIOSWorkingHours = finalhrs;
+                                    //var TotalWeeklyHoursMins = ConversionInMinute(TotalWeeklyHours.ToString()) + finalmins;
+                                    //TotalWeeklyHours = ConversionInHour(TotalWeeklyHoursMins);
                                 }
 
                                 var DesignHours = item.subweeksummary.FirstOrDefault(x => x.DepartmentName == "Design");
@@ -213,6 +322,8 @@ namespace TaskManagementOsvin.Controllers
                                     var finalmins = ConversionInMinute(TotalDesignWorkingHours.ToString());
                                     var finalhrs = ConversionInHour(finalmins);
                                     TotalDesignWorkingHours = finalhrs;
+                                    //var TotalWeeklyHoursMins = ConversionInMinute(TotalWeeklyHours.ToString()) + finalmins;
+                                    //TotalWeeklyHours = ConversionInHour(TotalWeeklyHoursMins);
                                 }
 
                                 var SEOHours = item.subweeksummary.FirstOrDefault(x => x.DepartmentName == "SEO");
@@ -224,6 +335,8 @@ namespace TaskManagementOsvin.Controllers
                                     var finalmins = ConversionInMinute(TotalSeoWorkingHours.ToString());
                                     var finalhrs = ConversionInHour(finalmins);
                                     TotalSeoWorkingHours = finalhrs;
+                                    //var TotalWeeklyHoursMins = ConversionInMinute(TotalWeeklyHours.ToString()) + finalmins;
+                                    //TotalWeeklyHours = ConversionInHour(TotalWeeklyHoursMins);
                                 }
 
                                 var QAHours = item.subweeksummary.FirstOrDefault(x => x.DepartmentName == "QA");
@@ -235,6 +348,8 @@ namespace TaskManagementOsvin.Controllers
                                     var finalmins = ConversionInMinute(TotalQaWorkingHours.ToString());
                                     var finalhrs = ConversionInHour(finalmins);
                                     TotalQaWorkingHours = finalhrs;
+                                    //var TotalWeeklyHoursMins = ConversionInMinute(TotalWeeklyHours.ToString()) + finalmins;
+                                    //TotalWeeklyHours = ConversionInHour(TotalWeeklyHoursMins);
                                 }
 
                                 var HybridHours = item.subweeksummary.FirstOrDefault(x => x.DepartmentName == "Hybrid App ");
@@ -246,19 +361,24 @@ namespace TaskManagementOsvin.Controllers
                                     var finalmins = ConversionInMinute(TotalHybridHours.ToString());
                                     var finalhrs = ConversionInHour(finalmins);
                                     TotalHybridHours = finalhrs;
+                                    //var TotalWeeklyHoursMins = ConversionInMinute(TotalWeeklyHours.ToString()) + finalmins;
+                                    //TotalWeeklyHours = ConversionInHour(TotalWeeklyHoursMins);
                                 }
                             }
-                            SummaryOfWeekDetailsMainModelList.FirstOrDefault().TotalDotNetWorkingHours = TotalDotNetWorkingHours;
-                            SummaryOfWeekDetailsMainModelList.FirstOrDefault().TotalPhpWorkingHours = TotalPhpWorkingHours;
-                            SummaryOfWeekDetailsMainModelList.FirstOrDefault().TotalAndroidWorkingHours = TotalAndroidWorkingHours;
-                            SummaryOfWeekDetailsMainModelList.FirstOrDefault().TotalIOSWorkingHours = TotalIOSWorkingHours;
-                            SummaryOfWeekDetailsMainModelList.FirstOrDefault().TotalDesignWorkingHours = TotalDesignWorkingHours;
-                            SummaryOfWeekDetailsMainModelList.FirstOrDefault().TotalSeoWorkingHours = TotalSeoWorkingHours;
-                            SummaryOfWeekDetailsMainModelList.FirstOrDefault().TotalQaWorkingHours = TotalQaWorkingHours;
-                            SummaryOfWeekDetailsMainModelList.FirstOrDefault().TotalHybridWorkingHours = TotalHybridHours;
+                            OverAllSummaryOfWeekDetailsModel.TotalDotNetWorkingHours = TotalDotNetWorkingHours;
+                            OverAllSummaryOfWeekDetailsModel.TotalPhpWorkingHours = TotalPhpWorkingHours;
+                            OverAllSummaryOfWeekDetailsModel.TotalAndroidWorkingHours = TotalAndroidWorkingHours;
+                            OverAllSummaryOfWeekDetailsModel.TotalIOSWorkingHours = TotalIOSWorkingHours;
+                            OverAllSummaryOfWeekDetailsModel.TotalDesignWorkingHours = TotalDesignWorkingHours;
+                            OverAllSummaryOfWeekDetailsModel.TotalSeoWorkingHours = TotalSeoWorkingHours;
+                            OverAllSummaryOfWeekDetailsModel.TotalQaWorkingHours = TotalQaWorkingHours;
+                            OverAllSummaryOfWeekDetailsModel.TotalHybridWorkingHours = TotalHybridHours;
+                            var weeklyMinsTotal = ConversionInMinute(TotalDotNetWorkingHours.ToString()) + ConversionInMinute(TotalPhpWorkingHours.ToString()) + ConversionInMinute(TotalAndroidWorkingHours.ToString()) + ConversionInMinute(TotalIOSWorkingHours.ToString()) + ConversionInMinute(TotalDesignWorkingHours.ToString()) + ConversionInMinute(TotalSeoWorkingHours.ToString()) + ConversionInMinute(TotalQaWorkingHours.ToString()) + ConversionInMinute(TotalHybridHours.ToString());
+                            OverAllSummaryOfWeekDetailsModel.TotalWeeklyWorkingHours = ConversionInHour(weeklyMinsTotal);
+                            OverAllSummaryOfWeekDetailsModel.SummaryOfWeekDetails = SummaryOfWeekDetailsMainModelList;
                         }
 
-                        httpResponse = Request.CreateResponse(HttpStatusCode.OK, SummaryOfWeekDetailsMainModelList);
+                        httpResponse = Request.CreateResponse(HttpStatusCode.OK, OverAllSummaryOfWeekDetailsModel);
                     }
                     else
                     {
@@ -293,19 +413,19 @@ namespace TaskManagementOsvin.Controllers
 
             string[] parts = WorkingHours.Split('.');
             decimal hours = 0;
-            decimal mintues = 0;
+            decimal minutes = 0;
             if (parts.Length > 1)
             {
                 hours = Convert.ToDecimal(parts[0]);
-                mintues = Convert.ToDecimal((parts[1]));
+                minutes = Convert.ToDecimal((parts[1]));
             }
             else
             {
                 hours = Convert.ToDecimal(parts[0]);
-                mintues = 0;
+                minutes = 0;
             }
 
-            decimal TotalMintues = hours * 60 + mintues;
+            decimal TotalMintues = hours * 60 + minutes;
             return TotalMintues;
         }
     }

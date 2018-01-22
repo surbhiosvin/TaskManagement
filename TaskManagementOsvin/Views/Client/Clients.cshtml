@@ -388,30 +388,9 @@
             success: function (response) {
                 $('#dvClientDetails').html(response);
                 $("#lblMessage").html("Client added successfully");
-                $(".dvAlert").show();
-                //$('#tbl_Client').DataTable({
-                //    "bStateSave": true,
-                //    "fnStateSave": function (oSettings, oData) {
-                //        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
-                //    },
-                //    "fnStateLoad": function (oSettings) {
-                //        var data = localStorage.getItem('DataTables_' + window.location.pathname);
-                //        return JSON.parse(data);
-                //    }
-                //});
+                $(".dvAlert").show();              
                 TableDatatablesFixedHeader.init();
-                ClearFields();
-                //if (response.isSuccess == true) {
-                //    $("#lblMessage").html("Client added successfully");
-                //    $(".dvAlert").show();
-                //    setTimeout(function () {
-                //        window.location.href = "/Client/Clients";
-                //    }, 1700);
-                //}
-                //else {
-                //    $("#lblMessage").html(response.response);
-                //    $(".dvAlert").show();
-                //}
+                ClearFields();              
             },
             error: function (error) {
                 $("#lblMessage").html("Something went wrong, please try again");
@@ -566,33 +545,9 @@
                 $("#lblMessage").html("Client updated successfully");
                 $(".dvAlert").show();
                 $("#btnUpdate").hide();
-                $("#btnAdd").show();
-                //$('#tbl_Client').DataTable({
-                //    "bStateSave": true,
-                //    "fnStateSave": function (oSettings, oData) {
-                //        localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
-                //    },
-                //    "fnStateLoad": function (oSettings) {
-                //        var data = localStorage.getItem('DataTables_' + window.location.pathname);
-                //        return JSON.parse(data);
-                //    }
-                //});
+                $("#btnAdd").show();               
                 TableDatatablesFixedHeader.init();
-                ClearFields();
-                //if (response.isSuccess == true) {
-                //    $("#lblMessage").html("Client Updated successully");
-                //    $(".dvAlert").show();
-                //    //$("#txtDepartmentName").val("");
-                //    $("#btnUpdate").hide();
-                //    $("#btnAdd").show();
-                //    setTimeout(function () {
-                //        window.location.href = "/Client/Clients";
-                //    }, 1700);
-                //}
-                //else {
-                //    $("#lblMessage").html(response.response);
-                //    $(".dvAlert").show();
-                //}
+                ClearFields();               
             },
             error: function (error) {
                 $("#lblMessage").html("Something went wrong, please try again");

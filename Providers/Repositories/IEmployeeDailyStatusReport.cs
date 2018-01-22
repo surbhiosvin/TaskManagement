@@ -14,5 +14,12 @@ namespace Providers.Repositories
         List<EmployeeDailyReportDomainModel> GetDailyStatusReportDetailsOfCurrentDate(long employeeid);
         List<EmployeeTotalWorkingHoursReportDomainModel> GetEmployeeTotalWorkingHoursReport(long DepartmentId, long EmployeeId, string StartDate, string EndDate);
         List<GetEmployeeDailyStatusReportDomainModel> GetEmployeeDailyReportDetails(long DepartmentId, long EmployeeId, string ReportDate);
+        ResponseDomainModel AddDailyStatusReportByTeamLeader(EmployeeDailyReportDomainModel model);
+        List<EmployeeTotalWorkingHoursReportDomainModel> GetEmployeeReportFilledByTeamLeaderWithTotalWorkingHours(long DepartmentId, long TLEmployeeId);
+        List<GetEmployeeDailyStatusReportDomainModel> GetEmployeeReportDetailsFilledByTeamLeader(long DepartmentId, long TLEmployeeId, long EmployeeId, string CreatedDate);
+        List<EmployeeTotalWorkingHoursReportDomainModel> GetEmployeeReportFilledByTeamLeaderAccToEmployeeId(long TLEmployeeId, long EmployeeId);
+        List<GetEmployeeDailyStatusReportDomainModel> GetEmployeeReportAccordingToEmployeeId(long DepartmentId, long TLEmployeeId, long EmployeeId, string CreatedDate);
+        EmployeeDailyReportDomainModel GetDailyStatusReportDetailsById(long DailyReportId);
+        List<EmployeeTotalWorkingHoursInMonthDomainModel> GetEmployeeTotalWorkingHours(string StartDate, string EndDate);
     }
 }

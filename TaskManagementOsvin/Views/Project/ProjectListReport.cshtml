@@ -1,0 +1,116 @@
+﻿
+@{
+    ViewBag.Title = "ProjectListReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model List<EmployeeDomainModel>
+<div class="page-content">
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="~/Dashboard/Welcome">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="#">Project Report</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            @*<li>
+                    <span>Page Layouts</span>
+                </li>*@
+        </ul>
+        <div class="page-toolbar">
+            <div class="btn-group pull-right">
+                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li>
+                        <a href="#">
+                            <i class="icon-bell"></i> Action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-shield"></i> Another action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-user"></i> Something else here
+                        </a>
+                    </li>
+                    <li class="divider"> </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-bag"></i> Separated link
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE BAR -->
+    <!-- BEGIN PAGE TITLE-->
+    <h1 class="page-title">
+        Project Report
+        @*<small>blank page layout</small>*@
+    </h1>
+    <!-- END PAGE TITLE-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN EXAMPLE TABLE PORTLET-->
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption font-green">
+                        <i class="icon-settings font-green"></i>
+                        <span class="caption-subject font-green bold uppercase">Project Report</span>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <div class="col-md-offset-3 col-md-3">
+                            <label class="control-label">Start Date</label>
+                            <input type="text" class="form-control datepicker" id="txtStartDate" placeholder="StartDate"/>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="control-label">End Date</label>
+                            <input type="text" class="form-control datepicker" id="txtEndDate" placeholder="EndDate" />
+                        </div>
+                    </div>
+                    <div class="col-md-12 form-group text-center">
+                        <button type="button" class="btn green-dark" id="btnSearch">Search</button>
+                    </div>
+                </div>
+                <div class="portlet-body dv_ProjectReportContainer">
+                    @Html.Action("_ProjectListReport", "Project")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#btnSearch").click(function () {
+        var StartDate = $("#txtStartDate").val();
+        var EndDate = $("#txtEndDate").val();
+        var model = {
+            startdate: StartDate,
+            enddate:EndDate
+        }
+            $.ajax({
+                type: "GET",
+                url: "/Project/_ProjectListReport?StartDate="+StartDate+"&EndDate="+EndDate,
+                contentType: "application/text; charset=utf-8",
+                dataType: "text",
+                success: function (response) {
+                    $('.dv_ProjectReportContainer').html(response);
+                    TableDatatablesFixedHeader.init();
+                },
+                failure: function (msg) {
+                    html = false;
+                }
+            });
+    });
+</script>
+

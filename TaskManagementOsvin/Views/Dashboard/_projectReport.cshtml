@@ -1,0 +1,142 @@
+﻿@using TaskManagementOsvin.Models;
+@using TaskManagementOsvin.Security;
+@model SummaryDSRModel 
+<!-- BEGIN EXAMPLE TABLE PORTLET-->
+<div class="portlet-title">
+    <div class="caption">
+        <i class="icon-settings font-red"></i>
+        <span class="caption-subject font-red sbold uppercase">Summary Of Week</span>
+    </div>
+</div>
+<div class="portlet-body">
+    <table class="table table-striped table-bordered table-advance table-hover table-header-fixed nosort-table">
+        <thead>
+            <tr>
+                <th style="font-weight:600"> Project </th>
+                <th style="font-weight:600"> Client </th>
+                <th style="font-weight:600"> Profiles </th>
+                <th style="font-weight:600"> Released <br /> Amount </th>
+                <th style="font-weight:600"> Payment <br /> Due Date </th>
+                <th style="font-weight:600"> Week Total </th>
+                <th style="font-weight:600"> Total </th>
+                <th style="font-weight:600"> Action </th>
+            </tr>
+        </thead>
+        @if (Model != null)
+        {
+            <tfoot>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th><span>@Model.OverallTotalWorkingHours</span></th>
+                    <th><span>@Model.OverallWeekTotalWorkingHours</span></th>
+                    <th></th>
+                </tr>
+            </tfoot>
+            <tbody>
+                @foreach (var item in Model.dsr)
+                {
+                    <tr>
+                        <td class="highlight"><div class="success"></div><a href="#">@item.ProjectTitle</a></td>
+                        <td>@item.ClientName</td>
+                        <td>@item.Profiles</td>
+                        <td>@item.ReleasedAmount</td>
+                        <td>@item.PaymentDueDate</td>
+                        <td>@item.WorkingHoursOfProject</td>
+                        <td>@item.TotalWorkingHoursOfProject</td>
+                        <td><a href="@Url.Action("GetProfiles", "Project",new { ProjectID = item.ProjectID})" title="View Profile" class="btn btn-icon-only red"><i class="fa fa-eye" aria-hidden="true"></i></a> &nbsp; &nbsp;
+                            <a href="Javascript:" onclick="editPayment(this)" title="Edit Payment" data-id="@item.ProjectID" class="btn btn-icon-only blue"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        }
+    </table>
+</div>
+<!-- END EXAMPLE TABLE PORTLET--> 
+<script>
+    function editPayment(td) {
+        var ProjectId = $(td).attr('data-id');
+        var FourthTd = $(td).closest('tr').children('td:eq(3)');
+        var FifthTd = $(td).closest('tr').children('td:eq(4)');
+        var SixthTd = $(td).closest('tr').children('td:eq(7)');
+        var PaymentReleasedDate = FifthTd.text().trim();
+        var ReleasedPayment = FourthTd.text().trim();
+        var actions = SixthTd.text();
+        FourthTd.text('');
+        FifthTd.text('');
+        SixthTd.text('');
+        var textBoxPayment = '<input type="text" id="' + ProjectId + '_Paymenttext" class="form-control" value="' + ReleasedPayment + '" />';
+        var textBoxPaymentReleasedDate = '<input type="text" id="' + ProjectId + '_Datetext" class="form-control datepicker" value="' + PaymentReleasedDate + '" />';
+        var BackAndSaveButton = '<a href="javascript:" title="Back" onclick="BackToOriginalForm(this)" data-paymentRelease="' + ReleasedPayment + '" data-releaseDate="' + PaymentReleasedDate + '" data-id="' + ProjectId + '" class="btn btn-icon-only purple"><i class="fa fa-arrow-left" aria-hidden="true"></i></a> &nbsp; &nbsp;' + '<a href="javascript:" title="Save" class="btn btn-icon-only green" data-id="' + ProjectId + '" onclick="SavePayment(this)"><i class="fa fa-save" aria-hidden="true"></i></a>';
+        FourthTd.html(textBoxPayment);
+        FifthTd.html(textBoxPaymentReleasedDate);
+        SixthTd.html(BackAndSaveButton);
+        $('.datepicker').datepicker({ format: 'dd/mm/yyyy' });
+    }
+
+    function SavePayment(td) {
+        var ProjectId = $(td).attr('data-id');
+        var ReleasedPayment = $('#' + ProjectId + '_Paymenttext').val();
+        var PaymentReleasedDate = $('#' + ProjectId + '_Datetext').val();
+        if (ReleasedPayment === "" || PaymentReleasedDate === "") {
+            swal("Error!", "Please enter in both fields", "error")
+        }
+        else {
+            swal({
+                title: "Are you sure want to save this?",
+                text: "New payment and date will be saved!",
+                type: "info",
+                showCancelButton: true,
+                confirmButtonClass: "btn-warning",
+                confirmButtonText: "Yes, Save it!",
+                closeOnConfirm: false,
+                showLoaderOnConfirm: true
+            }, function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/api/Project/AddPaymentRelease",
+                    data: { PaymentId: 0, ProjectId: ProjectId, ReleasedAmount: ReleasedPayment, NextDueDate: PaymentReleasedDate, CreatedBy: @UserManager.user.UserId},
+                    success: function (response) {
+                        if (response.isSuccess) {
+                            //populateTable();
+                            BindBack(td, ProjectId, ReleasedPayment, PaymentReleasedDate);
+                            setTimeout(function () {
+                                swal("Saved!", "Saved Successfully.", "success");
+                            }, 1000);
+                        }
+                        else {
+                            setTimeout(function () {
+                                swal("Error!", "Error occurred!", "error");
+                            }, 1000);
+                        }
+                    },
+                    error: function () {
+                        setTimeout(function () {
+                            swal("Error!", "Error occurred!", "error");
+                        }, 1000);
+                    }
+                });
+
+            });
+        }
+    }
+
+    function BackToOriginalForm(td) {
+        var ProjectId = $(td).attr('data-id');
+        var ReleasedPayment = $(td).attr('data-paymentRelease');
+        var PaymentReleasedDate = $(td).attr('data-releaseDate');
+        BindBack(td, ProjectId, ReleasedPayment, PaymentReleasedDate);
+    }
+
+    function BindBack(td, ProjectID, ReleasedPayment, PaymentReleasedDate) {
+        var ViewAndEditButton = '<a href="/Project/GetProfiles?ProjectID='+ ProjectID + '" title="View Profile" class="btn btn-icon-only red"><i class="fa fa-eye" aria-hidden="true"></i></a> &nbsp; &nbsp;' +
+         '<a href="Javascript:" onclick="editPayment(this)" title="Edit Payment" data-id="' + ProjectID + '" class="btn btn-icon-only blue"><i class="fa fa-edit" aria-hidden="true"></i></a>';
+        $(td).closest('tr').children('td:eq(3)').text(ReleasedPayment);
+        $(td).closest('tr').children('td:eq(4)').text(PaymentReleasedDate);
+        $(td).closest('tr').children('td:eq(7)').html(ViewAndEditButton);
+    }
+</script>

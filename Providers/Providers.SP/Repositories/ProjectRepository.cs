@@ -31,11 +31,88 @@ namespace Providers.Providers.SP.Repositories
                 return null;
             }
         }
+
+        public List<GetDepAndEmpProjDomainModel> GetDepartmentAndEmpInProject(long ProjectId)
+        {
+            try
+            {
+                var records = objHelper.Query<GetDepAndEmpProjDomainModel>("GET_DEPARTMENT_AND_COUNT_OF_EMPLOYEE_IN_THE_DEPARTMENT", new { ProjectId = ProjectId }).ToList();
+                return records;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public List<EmpWorkedOnProjDomainModel> EmployeesWorkedOnProject(long ProjectId)
+        {
+            try
+            {
+                var records = objHelper.Query<EmpWorkedOnProjDomainModel>("GET_EMPLOYEENAME_IN_DEPARTMENT_WORKED_ON_PROJECT", new { ProjectId = ProjectId }).ToList();
+                return records;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public List<WeeksBwDateDomainModel> WeeksBetweenDates(long ProjectId)
+        {
+            try
+            {
+                var records = objHelper.Query<WeeksBwDateDomainModel>("GET_WEEKS_BETWEEN_TWO_DATES", new { ProjectId = ProjectId }).ToList();
+                return records;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public List<HoursByDateAndProjDomainModel> GetHoursBetweenTwoDates(GetHrsByDateAndProjDomainModel model)
+        {
+            try
+            {
+                var records = objHelper.Query<HoursByDateAndProjDomainModel>("GET_HOURS_BETWEEN_TWO_DATES", new
+                {
+                    ProjectId = model.Projectid,
+                    startdate = Convert.ToDateTime(model.startdate),
+                    enddate = Convert.ToDateTime(model.enddate)
+                }).ToList();
+                return records;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public List<WorkingHoursDomainModel> GetIndividualWorkingHours(GetIndividualWorkingHoursDomainModel model)
+        {
+            try
+            {
+                var records = objHelper.Query<WorkingHoursDomainModel>("GET_INDIVIDUAL_WORKING_HOURS_ACCORDING_TO_EMPLOYEE", new
+                {
+                    employeeId = model.UserId,
+                    ProjectId = model.ProjectId,
+                    startdate = model.StartDate,
+                    enddate = model.EndDate
+                }).ToList();
+                return records;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public ProjectFullDetailsDomainModel GetProjectFullDetails(long ProjectId)
         {
             try
             {
-               var objRes = objHelper.Query<ProjectFullDetailsDomainModel>("GET_PROJECT_FULL_DETAILS_MAIN_NEW_MVC", new { ProjectId = ProjectId }).FirstOrDefault();
+                var objRes = objHelper.Query<ProjectFullDetailsDomainModel>("GET_PROJECT_FULL_DETAILS_MAIN_NEW_MVC", new { ProjectId = ProjectId }).FirstOrDefault();
                 return objRes;
             }
             catch (Exception ex)
@@ -82,7 +159,7 @@ namespace Providers.Providers.SP.Repositories
         {
             try
             {
-               var listAddendums = objHelper.Query<AddendumDomainModel>("GetProjectAddendumDetails", new { ProjectId = ProjectId }).ToList();
+                var listAddendums = objHelper.Query<AddendumDomainModel>("GetProjectAddendumDetails", new { ProjectId = ProjectId }).ToList();
                 return listAddendums;
             }
             catch (Exception ex)
@@ -95,7 +172,7 @@ namespace Providers.Providers.SP.Repositories
         {
             try
             {
-               var listEmployeeHours = objHelper.Query<ProjectAssignToUserTotalWorkingHoursDomainModel>("GET_PROJECT_ASSIGN_TO_USER_WITH_TOTAL_WORKING_HOURS_NEW", new
+                var listEmployeeHours = objHelper.Query<ProjectAssignToUserTotalWorkingHoursDomainModel>("GET_PROJECT_ASSIGN_TO_USER_WITH_TOTAL_WORKING_HOURS_NEW", new
                 {
                     projectid = ProjectId,
                     DepartmentId = DepartmentId,
@@ -113,7 +190,7 @@ namespace Providers.Providers.SP.Repositories
         {
             try
             {
-               var listProjects = objHelper.Query<ProjectDomainModel>("GetProjectList", null).ToList();
+                var listProjects = objHelper.Query<ProjectDomainModel>("GetProjectList", null).ToList();
                 return listProjects;
             }
             catch (Exception ex)
@@ -187,7 +264,7 @@ namespace Providers.Providers.SP.Repositories
                 ErrorLog.LogError(ex);
                 return null;
             }
-            
+
         }
         public ResponseDomainModel ActivateDeactivateProjectReportCategory(long CategoryId, bool IsActive)
         {
@@ -231,7 +308,7 @@ namespace Providers.Providers.SP.Repositories
         {
             try
             {
-               var listProjectReportCategories = objHelper.Query<ProjectReportCategoryDomainModel>("GetProjectReportCategories", null).ToList();
+                var listProjectReportCategories = objHelper.Query<ProjectReportCategoryDomainModel>("GetProjectReportCategories", null).ToList();
                 return listProjectReportCategories;
             }
             catch (Exception ex)
@@ -282,9 +359,9 @@ namespace Providers.Providers.SP.Repositories
             try
             {
                 ResponseDomainModel objRes = new ResponseDomainModel();
-                var merge = objHelper.Query<string>("MERGEPROJECT", new { projectmergeto = projectmergeto, projectmergefrom = projectmergefrom}).FirstOrDefault();
-                var add= objHelper.Query<string>("ADD_MERGE_PROJECT_DETAILS", new { projectmergeto = projectmergeto, projectmergefrom = projectmergefrom }).FirstOrDefault();
-                if (merge == "Successfull" && add== "Insert")
+                var merge = objHelper.Query<string>("MERGEPROJECT", new { projectmergeto = projectmergeto, projectmergefrom = projectmergefrom }).FirstOrDefault();
+                var add = objHelper.Query<string>("ADD_MERGE_PROJECT_DETAILS", new { projectmergeto = projectmergeto, projectmergefrom = projectmergefrom }).FirstOrDefault();
+                if (merge == "Successfull" && add == "Insert")
                 {
                     objRes.isSuccess = true;
                     objRes.response = "Project Merged Successfully.";
@@ -333,7 +410,7 @@ namespace Providers.Providers.SP.Repositories
                 }).First();
                 return response;
             }
-            catch(SqlException sq)
+            catch (SqlException sq)
             {
                 ErrorLog.LogError(sq);
                 resp.response = sq.Message;
@@ -382,6 +459,98 @@ namespace Providers.Providers.SP.Repositories
             catch (Exception ex)
             {
                 return false;
+            }
+        }
+
+        public GetPaymentDomainModel GetPaymentById(long PaymentId)
+        {
+            try
+            {
+                var payment = objHelper.Query<GetPaymentDomainModel>("GetPaymentById", new { PaymentId = PaymentId }).FirstOrDefault();
+                return payment;
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError(ex);
+                return null;
+            }
+        }
+
+        public ResponseDomainModel AddPaymentRelease(AddUpdatePaymentReleaseDomainModel model)
+        {
+            try
+            {
+                DateTime date = DateTime.ParseExact(model.NextDueDate, "dd/MM/yyyy", null); // necessary so that it can catch error
+                var response = objHelper.Query<ResponseDomainModel>("AddUpdatePaymentRelease", new { PaymentId = model.PaymentId, ProjectId = model.ProjectId, ReleasedAmount = model.ReleasedAmount, NextDueDate = model.NextDueDate, CreatedBy = model.CreatedBy }).FirstOrDefault();
+                return response;
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError(ex);
+                return null;
+            }
+        }
+
+        public ResponseDomainModel UpdatePaymentRelease(AddUpdatePaymentReleaseDomainModel model)
+        {
+            try
+            {
+                DateTime date = DateTime.ParseExact(model.NextDueDate, "dd/MM/yyyy", null); // necessary so that it can catch error
+                var response = objHelper.Query<ResponseDomainModel>("AddUpdatePaymentRelease", new { PaymentId = model.PaymentId, ProjectId = model.ProjectId, ReleasedAmount = model.ReleasedAmount, NextDueDate = model.NextDueDate, CreatedBy = model.CreatedBy }).FirstOrDefault();
+                return response;
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError(ex);
+                return null;
+            }
+        }
+        public List<ProjectFullDetailsDomainModel> GetProjectReportDetails(string StartDate, string EndDate)
+        {
+            try
+            {
+                var list = objHelper.Query<ProjectFullDetailsDomainModel>("GetProjectDetailsNew", new
+                {
+                    projectTitle = string.Empty,
+                    startdate = string.IsNullOrWhiteSpace(StartDate) ? "" : StartDate,
+                    enddate = string.IsNullOrWhiteSpace(EndDate) ? "" : EndDate
+                }).ToList();
+                if (list != null && list.Count > 0)
+                {
+                    foreach(var obj in list)
+                    {
+                        obj.TotalWorkingHours = GetProjectTotalWorkingHoursTillDate(obj.ProjectId);
+                    }
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError(ex);
+                return null;
+            }
+        }
+        public string GetProjectTotalWorkingHoursTillDate(long ProjectId)
+        {
+            try
+            {
+                decimal ProjectTotal = 0;
+                var listtotalworkinghours = objHelper.Query<string>("GET_TOTALWORKINGHOURS_TILL_DATE", new { Projectid = ProjectId }).ToList();
+                if (listtotalworkinghours != null && listtotalworkinghours.Count > 0)
+                {
+                    long total12 = 0;
+                    foreach (var data in listtotalworkinghours)
+                    {
+                        total12 += HelperMethods.ConversionInMinute(data);
+                    }
+                    ProjectTotal = Convert.ToDecimal(HelperMethods.ConversionInHour(total12));
+                }
+                return Convert.ToString(ProjectTotal);
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError(ex);
+                return string.Empty;
             }
         }
     }
