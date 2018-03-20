@@ -98,7 +98,7 @@
                         <button type="button" class="btn green-dark" id="btnSearch">Search</button>
                     </div>
                 </div>
-                <div class="portlet-body dv_ProjectReportContainer">
+                <div class="portlet-body dv_BugsReportContainer">
                     @Html.Action("_BugsList", "Bugs")
                 </div>
             </div>
@@ -107,26 +107,26 @@
 </div>
 <script type="text/javascript">
     $("#btnSearch").click(function () {
-        var StartDate = $("#txtStartDate").val();
-        var EndDate = $("#txtEndDate").val();
-        var EmployeeId = getParameterByName("EmployeeId")
+        var EmployeeId = $("#ddlEmployee").val();
+        var ProjectId = $("#ddlProject").val();
+
         var model = {
-            startdate: StartDate,
-            enddate:EndDate
+            EmployeeId: EmployeeId,
+            ProjectId: ProjectId
         }
-            $.ajax({
-                type: "GET",
-                url: "/EmployeeDailyStatusReport/_EmployeeReporting?EmployeeId="+EmployeeId+"&StartDate=" + StartDate + "&EndDate=" + EndDate,
-                contentType: "application/text; charset=utf-8",
-                dataType: "text",
-                success: function (response) {
-                    $('.dv_ProjectReportContainer').html(response);
-                    TableDatatablesFixedHeader.init();
-                },
-                failure: function (msg) {
-                    html = false;
-                }
-            });
+        $.ajax({
+            type: "GET",
+            url: "/Bugs/_BugsList?UserId=" + EmployeeId + "&ProjectId=" + ProjectId,
+            contentType: "application/text; charset=utf-8",
+            dataType: "text",
+            success: function (response) {
+                $('.dv_BugsReportContainer').html(response);
+                TableDatatablesFixedHeader.init();
+            },
+            failure: function (msg) {
+                html = false;
+            }
+        });
     });
     function getParameterByName(name) {
         var url = window.location.href;

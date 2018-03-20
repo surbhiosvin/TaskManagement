@@ -95,7 +95,7 @@
 
 <script type="text/javascript">
     jQuery(document).on('ready', function () {
-        var table = $('#sample_2').DataTable();
+        var table = $('#sample_3').DataTable();
         table.state.clear();
         table.destroy();
         TableDatatablesFixedHeader.init();        
@@ -118,7 +118,7 @@
             dataType: "text",
             success: function (response) {
                 $('.dvEmployeeDailyStatusReportContainer').html(response);
-                var table = $('#sample_2').DataTable();
+                var table = $('#sample_3').DataTable();
                 table.state.clear();
                 table.destroy();
                 TableDatatablesFixedHeader.init();

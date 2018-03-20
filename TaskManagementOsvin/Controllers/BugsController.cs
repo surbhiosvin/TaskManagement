@@ -1,5 +1,4 @@
-﻿using DomainModel.EntityModel;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Providers.Helper;
 using System;
 using System.Collections.Generic;
@@ -13,6 +12,7 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using TaskManagementOsvin.Models;
 using TaskManagementOsvin.Security;
+using DomainModel.EntityModel;
 
 namespace TaskManagementOsvin.Controllers
 {
