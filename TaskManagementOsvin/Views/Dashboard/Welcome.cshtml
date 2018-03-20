@@ -7,7 +7,7 @@
 }
 @using TaskManagementOsvin.Security;
 @using TaskManagementOsvin.Models;
-@model TaskManagementOsvin.Models.GetDSRModel
+@model GetDSRModel
 <div class="page-content">
     <!-- BEGIN PAGE HEADER-->
     <!-- BEGIN PAGE BAR -->
@@ -47,27 +47,12 @@
                         <input type="submit" value="Submit" class="btn btn-success" />
                     </div>
                 }
-               @*<div class="col-md-12" style="padding-left:0">
-                   <ul class="pager">
-                       <li class="previous">
-                           <a href="#" class="btn blue"><i class="fa fa-angle-left"></i>Older</a>
-                       </li>
-                       @if(DateTime.ParseExact(Model.enddate, "dd/MM/yyyy", null).Date.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Friday) == DateTime.Now.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Friday))
-                       {
-                           action = "javascript:";
-                           disabled = "disabled";
-                       }
-                       <li class="next @disabled">
-                           <a href="@action" class="btn blue"><i class="fa fa-angle-right"></i>Next</a>
-                       </li>
-                   </ul>
-               </div>*@
                 <div class="clearfix"></div>
             </div>
         </div>
     </div>
     <!-- END PAGE HEADER-->
-    @if (UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType == roleTypeModel.HR)
+    @if (UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType == roleTypeModel.HR || UserManager.user.roleType == roleTypeModel.TeamLeader)
     {
         <div class="row">
             <div class="col-md-12">

@@ -129,7 +129,6 @@ namespace TaskManagementOsvin.Controllers
         {
             try
             {
-                SummaryDSRDomainModel SummaryModel = null;
                 HttpResponseMessage httpResponse = new HttpResponseMessage();
                 if (model != null)
                 {
@@ -139,32 +138,36 @@ namespace TaskManagementOsvin.Controllers
                     {
                         httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
                     }
-                    else if (dsrs.Count() == 0)
-                    {
-                        httpResponse = Request.CreateResponse(HttpStatusCode.OK, SummaryModel);
-                    }
                     else
                     {
-                        SummaryModel = new SummaryDSRDomainModel();
-
-                        Parallel.ForEach(dsrs, d =>
-                        {
-                            var mins = ConversionInMinute(d.WorkingHoursOfProject);
-                            var finalmins = ConversionInMinute(TotalWorkingHoursOfProject.ToString());
-                            var overAllMins = mins + finalmins;
-                            var finalhrs = ConversionInHour(overAllMins);
-                            TotalWorkingHoursOfProject = finalhrs;
-
-                            var overAllWorkingHoursMins = ConversionInMinute(d.TotalWorkingHoursOfProject);
-                            var overAllWorkingHourfinalmins = ConversionInMinute(OverAllTotalWorkingHoursOfProject.ToString());
-                            var overAllWorkingHourMins = overAllWorkingHoursMins + overAllWorkingHourfinalmins;
-                            OverAllTotalWorkingHoursOfProject = ConversionInHour(overAllWorkingHourMins);
-                        });
-                        SummaryModel.dsr = dsrs;
-                        SummaryModel.OverallTotalWorkingHours = TotalWorkingHoursOfProject;
-                        SummaryModel.OverallWeekTotalWorkingHours = OverAllTotalWorkingHoursOfProject;
-                        httpResponse = Request.CreateResponse(HttpStatusCode.OK, SummaryModel);
+                        httpResponse = Request.CreateResponse(HttpStatusCode.OK, dsrs);
                     }
+                    //else if (dsrs.Count() == 0)
+                    //{
+                    //    httpResponse = Request.CreateResponse(HttpStatusCode.OK, SummaryModel);
+                    //}
+                    //else
+                    //{
+                    //    SummaryModel = new SummaryDSRDomainModel();
+
+                    //    Parallel.ForEach(dsrs, d =>
+                    //    {
+                    //        var mins = ConversionInMinute(d.WorkingHoursOfProject);
+                    //        var finalmins = ConversionInMinute(TotalWorkingHoursOfProject.ToString());
+                    //        var overAllMins = mins + finalmins;
+                    //        var finalhrs = ConversionInHour(overAllMins);
+                    //        TotalWorkingHoursOfProject = finalhrs;
+
+                    //        var overAllWorkingHoursMins = ConversionInMinute(d.TotalWorkingHoursOfProject);
+                    //        var overAllWorkingHourfinalmins = ConversionInMinute(OverAllTotalWorkingHoursOfProject.ToString());
+                    //        var overAllWorkingHourMins = overAllWorkingHoursMins + overAllWorkingHourfinalmins;
+                    //        OverAllTotalWorkingHoursOfProject = ConversionInHour(overAllWorkingHourMins);
+                    //    });
+                    //    SummaryModel.dsr = dsrs;
+                    //    SummaryModel.OverallTotalWorkingHours = TotalWorkingHoursOfProject;
+                    //    SummaryModel.OverallWeekTotalWorkingHours = OverAllTotalWorkingHoursOfProject;
+                    //    httpResponse = Request.CreateResponse(HttpStatusCode.OK, SummaryModel);
+                    //}
                 }
                 else
                 {
@@ -404,8 +407,13 @@ namespace TaskManagementOsvin.Controllers
 
         private decimal ConversionInHour(decimal durationMin)
         {
+            //decimal hours = (durationMin - durationMin % 60) / 60;
+            //decimal total = Convert.ToDecimal("" + hours + "." + Convert.ToDecimal(durationMin - hours * 60));
+            //return total;
             decimal hours = (durationMin - durationMin % 60) / 60;
-            decimal total = Convert.ToDecimal("" + hours + "." + Convert.ToDecimal(durationMin - hours * 60));
+            var hoursFormat = string.Format("{0:00}:{1:00}", (int)hours, durationMin % 60);
+            //hoursFormat
+            decimal total = Convert.ToDecimal(hoursFormat.Replace(':', '.'));
             return total;
         }
         private decimal ConversionInMinute(string WorkingHours)

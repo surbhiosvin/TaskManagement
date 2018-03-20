@@ -10,6 +10,7 @@ namespace TaskManagementOsvin.Models
         public long ProjectID { get; set; }
         public long DailyReportId { get; set; }
         public long EmployeeId { get; set; }
+        public int DepartmentId { get; set; }
         public string DepartmentName { get; set; }
         public string ClientName { get; set; }
         public string ProjectTitle { get; set; }

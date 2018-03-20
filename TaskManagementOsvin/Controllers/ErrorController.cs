@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using TaskManagementOsvin.Security;
 
 namespace TaskManagementOsvin.Controllers
 {
@@ -18,6 +19,12 @@ namespace TaskManagementOsvin.Controllers
         {
             Response.StatusCode = 404;  //you may want to set this to 200
             return View("NotFound");
+        }
+
+        [Authorize]
+        public ActionResult NoPermissions()
+        {
+            return View();
         }
     }
 }

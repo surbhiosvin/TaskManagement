@@ -17,8 +17,10 @@ namespace TaskManagementOsvin.Controllers
     public class DashboardController : Controller
     {
         // GET: Dashboard
-        //GetDSRModel GetDSRModel = new GetDSRModel() { startdate = DateTime.Now.AddDays(-38).ToString("dd/MM/yyyy"), enddate = DateTime.Now.AddDays(-30).ToString("dd/MM/yyyy") };
-        static GetDSRModel GetDSRModel = new GetDSRModel() { startdate = DateTime.Now.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Sunday).ToString("dd/MM/yyyy"), enddate = DateTime.Now.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Saturday).ToString("dd/MM/yyyy") };
+        static GetDSRModel GetDSRModel = new GetDSRModel() { startdate = DateTime.Now.AddDays(-48).ToString("dd/MM/yyyy"), enddate = DateTime.Now.AddDays(-40).ToString("dd/MM/yyyy") };
+        //static GetDSRModel GetDSRModel = new GetDSRModel() { startdate = DateTime.Now.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Sunday).ToString("dd/MM/yyyy"), enddate = DateTime.Now.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Saturday).ToString("dd/MM/yyyy") };
+
+        [CustomAuthorize(roles: "HR,Admin,Team Leader,Project Manager")]
         public ActionResult Welcome()
         {
             return View(GetDSRModel);
@@ -34,7 +36,22 @@ namespace TaskManagementOsvin.Controllers
 
         public PartialViewResult _projectReport()
         {
+            decimal weekTotal = 0, OverallTotal = 0;
             var reports = GetProjectReport(GetDSRModel);
+            if (UserManager.user.roleType == roleTypeModel.TeamLeader && reports.dsr != null && reports.dsr.Count() > 0)
+            {
+                reports.dsr = reports.dsr.Where(x => x.DepartmentId == UserManager.user.DepartmentId).ToList();
+            }
+            foreach (var item in reports.dsr)
+            {
+                weekTotal += ConversionInMinute(item.WorkingHoursOfProject);
+            }
+            foreach (var workingHours in reports.dsr)
+            {
+                OverallTotal += ConversionInMinute(workingHours.TotalWorkingHoursOfProject);
+            }
+            reports.OverallTotalWorkingHours = ConversionInHour(weekTotal);
+            reports.OverallWeekTotalWorkingHours = ConversionInHour(OverallTotal);
             return PartialView(reports);
         }
 
@@ -44,13 +61,17 @@ namespace TaskManagementOsvin.Controllers
             List<WeekelyEmployeeReportModel> EmployeeReports = new List<WeekelyEmployeeReportModel>(); 
             var client = new HttpClient();
             var serialized = new JavaScriptSerializer().Serialize(GetDSRModel);
-            var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
+            var content = new StringContent(serialized, Encoding.UTF8, "application/json");
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
             var result = client.PostAsync("/api/Employee/GetWeekelySummaryOfEmpDetails", content).Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;
                 var reports = new JavaScriptSerializer().Deserialize<List<GetWeekelySummaryOfEmpModel>>(contents);
+                if (UserManager.user.roleType == roleTypeModel.TeamLeader)
+                {
+                    reports = reports.Where(x => x.DepartmentId == UserManager.user.DepartmentId).ToList();
+                }
                 var GroupedReports = reports.GroupBy(x => x.EmployeeId).ToList();
                 foreach (var item in GroupedReports)
                 {
@@ -208,7 +229,7 @@ namespace TaskManagementOsvin.Controllers
             return PartialView(EmployeeReports);
         }
 
-        public ActionResult FullProjectReport(long ProjectId = 472)
+        public ActionResult FullProjectReport(long ProjectId = 0)
         {
             if (ProjectId > 0)
             {
@@ -312,21 +333,19 @@ namespace TaskManagementOsvin.Controllers
             return View();
         }
 
+        [NonAction]
         public SummaryDSRModel GetProjectReport(GetDSRModel model)
         {
             SummaryDSRModel Summarymodel = new SummaryDSRModel();
-            var id = UserManager.user.UserId;
-            var username = User.Identity.Name;
-            //ViewBag.GetSummaryMain = GetSummaryMain(model);
             var client = new HttpClient();
             var serialized = new JavaScriptSerializer().Serialize(model);
-            var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
+            var content = new StringContent(serialized, Encoding.UTF8, "application/json");
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
             var result = client.PostAsync("/api/Employee/GetSummaryOfWeekDetails", content).Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;
-                Summarymodel = new JavaScriptSerializer().Deserialize<SummaryDSRModel>(contents);
+                Summarymodel.dsr = new JavaScriptSerializer().Deserialize<List<GetWeeklyEmployeeDSRModel>>(contents);
             }
             return Summarymodel;
         }
@@ -392,12 +411,17 @@ namespace TaskManagementOsvin.Controllers
             return View();
         }
 
+        [NonAction]
         public decimal ConversionInHour(decimal durationMin)
         {
             decimal hours = (durationMin - durationMin % 60) / 60;
-            decimal total = Convert.ToDecimal("" + hours + "." + Convert.ToDecimal(durationMin - hours * 60));
+            var hoursFormat = string.Format("{0:00}:{1:00}", (int)hours, durationMin % 60);
+            //hoursFormat
+            decimal total = Convert.ToDecimal(hoursFormat.Replace(':', '.'));
             return total;
         }
+
+        [NonAction]
         public decimal ConversionInMinute(string WorkingHours)
         {
 
@@ -419,6 +443,7 @@ namespace TaskManagementOsvin.Controllers
             return TotalMintues;
         }
 
+        [NonAction]
         public OverAllSummaryOfWeekDetailsMainModel GetSummaryMain(GetSummaryModel model)
         {
             var serialized = new JavaScriptSerializer().Serialize(model);
