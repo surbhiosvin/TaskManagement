@@ -553,49 +553,5 @@ namespace Providers.Providers.SP.Repositories
                 return string.Empty;
             }
         }
-
-        public GetPaymentDomainModel GetPaymentById(long PaymentId)
-        {
-            try
-            {
-                var payment = objHelper.Query<GetPaymentDomainModel>("GetPaymentById", new { PaymentId = PaymentId }).FirstOrDefault();
-                return payment;
-            }
-            catch (Exception ex)
-            {
-                ErrorLog.LogError(ex);
-                return null;
-            }
-        }
-
-        public ResponseDomainModel AddPaymentRelease(AddUpdatePaymentReleaseDomainModel model)
-        {
-            try
-            {
-                DateTime date = DateTime.ParseExact(model.NextDueDate, "dd/MM/yyyy", null); // necessary so that it can catch error
-                var response = objHelper.Query<ResponseDomainModel>("AddUpdatePaymentRelease", new { PaymentId = model.PaymentId, ProjectId = model.ProjectId, ReleasedAmount = model.ReleasedAmount, NextDueDate = model.NextDueDate, CreatedBy = model.CreatedBy }).FirstOrDefault();
-                return response;
-            }
-            catch (Exception ex)
-            {
-                ErrorLog.LogError(ex);
-                return null;
-            }
-        }
-
-        public ResponseDomainModel UpdatePaymentRelease(AddUpdatePaymentReleaseDomainModel model)
-        {
-            try
-            {
-                DateTime date = DateTime.ParseExact(model.NextDueDate, "dd/MM/yyyy", null); // necessary so that it can catch error
-                var response = objHelper.Query<ResponseDomainModel>("AddUpdatePaymentRelease", new { PaymentId = model.PaymentId, ProjectId = model.ProjectId, ReleasedAmount = model.ReleasedAmount, NextDueDate = model.NextDueDate, CreatedBy = model.CreatedBy }).FirstOrDefault();
-                return response;
-            }
-            catch (Exception ex)
-            {
-                ErrorLog.LogError(ex);
-                return null;
-            }
-        }
     }
 }
