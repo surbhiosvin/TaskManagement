@@ -1,0 +1,35 @@
+﻿@model List<EmployeeTotalWorkingHoursInMonthDomainModel>
+
+<table class="table table-striped table-bordered table-hover table-header-fixed" id="sample_2">
+    <thead>
+        <tr class="">
+            <th class="text-center"> Employee </th>
+            <th class="text-center"> Department </th>
+            <th class="text-center"> Designation </th>
+            <th class="text-center"> Is Active </th>
+            <th class="text-center"> Hours </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var obj in Model)
+            {
+                <tr>
+                    <td class="text-center"> @obj.EmployeeName </td>
+                    <td class="text-center"> @obj.DepartmentName </td>
+                    <td class="text-center"> @obj.DesignationName </td>
+                    @if (obj.IsActive)
+                    {
+                        <td class="text-center"><img alt='Active' src='~/assets/global/img/Guiimages/Active.png' width='30px' height='30px' /></td>
+                    }
+                    else
+                    {
+                        <td class="text-center"><img alt='In Active Slip' src='~/assets/global/img/Guiimages/InActive.png' width='30px' height='30px' /></td>
+                    }
+                    <td class="text-center">@obj.Hours </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

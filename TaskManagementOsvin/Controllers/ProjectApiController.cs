@@ -776,11 +776,39 @@ namespace TaskManagementOsvin.Controllers
                 var objRes = ProjectRepository.UpdatePaymentRelease(model);
                 if (objRes == null)
                 {
+                    respnose.isSuccess = false;
                     httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
                 }
                 else
                 {
                     httpResponse = Request.CreateResponse(HttpStatusCode.OK, objRes);
+                }
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("An error occurred, please try again or contact the administrator."),
+                    ReasonPhrase = "An error occurred, please try again or contact the administrator.",
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+            }
+        }
+        [Route("~/api/Project/GetProjectReportDetails")]
+        public HttpResponseMessage GetProjectReportDetails(string StartDate, string EndDate)
+        {
+            HttpResponseMessage httpResponse = new HttpResponseMessage();
+            try
+            {
+                var listProjectsReportDetails = ProjectRepository.GetProjectReportDetails(StartDate,EndDate);
+                if (listProjectsReportDetails == null)
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
+                }
+                else
+                {
+                    httpResponse = Request.CreateResponse(HttpStatusCode.OK, listProjectsReportDetails);
                 }
                 return httpResponse;
             }

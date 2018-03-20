@@ -760,7 +760,53 @@ namespace TaskManagementOsvin.Controllers
             return View();
         }
 
-
+        public ActionResult ProjectListReport(GetAllProjectsModel model)
+        {            
+            return View();
+        }
+        public ActionResult _ProjectListReport(string StartDate, string EndDate)
+        {
+            List<ProjectFullDetailsDomainModel> list = new List<ProjectFullDetailsDomainModel>();
+            DateTime date = DateTime.Now;
+            if (!string.IsNullOrWhiteSpace(StartDate))
+            {
+                date = DateTime.ParseExact(StartDate, "dd/MM/yyyy", null);
+                StartDate = date.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
+            }
+            if (!string.IsNullOrWhiteSpace(EndDate))
+            {
+                date = DateTime.ParseExact(EndDate, "dd/MM/yyyy", null);
+                EndDate = date.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
+            }
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+            var result = client.GetAsync("/api/Project/GetProjectReportDetails?&StartDate=" + StartDate + "&EndDate=" + EndDate).Result;
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                var contents = result.Content.ReadAsStringAsync().Result;
+                var Response = JsonConvert.DeserializeObject<List<ProjectFullDetailsDomainModel>>(contents);
+                list = Response;
+            }
+            if (list != null && list.Count > 0)
+            {
+                foreach (var obj in list)
+                {
+                    if (!string.IsNullOrWhiteSpace(obj.StartDate))
+                    {
+                        obj.Startdate1 = Convert.ToDateTime(obj.StartDate).ToString("d MMMM yyyy", CultureInfo.CreateSpecificCulture("en-US"));
+                    }
+                    if (!string.IsNullOrWhiteSpace(obj.EndDate))
+                    {
+                        obj.Enddate1 = Convert.ToDateTime(obj.EndDate).ToString("d MMMM yyyy", CultureInfo.CreateSpecificCulture("en-US"));
+                    }
+                }
+            }         
+            return PartialView(list);
+        }
+        public ActionResult FullProjectReport()
+        {
+            return View();
+        }
         #region User Defined Functions
         public List<ProjectModel> GetProjectList()
         {

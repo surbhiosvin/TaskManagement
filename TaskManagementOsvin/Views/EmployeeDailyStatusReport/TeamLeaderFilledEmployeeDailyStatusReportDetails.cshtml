@@ -1,0 +1,171 @@
+﻿
+@{
+    ViewBag.Title = "TeamLeaderFilledEmployeeDailyStatusReportDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using TaskManagementOsvin.Security;
+@using TaskManagementOsvin.Models;
+<div class="page-content">
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="~/Dashboard/Welcome">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="#">Daily Status Report Details Filled By Team Leader</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            @*<li>
+                    <span>Page Layouts</span>
+                </li>*@
+        </ul>
+        <div class="page-toolbar">
+            <div class="btn-group pull-right">
+                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li>
+                        <a href="#">
+                            <i class="icon-bell"></i> Action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-shield"></i> Another action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-user"></i> Something else here
+                        </a>
+                    </li>
+                    <li class="divider"> </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-bag"></i> Separated link
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE BAR -->
+    <!-- BEGIN PAGE TITLE-->
+    <h1 class="page-title">
+        Daily Status Report Details Filled By Team Leader
+        @*<small>blank page layout</small>*@
+    </h1>
+    <!-- END PAGE TITLE-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN EXAMPLE TABLE PORTLET-->
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption font-green">
+                        <i class="icon-settings font-green"></i>
+                        <span class="caption-subject font-green bold uppercase">Daily Status Report Details Filled By Team Leader</span>
+                    </div>
+                    @if (UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType == roleTypeModel.HR || UserManager.user.roleType == roleTypeModel.ProjectManager)
+                    {
+                            <div class="col-sm-offset-3 col-sm-6" style="padding:10px;">
+                                <label class="control-label">Team Leader</label>
+                                @Html.DropDownList("ddlTeamLeaders", ViewBag.listTeamLeaders as SelectList, "Select Team Leader", new { @class = "form-control" })
+                            </div>
+                            <div class="col-sm-offset-3 col-sm-6" style="padding:10px;">
+                                <select class="form-control ddlEmployees" id="ddlEmployees" name="ddlEmployees">
+                                    <option value="">Please Select</option>
+                                </select>
+                            </div>
+                    }
+                    else if (UserManager.user.roleType == roleTypeModel.TeamLeader)
+                    {
+                        <div class="col-sm-offset-3 col-sm-6" style="padding:10px;">
+                            <label class="control-label">Employee Name</label>
+                            @Html.DropDownList("ddlEmployees", ViewBag.listEmployees as SelectList, "Select Employee", new { @class = "form-control" })
+                        </div>
+                    }
+                    else
+                    {
+
+                    }
+                </div>              
+                <div class="portlet-body dv_UserTableContainer">
+                    @Html.Action("_TeamLeaderFilledEmployeeDailyStatusReportDetails", "EmployeeDailyStatusReport")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    jQuery(document).on('ready', function () {
+        var table = $('#sample_2').DataTable();
+        table.state.clear();
+        table.destroy();
+        TableDatatablesFixedHeader.init();
+        $(document).on('change', '#ddlTeamLeaders', function () {
+            var _this = $(this);
+            var TeamLeaderId = _this.val();
+            if (TeamLeaderId == "")
+            {
+                $(".ddlEmployees > option").remove();
+                $(".ddlEmployees").append("<option value=''>Please Select</option>");
+                $('.dv_UserTableContainer').html("");
+                return false;
+            }
+            if (typeof TeamLeaderId != 'undefined') {
+                $.ajax({
+                    type: "GET",
+                    url: "/api/Management/GetEmployeeByTeamLeaderId?TeamLeaderId=" + TeamLeaderId,
+                    //data: { sortBy: sortByval },
+                    contentType: "application/text; charset=utf-8",
+                    dataType: "text",
+                    success: function (response) {
+                        var response = JSON.parse(response);
+                        var listEmployees = response;
+                        var ddlEmployees = $(".ddlEmployees");
+                        $(".ddlEmployees > option").remove();
+                        ddlEmployees.append("<option value=''>Please Select</option>")
+                        for (var i = 0; i < listEmployees.length; i++) {
+                            ddlEmployees.append($("<option />").val(listEmployees[i].UserId).text(listEmployees[i].FirstName));
+                        }
+                    },
+                    failure: function (msg) {
+                        html = false;
+                    }
+                });
+            }
+        });
+        $(document).on('change', '#ddlEmployees', function () {
+            var _this = $(this);
+            var EmployeeId = _this.val();
+            var TeamLeaderId = $("#ddlTeamLeaders").val();
+            if (typeof EmployeeId != 'undefined') {
+                $.ajax({
+                    type: "GET",
+                    url: "/EmployeeDailyStatusReport/_TeamLeaderFilledEmployeeDailyStatusReportDetails?EmployeeId=" + EmployeeId + "&TeamLeaderId=" + TeamLeaderId,
+                    //data: { sortBy: sortByval },
+                    contentType: "application/text; charset=utf-8",
+                    dataType: "text",
+                    success: function (response) {
+                        $('.dv_UserTableContainer').html(response);
+                        var table = $('#sample_2').DataTable();
+                        table.state.clear();
+                        table.destroy();
+                        TableDatatablesFixedHeader.init();
+                    },
+                    failure: function (msg) {
+                        html = false;
+                    }
+                });
+            }
+        });
+    });
+
+</script>
+
+

@@ -1,0 +1,29 @@
+﻿@model List<EmployeeDomainModel>
+
+<table class="table table-striped table-bordered table-hover table-header-fixed" id="sample_2">
+    <thead>
+        <tr class="">
+            <th class="text-center"> Name </th>
+            <th class="text-center"> Department </th>
+            <th class="text-center"> Designation </th>
+            <th class="text-center"> Email </th>
+            <th class="text-center">  </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var Emp in @Model)
+            {
+                <tr>
+                    <td class="text-center"> @Emp.FirstName @Emp.LastName</td>
+                    <td class="text-center"> @Emp.DepartmentName</td>
+                    <td class="text-center"> @Emp.DesignationName</td>
+                    <td class="text-center"> @Emp.Email</td>
+                    <td class="text-center"><a href="~/EmployeeDailyStatusReport/EmployeeReporting?EmployeeId=@Emp.UserId">Daily Status Report</a></td>
+                </tr>
+            }            
+        }
+    </tbody>
+</table>
+

@@ -1,0 +1,420 @@
+﻿
+@{
+    ViewBag.Title = "AddDailyStatusReportByTeamLeader";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using TaskManagementOsvin.Security;
+@using TaskManagementOsvin.Models;
+@model TaskManagementOsvin.Models.EmployeeDailyReportModel
+<div class="page-content">
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="~/Dashboard/Welcome">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="#">Add Daily Status Report By Team Leader</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            @*<li>
+                    <span>Page Layouts</span>
+                </li>*@
+        </ul>
+        <div class="page-toolbar">
+            <div class="btn-group pull-right">
+                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li>
+                        <a href="#">
+                            <i class="icon-bell"></i> Action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-shield"></i> Another action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-user"></i> Something else here
+                        </a>
+                    </li>
+                    <li class="divider"> </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-bag"></i> Separated link
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE BAR -->
+    <h1 class="page-title">
+        Add Daily Status Report By Team Leader
+        <small></small>
+    </h1>
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN VALIDATION STATES-->
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-layers font-green"></i>
+                        <span class="caption-subject font-green sbold uppercase">Add Daily Status Report By Team Leader</span>
+                    </div>
+                    @*<button class="btn btn-primary table-group-action-submit pull-right" type="button" data-toggle="modal" data-target="#formatmodal" id="btnnotification">
+                            DSR format
+                        </button>*@
+                </div>
+                <div class="portlet-body">
+                    <div class="alert dvAlert @ViewBag.Class">
+                        <a class="close" onclick="$('.alert').hide()">×</a>
+                        <span id="lblMessage"> @ViewBag.Message </span>
+                    </div>
+                    @using (Html.BeginForm("AddDailyStatusReportByTeamLeader", "EmployeeDailyStatusReport", FormMethod.Post, new { enctype = "multipart/form-data", @id = "frmAddEmpStatusReportByTeamLeader", @class = "form-horizontal" }))
+                    {
+                        <div class="form-body">
+                            <div class="form-group">
+                                @Html.HiddenFor(m => m.DailyReportId)
+                                <div class="col-md-offset-2 col-md-4">
+                                    <label class="control-label">
+                                        Employee Name
+                                        <span class="required"> * </span>
+                                    </label>
+                                    @Html.DropDownListFor(model => model.EmployeeId, new SelectList(ViewBag.listEmployees, "UserId", "EmployeeName"), "--Select Employee--", new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="control-label">
+                                        Status Report Date
+                                        <span class="required"> * </span>
+                                    </label>
+                                    @Html.TextBoxFor(m => m.ReportDateStr, new { @class = "form-control datepicker", @placeholder = "Report Date" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-4">
+                                    <label class="control-label">
+                                        Project Name
+                                        <span class="required"> * </span>
+                                    </label>
+                                    @Html.DropDownListFor(model => model.ProjectId, new SelectList(ViewBag.listProjects, "ProjectId", "ProjectTitle"), "--Select Project--", new { @class = "form-control selectpicker select2-allow-clear" })
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="control-label">
+                                        Sub Task Category
+                                        <span class="required"> * </span>
+                                    </label>
+                                    @Html.DropDownListFor(model => model.ReportCategoryId, new SelectList(ViewBag.listTaskCategories, "CategoryId", "CategoryName"), "--Select Report Category--", new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-4">
+                                    <label class="control-label">
+                                        Description
+                                        <span class="required"> * </span>
+                                    </label>
+                                    @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @rows = "6" })
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="control-label">Hours:<span class="required"> * </span></label>
+                                    @Html.DropDownListFor(m => m.Hours, new SelectList(ViewData["ddlHours"] as List<SelectListItem>, "Value", "Text", Model.Hours), "--Select--", new { @class = "form-control" })
+
+                                    <label class="control-label">Min:</label>
+                                    @Html.DropDownListFor(m => m.Minutes, new SelectList(ViewData["ddlMinutes"] as List<SelectListItem>, "Value", "Text", Model.Minutes), "", new { @class = "form-control" })
+                                    <input type="hidden" id="ctime" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-actions text-center">
+                                    <div class="btn-set">
+                                        <input type="button" class="btn green" id="btnAdd" value="Save" />
+                                        <button type="button" class="btn green" id="btnUpdate" style="display:none">Update</button>
+                                        <button type="button" class="btn red" id="btnCancel">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="dvDailyStatusReportsByTeamLeader">
+        @Html.Action("_EmployeeDailyStatusReportByTeamLeader", "EmployeeDailyStatusReport");
+    </div>
+</div>
+@*<script src="~/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js"></script>*@
+<script src="~/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".datepicker").datepicker({
+            format: "dd/mm/yyyy",
+            endDate: '-1d',
+            autoclose: true
+        });
+    });
+    $("#btnAdd").on('click', function (e) {
+        var errorCount = 0;
+        var employee = $("#EmployeeId");
+        var project = $("#ProjectId");
+        var reportcategory = $("#ReportCategoryId");
+        var description = $("#Description");
+        var reportdate = $("#ReportDateStr");
+        var hours = $("#Hours");
+        var minutes = $("#Minutes");
+
+        if (employee.val() == "0" || employee.val() == "") {
+            employee.css("border-color", "red");
+            errorCount = errorCount + 1;
+        }
+        else {
+            employee.css("border-color", "");
+        }
+        if (project.val() == "0" || project.val() == "") {
+            var span = $("#select2-ProjectId-container").parent();
+            span.css("border", "1px solid red");
+            errorCount = errorCount + 1;
+        }
+        else {
+            var span = $("#select2-ProjectId-container").parent();
+            span.css("border", "");
+        }
+        if (reportdate.val() == "") {
+            reportdate.css("border-color", "red");
+            errorCount = errorCount + 1;
+        }
+        else {
+            reportdate.css("border-color", "");
+        }
+        if (description.val() == "") {
+            description.css("border-color", "red");
+            errorCount = errorCount + 1;
+        }
+        else {
+            description.css("border-color", "");
+        }
+        if (description.val().length < 100) {
+            description.css("border-color", "red");
+            errorCount = errorCount + 1;
+        }
+        else {
+            description.css("border-color", "");
+        }
+        if (hours.val() == "-1" || hours.val() == "") {
+            hours.css("border-color", "red");
+            errorCount = errorCount + 1;
+        }
+        else {
+            hours.css("border-color", "");
+        }
+        if (reportcategory.val() == "0" || reportcategory.val() == "") {
+            reportcategory.css("border-color", "red");
+            errorCount = errorCount + 1;
+        }
+        else {
+            reportcategory.css("border-color", "");
+        }
+
+
+        if (errorCount > 0) {
+            return false;
+        }
+
+        var model = { EmployeeId: employee.val(), ReportDateStr: reportdate.val(), ProjectId: project.val(), ReportCategoryId: reportcategory.val(), Description: description.val(), Hours: hours.val(), Minutes: minutes.val() };
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "/EmployeeDailyStatusReport/AddDailyStatusReportByTeamLeader",
+            data: JSON.stringify(model),
+            dataType: 'json',
+            beforeSend: function () {
+                $("#lblMessage").html("Please wait...");
+                $(".dvAlert").addClass("alert-success");
+                $(".dvAlert").show();
+            },
+            success: function (response) {
+                $("#lblMessage").html(response.response);
+                if (response.isSuccess) {
+                    $(".dvAlert").addClass("alert-success");
+                }
+                else {
+                    $(".dvAlert").addClass("alert-danger");
+                }
+                $(".dvAlert").show();
+                GetDailyStatusReports();
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+                ClearFields();
+            },
+            error: function (error) {
+                $("#lblMessage").html("Something went wrong, please try again");
+                $(".dvAlert").addClass("alert-danger");
+                $(".dvAlert").show();
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+                console.log(error);
+            }
+        });
+    });
+    function EditStatusReport(Report) {
+        $("#lblMessage").html("");
+        $(".dvAlert").hide();
+        var array = Report.WorkingHours.split('.');
+        $("#DailyReportId").val(Report.DailyReportId);
+        $("#EmployeeId").val(Report.EmployeeId);
+        $("#ProjectId").val(Report.ProjectId);
+        $("#ProjectId").trigger("change");
+        $("#ReportCategoryId").val(Report.ReportCategoryId);
+        $("#ReportDateStr").val(Report.CreatedDateStr);
+        $("#Description").val(Report.Description);
+        $("#Hours").val(array[0]);
+        $("#Minutes").val(array[1]);
+        $("#btnAdd").hide();
+        $("#btnUpdate").show();
+        $("html, body").animate({ scrollTop: 0 }, "slow");
+    }
+    $("#btnUpdate").on('click', function (e) {
+        var errorCount = 0;
+        var employee = $("#EmployeeId");
+        var project = $("#ProjectId");
+        var reportcategory = $("#ReportCategoryId");
+        var description = $("#Description");
+        var reportdate = $("#ReportDateStr");
+        var hours = $("#Hours");
+        var minutes = $("#Minutes");
+
+        if (employee.val() == "0" || employee.val() == "") {
+            employee.css("border-color", "red");
+            errorCount = errorCount + 1;
+        }
+        else {
+            employee.css("border-color", "");
+        }
+        if (project.val() == "0" || project.val() == "") {
+            var span = $("#select2-ProjectId-container").parent();
+            span.css("border", "1px solid red");
+            errorCount = errorCount + 1;
+        }
+        else {
+            var span = $("#select2-ProjectId-container").parent();
+            span.css("border", "");
+        }
+        if (reportdate.val() == "") {
+            reportdate.css("border-color", "red");
+            errorCount = errorCount + 1;
+        }
+        else {
+            reportdate.css("border-color", "");
+        }
+        if (description.val() == "") {
+            description.css("border-color", "red");
+            errorCount = errorCount + 1;
+        }
+        else {
+            description.css("border-color", "");
+        }
+        if (description.val().length < 100) {
+            description.css("border-color", "red");
+            errorCount = errorCount + 1;
+        }
+        else {
+            description.css("border-color", "");
+        }
+        if (hours.val() == "-1" || hours.val() == "") {
+            hours.css("border-color", "red");
+            errorCount = errorCount + 1;
+        }
+        else {
+            hours.css("border-color", "");
+        }
+        if (reportcategory.val() == "0" || reportcategory.val() == "") {
+            reportcategory.css("border-color", "red");
+            errorCount = errorCount + 1;
+        }
+        else {
+            reportcategory.css("border-color", "");
+        }
+
+        if (errorCount > 0) {
+            return false;
+        }
+        var DailyReportId = $("#DailyReportId").val();
+        var model = { DailyReportId: DailyReportId, EmployeeId: employee.val(), ReportDateStr: reportdate.val(), ProjectId: project.val(), ReportCategoryId: reportcategory.val(), Description: description.val(), Hours: hours.val(), Minutes: minutes.val() };
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "/EmployeeDailyStatusReport/AddDailyStatusReportByTeamLeader",
+            data: JSON.stringify(model),
+            dataType: 'json',
+            beforeSend: function () {
+                $("#lblMessage").html("Please wait...");
+                $(".dvAlert").addClass("alert-success");
+                $(".dvAlert").show();
+            },
+            success: function (response) {
+                $("#lblMessage").html(response.response);
+                if (response.isSuccess) {
+                    $(".dvAlert").addClass("alert-success");
+                }
+                else {
+                    $(".dvAlert").addClass("alert-danger");
+                }
+                $(".dvAlert").show();
+                $("#btnAdd").show();
+                $("#btnUpdate").hide();
+                GetDailyStatusReports();
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+                ClearFields();
+            },
+            error: function (error) {
+                $("#lblMessage").html("Something went wrong, please try again");
+                $(".dvAlert").addClass("alert-danger");
+                $(".dvAlert").show();
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+                console.log(error);
+            }
+        });
+    });
+    $("#btnCancel").click(function () {
+        ClearFields();
+    });
+    function GetDailyStatusReports() {
+        $.ajax({
+            type: "Get",
+            contentType: "application/json; charset=utf-8",
+            url: "/EmployeeDailyStatusReport/_EmployeeDailyStatusReportByTeamLeader",
+            success: function (response) {
+                $('#dvDailyStatusReportsByTeamLeader').html(response);
+                TableDatatablesFixedHeader.init();
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+    function ClearFields() {
+        $("#ProjectId > option").removeAttr("selected");
+        $("#ProjectId").trigger("change");
+        $("#EmployeeId").val('');
+        $("#ReportDateStr").val('');
+        $("#ReportCategoryId").val('');
+        $("#Description").val('');
+        $("#Hours").val('');
+        $("#Minutes").val('00');
+        $("#EmployeeId").
+             $("#ProjectId").
+             $("#ReportDateStr").
+             $("#ReportCategoryId").
+             $("#Description").
+             $("#Hours").
+             $("#ProjectId").
+        $("#Hours").css("border-color", "");
+    }
+</script>

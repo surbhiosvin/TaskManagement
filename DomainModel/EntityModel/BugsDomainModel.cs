@@ -25,5 +25,8 @@ namespace DomainModel.EntityModel
         public DateTime BugUpdatedDate { get; set; }
         public DateTime IssueClosedDate { get; set; }
         public string Mode { get; set; }
+        public string EmployeeName { get; set; }
+        public string DepartmentName { get; set; }
+        public string ProjectTitle { get; set; }
     }
 }

@@ -20,10 +20,16 @@ namespace DomainModel.EntityModel
         public string Filename { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedDate { get; set; }
+        public string CreatedDateStr { get; set; }
         public string CreatedBy { get; set; }
         public string Hours { get; set; }
         public string Minutes { get; set; }
         public string ProjectTitle { get; set; }
         public string CategoryName { get; set; }
+        public string EmployeeName { get; set; }
+        public string DepartmentName { get; set; }
+        public string DesignationName { get; set; }
+        public string Time { get; set; }
+
     }
 }

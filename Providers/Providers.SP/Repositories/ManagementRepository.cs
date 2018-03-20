@@ -446,5 +446,32 @@ namespace Providers.Providers.SP.Repositories
                 return null;
             }
         }
+        public List<EmployeeDomainModel> GetAllTeamLeaders()
+        {
+            try
+            {
+                var list = objHelper.Query<EmployeeDomainModel>("GetAllTeamLeaders", null).ToList();
+                return list;
+            }
+            catch(Exception ex)
+            {
+                ErrorLog.LogError(ex);
+                return null;
+            }
+        }
+        public List<EmployeeDomainModel> GetEmployeeByTeamLeaderDepartmentId(long DepartmentId)
+        {
+            try
+            {
+                
+                var list = objHelper.Query<EmployeeDomainModel>("GetEmployeeByTeamLeaderDepartmentId", new { DepartmentId = DepartmentId }).ToList();
+                return list;
+            }
+            catch(Exception ex)
+            {
+                ErrorLog.LogError(ex);
+                return null;
+            }
+        }
     }
 }

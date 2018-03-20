@@ -1,0 +1,140 @@
+﻿
+@{
+    ViewBag.Title = "BugsList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using TaskManagementOsvin.Security;
+@using TaskManagementOsvin.Models;
+<div class="page-content">
+    <!-- BEGIN PAGE BAR -->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="~/Dashboard/Welcome">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="~/EmployeeDailyStatusReport/EmployeeReport">Bugs List</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="#">Employee Reporting</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            @*<li>
+                    <span>Page Layouts</span>
+                </li>*@
+        </ul>
+        <div class="page-toolbar">
+            <div class="btn-group pull-right">
+                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li>
+                        <a href="#">
+                            <i class="icon-bell"></i> Action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-shield"></i> Another action
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-user"></i> Something else here
+                        </a>
+                    </li>
+                    <li class="divider"> </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-bag"></i> Separated link
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE BAR -->
+    <!-- BEGIN PAGE TITLE-->
+    <h1 class="page-title">
+        Bugs List
+        @*<small>blank page layout</small>*@
+    </h1>
+    <!-- END PAGE TITLE-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN EXAMPLE TABLE PORTLET-->
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption font-green">
+                        <i class="icon-settings font-green"></i>
+                        <span class="caption-subject font-green bold uppercase">Bugs</span>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        @if (UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType == roleTypeModel.HR || UserManager.user.roleType == roleTypeModel.ProjectManager)
+                        {
+                            <div class="col-md-offset-3 col-md-3">
+                                <label class="control-label">Employee</label>
+                                @Html.DropDownList("ddlEmployee", ViewBag.listEmployees as SelectList, "Select Employee", new { @class = "form-control" })
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label">Project</label>
+                                @Html.DropDownList("ddlProject", ViewBag.listProjects as SelectList, "Select Project", new { @class = "form-control" })
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-offset-3 col-md-3">
+                                <label class="control-label">Project</label>
+                                @Html.DropDownList("ddlProject", ViewBag.listProjects as SelectList, "Select Project", new { @class = "form-control" })
+                            </div>
+                        }
+                    </div>
+                    <div class="col-md-12 form-group text-center">
+                        <button type="button" class="btn green-dark" id="btnSearch">Search</button>
+                    </div>
+                </div>
+                <div class="portlet-body dv_ProjectReportContainer">
+                    @Html.Action("_BugsList", "Bugs")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#btnSearch").click(function () {
+        var StartDate = $("#txtStartDate").val();
+        var EndDate = $("#txtEndDate").val();
+        var EmployeeId = getParameterByName("EmployeeId")
+        var model = {
+            startdate: StartDate,
+            enddate:EndDate
+        }
+            $.ajax({
+                type: "GET",
+                url: "/EmployeeDailyStatusReport/_EmployeeReporting?EmployeeId="+EmployeeId+"&StartDate=" + StartDate + "&EndDate=" + EndDate,
+                contentType: "application/text; charset=utf-8",
+                dataType: "text",
+                success: function (response) {
+                    $('.dv_ProjectReportContainer').html(response);
+                    TableDatatablesFixedHeader.init();
+                },
+                failure: function (msg) {
+                    html = false;
+                }
+            });
+    });
+    function getParameterByName(name) {
+        var url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+</script>

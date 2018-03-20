@@ -1,0 +1,54 @@
+﻿@using TaskManagementOsvin.Security;
+@using TaskManagementOsvin.Models;
+@model List<BugsDomainModel>
+
+<table class="table table-striped table-bordered table-hover table-header-fixed" id="sample_2">
+    <thead>
+        <tr class="">
+            <th class="text-center"> Employee </th>
+            <th class="text-center"> Department </th>
+            <th class="text-center"> Project </th>
+            <th class="text-center"> Subject </th>
+            <th class="text-center"> Description </th>
+            <th class="text-center"> Files </th>
+            <th class="text-center"> Priority </th>
+            <th class="text-center"> Status </th>
+            <th class="text-center"> Feedback </th>
+            @if (UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType == roleTypeModel.HR | UserManager.user.roleType == roleTypeModel.ProjectManager)
+            {
+                <th class="text-center"> Edit </th>
+            }
+            else
+            {
+                <th class="text-center"> Give Feedback </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var bug in Model)
+            {
+                <tr>
+                    <td class="text-center"> @bug.EmployeeName </td>
+                    <td class="text-center"> @bug.DepartmentName </td>
+                    <td class="text-center"> @bug.ProjectTitle </td>
+                    <td class="text-center"> @bug.BugSubject </td>
+                    <td class="text-center"> @bug.BugDescription </td>
+                    <td class="text-center"> @bug.Files </td>
+                    <td class="text-center"> @bug.Priority </td>
+                    <td class="text-center"> @bug.Status </td>
+                    <td class="text-center"> @bug.EmployeeFeedBack </td>
+                    @if (UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType == roleTypeModel.HR | UserManager.user.roleType == roleTypeModel.ProjectManager)
+                    {
+                        <td class="text-center"><a title="Edit" class="btn blue" href="~/Bugs/ReportBug?BugId=@bug.BugId"><i class="fa fa-edit"></i></a> </td>
+                    }
+                    else
+                    {
+                        <td class="text-center"><a title="Give Feedback" class="btn blue" href="javascript:;"><i class="fa fa-cogs"></i></a> </td>
+                    }
+                </tr>
+            }
+        }
+    </tbody>
+</table>
