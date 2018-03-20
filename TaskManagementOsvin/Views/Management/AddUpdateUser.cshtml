@@ -136,7 +136,7 @@
             success: function (response) {
                 $('.dv_UserTableContainer').html(response);
                 TableDatatablesFixedHeader.init();
-                if (Archived) {
+                if (Archived=="true") {
                     $("#lblMessage").html("User has removed from archive.");
                 }
                 else {

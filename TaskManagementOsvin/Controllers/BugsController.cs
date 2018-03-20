@@ -133,12 +133,13 @@ namespace TaskManagementOsvin.Controllers
                                 {
                                     if (insertfile == "InsertImage")
                                     {
-                                        ModelState.Clear();
-                                        ModelState.AddModelError("CustomError", Response.response);
-                                        ViewBag.Class = "alert-success";
-                                        model = new BugsModel();
+                                       
                                     }
                                 }
+                                ModelState.Clear();
+                                ModelState.AddModelError("CustomError", Response.response);
+                                ViewBag.Class = "alert-success";
+                                model = new BugsModel();
                             }
                             else if (Response.response == "Bug updated successfully.")
                             {
@@ -176,12 +177,13 @@ namespace TaskManagementOsvin.Controllers
                                 {
                                     if (updatefile == "UpdateImage")
                                     {
-                                        ModelState.Clear();
-                                        ModelState.AddModelError("CustomError", Response.response);
-                                        ViewBag.Class = "alert-success";
-                                        model = new BugsModel();
+                                       
                                     }
                                 }
+                                ModelState.Clear();
+                                ModelState.AddModelError("CustomError", Response.response);
+                                ViewBag.Class = "alert-success";
+                                model = new BugsModel();
                             }
                         }
                     }
