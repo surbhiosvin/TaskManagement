@@ -44,8 +44,8 @@ namespace TaskManagementOsvin.Models
         public string UploadDetailsDocument { get; set; }
         public string UploadDocument { get; set; }
         [RegularExpression(@"\d+(\.\d{1,2})?", ErrorMessage = "Invalid")]
-        public decimal? HourlyRate { get; set; }
-        public decimal? EstimateHours  { get; set; }
+        public decimal HourlyRate { get; set; }
+        public decimal EstimateHours  { get; set; }
         [RegularExpression(@"\d+(\.\d{1,2})?", ErrorMessage = "Invalid")]
         public decimal? AssignedHours { get; set; }
         [RegularExpression(@"\d+(\.\d{1,2})?", ErrorMessage = "Invalid")]
@@ -68,6 +68,8 @@ namespace TaskManagementOsvin.Models
         public decimal? NetworkSupportHours { get; set; }
         [RegularExpression(@"\d+(\.\d{1,2})?", ErrorMessage = "Invalid")]
         public decimal? QualityAnalystHours { get; set; }
+        [RegularExpression(@"\d+(\.\d{1,2})?", ErrorMessage = "Invalid")]
+        public decimal FixedPrice { get; set; }
         //public List<ClientModel> clients { get; set; }
         //public List<ProjectTypeModel> projectType { get; set; }
         //public List<EmployeesModel> employees { get; set; }

@@ -21,5 +21,9 @@ namespace TaskManagementOsvin.Models
         public string Profiles { get; set; }
         public decimal ReleasedAmount { get; set; }
         public string PaymentDueDate { get; set; }
+        public string ProjectCost { get; set; }
+        public string EstimateHours { get; set; }
+        public string EffectiveRate { get; set; }
+        public string RateTillDate { get; set; }
     }
 }

@@ -374,7 +374,7 @@ namespace TaskManagementOsvin.Controllers
             {
                 var contents = result.Content.ReadAsStringAsync().Result;
                 var Response = new JavaScriptSerializer().Deserialize<UserListDomainModel>(contents);
-                listusers = Response.listUsers;
+                listusers = Response.listUsers.Where(s=>s.IsActive==true).ToList();
                 if ((UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType == roleTypeModel.HR || UserManager.user.roleType == roleTypeModel.ProjectManager) && DepartmentId > 0)
                 {
                     listusers = listusers.Where(s => s.DepartmentId == DepartmentId).ToList();

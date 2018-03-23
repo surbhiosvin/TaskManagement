@@ -24,36 +24,37 @@
     </div>
     <!-- END PAGE BAR -->
     <!-- BEGIN PAGE TITLE-->
-    <h1 class="page-title">
-        Reports
-    </h1>
+    <h4 class="page-header">
+        Welcome <b>@UserManager.user.FirstName @UserManager.user.LastName</b>
+    </h4>
     <!-- END PAGE TITLE-->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="m-heading-1 border-green m-bordered">
-                <h3 class="text-center">Summary Of Week Start Date : <span class="label label-info">@DateTime.ParseExact(Model.startdate, "dd/MM/yyyy",null).ToString("dd-MMMM-yyyy")</span>
-                   End Date  <span class="label label-info">@DateTime.ParseExact(Model.enddate, "dd/MM/yyyy", null).ToString("dd-MMMM-yyyy")</span>
-                </h3>
-                @using (Html.BeginForm())
-                {
-                    <div class="col-md-4" style="padding-left:0">
-                        <div class="input-group input-large datepicker input-daterange" data-date-format="dd/mm/yyyy">
-                            @Html.TextBoxFor(x=>x.startdate,new { @class="form-control",@name= "from" })
-                            <span class="input-group-addon"> to </span>
-                            @Html.TextBoxFor(x => x.enddate, new { @class = "form-control", @name = "to" })
-                        </div>
-                    </div>
-                    <div class="col-md-4" style="padding-left:0;padding-top:5px">
-                        <input type="submit" value="Submit" class="btn btn-success" />
-                    </div>
-                }
-                <div class="clearfix"></div>
-            </div>
-        </div>
-    </div>
-    <!-- END PAGE HEADER-->
     @if (UserManager.user.roleType == roleTypeModel.Admin || UserManager.user.roleType == roleTypeModel.HR || UserManager.user.roleType == roleTypeModel.TeamLeader)
     {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="m-heading-1 border-green m-bordered">
+                    <h3 class="text-center">
+                        Summary Of Week Start Date : <span class="label label-info">@DateTime.ParseExact(Model.startdate, "dd/MM/yyyy", null).ToString("dd-MMMM-yyyy")</span>
+                        End Date  <span class="label label-info">@DateTime.ParseExact(Model.enddate, "dd/MM/yyyy", null).ToString("dd-MMMM-yyyy")</span>
+                    </h3>
+                    @using (Html.BeginForm())
+                {
+                        <div class="col-md-4" style="padding-left:0">
+                            <div class="input-group input-large datepicker input-daterange" data-date-format="dd/mm/yyyy">
+                                @Html.TextBoxFor(x => x.startdate, new { @class = "form-control", @name = "from" })
+                                <span class="input-group-addon"> to </span>
+                                @Html.TextBoxFor(x => x.enddate, new { @class = "form-control", @name = "to" })
+                            </div>
+                        </div>
+                        <div class="col-md-4" style="padding-left:0;padding-top:5px">
+                            <input type="submit" value="Submit" class="btn btn-success" />
+                        </div>
+                    }
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    <!-- END PAGE HEADER-->
         <div class="row">
             <div class="col-md-12">
                 <div class="portlet light bordered">
@@ -61,12 +62,12 @@
                 </div>
             </div>
         </div>
-    }
-    <div class="row">
-        <div class="col-md-12">
-            <div class="portlet light bordered">
-                @Html.Action("_employeeReport")
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet light bordered">
+                    @Html.Action("_employeeReport")
+                </div>
             </div>
         </div>
-    </div>
+    }
 </div>

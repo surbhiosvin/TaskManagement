@@ -1,5 +1,4 @@
-﻿using DomainModel.EntityModel;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Providers.Helper;
 using System;
 using System.Collections.Generic;
@@ -13,6 +12,7 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using TaskManagementOsvin.Models;
 using TaskManagementOsvin.Security;
+using DomainModel.EntityModel;
 
 namespace TaskManagementOsvin.Controllers
 {
@@ -133,12 +133,13 @@ namespace TaskManagementOsvin.Controllers
                                 {
                                     if (insertfile == "InsertImage")
                                     {
-                                        ModelState.Clear();
-                                        ModelState.AddModelError("CustomError", Response.response);
-                                        ViewBag.Class = "alert-success";
-                                        model = new BugsModel();
+                                       
                                     }
                                 }
+                                ModelState.Clear();
+                                ModelState.AddModelError("CustomError", Response.response);
+                                ViewBag.Class = "alert-success";
+                                model = new BugsModel();
                             }
                             else if (Response.response == "Bug updated successfully.")
                             {
@@ -176,12 +177,13 @@ namespace TaskManagementOsvin.Controllers
                                 {
                                     if (updatefile == "UpdateImage")
                                     {
-                                        ModelState.Clear();
-                                        ModelState.AddModelError("CustomError", Response.response);
-                                        ViewBag.Class = "alert-success";
-                                        model = new BugsModel();
+                                       
                                     }
                                 }
+                                ModelState.Clear();
+                                ModelState.AddModelError("CustomError", Response.response);
+                                ViewBag.Class = "alert-success";
+                                model = new BugsModel();
                             }
                         }
                     }

@@ -14,11 +14,15 @@
             <tr>
                 <th style="font-weight:600"> Project </th>
                 <th style="font-weight:600"> Client </th>
-                <th style="font-weight:600"> Profiles </th>
-                <th style="font-weight:600"> Released <br /> Amount </th>
+                <th style="font-weight:600"> Profiles </th>                
+                <th style="font-weight:600"> Week <br /> Total </th>
+                <th style="font-weight:600"> Grand <br /> Total </th>
+                <th style="font-weight:600"> Project <br /> Cost </th>
+                <th style="font-weight:600"> Payment <br /> Received </th>
                 <th style="font-weight:600"> Payment <br /> Due Date </th>
-                <th style="font-weight:600"> Week Total </th>
-                <th style="font-weight:600"> Total </th>
+                <th style="font-weight:600"> Exp Hours </th>
+                <th style="font-weight:600"> Eff Rate </th>
+                <th style="font-weight:600"> Rate Till <br /> Date </th>
                 <th style="font-weight:600"> Action </th>
             </tr>
         </thead>
@@ -26,6 +30,10 @@
         {
             <tfoot>
                 <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -43,10 +51,15 @@
                         <td class="highlight"><div class="success"></div><a href="#">@item.ProjectTitle</a></td>
                         <td>@item.ClientName</td>
                         <td>@item.Profiles</td>
-                        <td>@item.ReleasedAmount</td>
-                        <td>@item.PaymentDueDate</td>
+                        @*<td>@item.ReleasedAmount</td>*@                        
                         <td>@item.WorkingHoursOfProject</td>
                         <td>@item.TotalWorkingHoursOfProject</td>
+                        <td>@item.ProjectCost</td>
+                        <td>@item.ReleasedAmount</td>
+                        <td>@item.PaymentDueDate</td>
+                        <td>@item.EstimateHours</td>
+                        <td>@item.EffectiveRate</td>
+                        <td>@item.RateTillDate</td>
                         <td><a href="@Url.Action("GetProfiles", "Project",new { ProjectID = item.ProjectID})" title="View Profile" class="btn btn-icon-only red"><i class="fa fa-eye" aria-hidden="true"></i></a> &nbsp; &nbsp;
                             <a href="Javascript:" onclick="editPayment(this)" title="Edit Payment" data-id="@item.ProjectID" class="btn btn-icon-only blue"><i class="fa fa-edit" aria-hidden="true"></i></a>
                         </td>
@@ -60,9 +73,12 @@
 <script>
     function editPayment(td) {
         var ProjectId = $(td).attr('data-id');
-        var FourthTd = $(td).closest('tr').children('td:eq(3)');
-        var FifthTd = $(td).closest('tr').children('td:eq(4)');
-        var SixthTd = $(td).closest('tr').children('td:eq(7)');
+        //var FourthTd = $(td).closest('tr').children('td:eq(3)');
+        //var FifthTd = $(td).closest('tr').children('td:eq(4)');
+        //var SixthTd = $(td).closest('tr').children('td:eq(7)');
+        var FourthTd = $(td).closest('tr').children('td:eq(6)');
+        var FifthTd = $(td).closest('tr').children('td:eq(7)');
+        var SixthTd = $(td).closest('tr').children('td:eq(11)');
         var PaymentReleasedDate = FifthTd.text().trim();
         var ReleasedPayment = FourthTd.text().trim();
         var actions = SixthTd.text();
@@ -135,8 +151,8 @@
     function BindBack(td, ProjectID, ReleasedPayment, PaymentReleasedDate) {
         var ViewAndEditButton = '<a href="/Project/GetProfiles?ProjectID='+ ProjectID + '" title="View Profile" class="btn btn-icon-only red"><i class="fa fa-eye" aria-hidden="true"></i></a> &nbsp; &nbsp;' +
          '<a href="Javascript:" onclick="editPayment(this)" title="Edit Payment" data-id="' + ProjectID + '" class="btn btn-icon-only blue"><i class="fa fa-edit" aria-hidden="true"></i></a>';
-        $(td).closest('tr').children('td:eq(3)').text(ReleasedPayment);
-        $(td).closest('tr').children('td:eq(4)').text(PaymentReleasedDate);
-        $(td).closest('tr').children('td:eq(7)').html(ViewAndEditButton);
+        $(td).closest('tr').children('td:eq(6)').text(ReleasedPayment);
+        $(td).closest('tr').children('td:eq(7)').text(PaymentReleasedDate);
+        $(td).closest('tr').children('td:eq(11)').html(ViewAndEditButton);
     }
 </script>

@@ -13,7 +13,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <a href="javascript:">Home</a>
-                <i class="fa fa-circle"></i> 
+                <i class="fa fa-circle"></i>
             </li>
             <li>
                 <a href="javascript:">Add / Update Project</a>
@@ -32,7 +32,7 @@
                 <div class="portlet-title">
                     <div class="caption">
                         <i class="icon-layers font-green"></i>
-                    <span class="caption-subject font-green sbold uppercase">Add / Update Project</span>
+                        <span class="caption-subject font-green sbold uppercase">Add / Update Project</span>
                     </div>
                 </div>
                 <div class="portlet-body">
@@ -41,15 +41,15 @@
                             @ViewBag.Message
                         </div>
                     </div>
-                    @using (Html.BeginForm("AddUpdateProject", "Project", FormMethod.Post, new { enctype = "multipart/form-data",@id = "AddUpdateProject" }))
+                    @using (Html.BeginForm("AddUpdateProject", "Project", FormMethod.Post, new { enctype = "multipart/form-data", @id = "AddUpdateProject" }))
                     {
-                        @Html.HiddenFor(x=>x.ProjectId)
+                        @Html.HiddenFor(x => x.ProjectId)
                         <div class="col-md-12">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="single-append-text" class="control-label">Select Client</label>
                                     <div class="input-group select2-bootstrap-append">
-                                        @Html.DropDownListFor(x => x.ClientId, new SelectList(clients, "ClientId", "FullName"), "----Select Client-----", new { @id= "single-append-text", @class = "form-control select2-allow-clear" })
+                                        @Html.DropDownListFor(x => x.ClientId, new SelectList(clients, "ClientId", "FullName"), "----Select Client-----", new { @id = "single-append-text", @class = "form-control select2-allow-clear" })
                                         <span class="input-group-btn">
                                             <button class="btn btn-default" type="button" data-select2-open="single-append-text">
                                                 <span class="glyphicon glyphicon-search"></span>
@@ -62,19 +62,19 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                               <div class="form-group">
-                                   <label>Project Type</label>
-                                   @Html.DropDownListFor(x => x.ProjectTypeId, new SelectList(projectType, "TypeId", "TypeName"), "Select Project Type", new{@class = "form-control"})
-                                   <div class="text-danger">
-                                       @Html.ValidationMessageFor(x => x.ProjectTypeId)
-                                   </div>
-                               </div>
+                                <div class="form-group">
+                                    <label>Project Type</label>
+                                    @Html.DropDownListFor(x => x.ProjectTypeId, new SelectList(projectType, "TypeId", "TypeName"), "Select Project Type", new { @class = "form-control" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(x => x.ProjectTypeId)
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-12" style="display:none" id="HourlyDiv">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    
+
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -87,6 +87,22 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-12" style="display:none" id="FixedCostDiv">
+                            <div class="col-md-6">
+                                <div class="form-group">
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Fixed Price</label>
+                                    @Html.TextBoxFor(x => x.FixedPrice, new { @class = "form-control", @placeholder = "Fixed Price" })
+                                    <div class="text-danger">
+                                        @Html.ValidationMessageFor(x => x.FixedPrice)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="col-md-12">
                             <div class="col-md-6">
@@ -94,7 +110,7 @@
                                     <label>Project Title </label>
                                     @Html.TextBoxFor(x => x.ProjectTitle, new { @class = "form-control", @placeholder = "Project Title" })
                                     <div class="text-danger">
-                                        @Html.ValidationMessageFor(x=>x.ProjectTitle)
+                                        @Html.ValidationMessageFor(x => x.ProjectTitle)
                                     </div>
                                 </div>
                             </div>
@@ -288,10 +304,10 @@
 
                         <div class="col-md-12">
                             <div class="form-group">
-                               <div class="col-md-offset-3 col-md-9">
-                                   <input type="submit" name="name" value="Submit" class="btn btn-lg btn-success" />
-                                   <input type="button" name="cancel" value="Cancel" class="btn btn-lg btn-default" />
-                               </div>
+                                <div class="col-md-offset-3 col-md-9">
+                                    <input type="submit" name="name" value="Submit" class="btn btn-lg btn-success" />
+                                    <input type="button" name="cancel" value="Cancel" class="btn btn-lg btn-default" />
+                                </div>
                                 <div class="clearfix"></div>
                             </div>
                         </div>
@@ -302,7 +318,6 @@
         </div>
     </div>
 </div>
-
 <script>
     $(document).ready(function () {
         ShowHideDiv();
@@ -339,10 +354,19 @@
         var value = $('#ProjectTypeId option:selected').text().toLowerCase();
         if (value.indexOf("hourly") >= 0) {
             $('#HourlyDiv').show();
+            $('#FixedPrice').val('0');
+            $('#FixedCostDiv').hide();
+        }
+        else if (value.indexOf("fixed") >= 0) {
+            $('#FixedCostDiv').show();
+            $('#HourlyRate').val('0');
+            $('#HourlyDiv').hide();
         }
         else {
-            $('#HourlyRate').val('');
+            $('#HourlyRate').val('0');
             $('#HourlyDiv').hide();
+            $('#FixedPrice').val('0');
+            $('#FixedCostDiv').hide();
         }
     }
 </script>

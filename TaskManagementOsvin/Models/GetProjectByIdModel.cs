@@ -41,6 +41,7 @@ namespace TaskManagementOsvin.Models
         public string SetUpHours { get; set; }
         public string MaintainenceHours { get; set; }
         public string NetworkSupprotHours { get; set; }
-        public decimal? HourlyRate { get; set; }
+        public decimal HourlyRate { get; set; }
+        public decimal FixedPrice { get; set; }
     }
 }

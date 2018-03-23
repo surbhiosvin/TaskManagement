@@ -669,6 +669,10 @@ namespace TaskManagementOsvin.Controllers
                 {
                     model.HourlyRate = 0;
                 }
+                if (model.FixedPrice == null)
+                {
+                    model.FixedPrice = 0;
+                }
                 if (!string.IsNullOrEmpty(model.StartDate))
                 {
                     var sd = DateTime.ParseExact(model.StartDate, "dd/MM/yyyy", null).ToString("yyyy/MM/dd");
@@ -776,7 +780,7 @@ namespace TaskManagementOsvin.Controllers
                 var objRes = ProjectRepository.UpdatePaymentRelease(model);
                 if (objRes == null)
                 {
-                    respnose.isSuccess = false;
+                    //respnose.isSuccess = false;
                     httpResponse = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error Occurred");
                 }
                 else
