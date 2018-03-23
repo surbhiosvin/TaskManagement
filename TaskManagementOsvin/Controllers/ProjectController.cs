@@ -44,10 +44,11 @@ namespace TaskManagementOsvin.Controllers
                             ProjectTitle = response.ProjectTitle,
                             ProjectUrl = response.ProjectUrl,
                             HourlyRate = response.HourlyRate,
+                            FixedPrice=response.FixedPrice,
                             UploadDocument = response.UploadDocument,
                             StartDate = response.StartDate,
                             EndDate = response.EndDate,
-                            EstimateHours = string.IsNullOrEmpty(response.EstimateHours) ? (decimal?)null : Convert.ToDecimal(response.EstimateHours),
+                            EstimateHours = string.IsNullOrEmpty(response.EstimateHours) ? 0 : Convert.ToDecimal(response.EstimateHours),
                             AssignedHours = string.IsNullOrEmpty(response.AssignHours) ? (decimal?)null : Convert.ToDecimal(response.AssignHours),
                             developerCodinghours = string.IsNullOrEmpty(response.DeveloperCodingHours) ? (decimal?)null : Convert.ToDecimal(response.DeveloperCodingHours),
                             WebserviceHours = string.IsNullOrEmpty(response.WebServiceHours) ? (decimal?)null : Convert.ToDecimal(response.WebServiceHours),
@@ -162,7 +163,7 @@ namespace TaskManagementOsvin.Controllers
             }
             catch (Exception ex)
             {
-                
+
             }
             return View();
         }
@@ -202,7 +203,7 @@ namespace TaskManagementOsvin.Controllers
                                 var contents = Clientresult.Content.ReadAsStringAsync().Result;
                                 var response = new JavaScriptSerializer().Deserialize<List<GetProfilesModel>>(contents);
                                 var selectIds = ProfileList.Select(x => x.ProfileId);
-                                var idsToDel = response.Where(x => !selectIds.Contains(x.ProfileId)).Select(x=>x.ProfileId).ToArray();
+                                var idsToDel = response.Where(x => !selectIds.Contains(x.ProfileId)).Select(x => x.ProfileId).ToArray();
                                 string joinedIdsToDel = string.Join(",", idsToDel);
 
                                 if (joinedIdsToDel != "")
@@ -223,7 +224,7 @@ namespace TaskManagementOsvin.Controllers
                             }
                         }
                     }
-                    
+
                     foreach (var model in ProfileList)
                     {
                         var client = new HttpClient();
@@ -318,7 +319,7 @@ namespace TaskManagementOsvin.Controllers
             {
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var Clientresult = client.GetAsync("/api/Project/GetProjectPaymentById/"+ ProfileID).Result;
+                var Clientresult = client.GetAsync("/api/Project/GetProjectPaymentById/" + ProfileID).Result;
                 if (Clientresult.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = Clientresult.Content.ReadAsStringAsync().Result;
@@ -337,7 +338,7 @@ namespace TaskManagementOsvin.Controllers
             ViewBag.listProjects = GetProjectList();
             try
             {
-                if(ModelState.IsValid)
+                if (ModelState.IsValid)
                 {
                     model.CreatedBy = UserManager.user.UserId;
                     var dt = DateTime.ParseExact(model.NextDueDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
@@ -665,7 +666,7 @@ namespace TaskManagementOsvin.Controllers
                     if (!Directory.Exists(path))
                     {
                         Directory.CreateDirectory(path);
-                    }                    
+                    }
                     if (model.UploadDocumentFile != null)
                     {
                         string fileName = Path.GetFileName(model.UploadDocumentFile.FileName);
@@ -724,12 +725,12 @@ namespace TaskManagementOsvin.Controllers
             ViewBag.listProjects = new SelectList(listProjects, "ProjectId", "ProjectTitle");
             return View();
         }
-        
+
         public ActionResult ProjectList()
         {
             return View();
         }
-        
+
         public PartialViewResult _ProjectList(GetAllProjectsModel model)
         {
             List<AllProjectsModel> GetProjects = new List<AllProjectsModel>();
@@ -761,7 +762,7 @@ namespace TaskManagementOsvin.Controllers
         }
 
         public ActionResult ProjectListReport(GetAllProjectsModel model)
-        {            
+        {
             return View();
         }
         public ActionResult _ProjectListReport(string StartDate, string EndDate)
@@ -800,7 +801,7 @@ namespace TaskManagementOsvin.Controllers
                         obj.Enddate1 = Convert.ToDateTime(obj.EndDate).ToString("d MMMM yyyy", CultureInfo.CreateSpecificCulture("en-US"));
                     }
                 }
-            }         
+            }
             return PartialView(list);
         }
         public ActionResult FullProjectReport()

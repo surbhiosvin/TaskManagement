@@ -20,7 +20,6 @@ namespace TaskManagementOsvin.Controllers
         static GetDSRModel GetDSRModel = new GetDSRModel() { startdate = DateTime.Now.AddDays(-48).ToString("dd/MM/yyyy"), enddate = DateTime.Now.AddDays(-40).ToString("dd/MM/yyyy") };
         //static GetDSRModel GetDSRModel = new GetDSRModel() { startdate = DateTime.Now.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Sunday).ToString("dd/MM/yyyy"), enddate = DateTime.Now.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Saturday).ToString("dd/MM/yyyy") };
 
-        [CustomAuthorize(roles: "HR,Admin,Team Leader,Project Manager")]
         public ActionResult Welcome()
         {
             return View(GetDSRModel);
@@ -33,7 +32,7 @@ namespace TaskManagementOsvin.Controllers
             GetDSRModel.enddate = DateTime.ParseExact(Dsrmodel.enddate, "dd/MM/yyyy", null).ToString("dd/MM/yyyy");
             return View(GetDSRModel);
         }
-
+        [CustomAuthorize(roles: "HR,Admin,Team Leader,Project Manager")]
         public PartialViewResult _projectReport()
         {
             decimal weekTotal = 0, OverallTotal = 0;
@@ -54,7 +53,7 @@ namespace TaskManagementOsvin.Controllers
             reports.OverallWeekTotalWorkingHours = ConversionInHour(OverallTotal);
             return PartialView(reports);
         }
-
+        [CustomAuthorize(roles: "HR,Admin,Team Leader,Project Manager")]
         public PartialViewResult _employeeReport()
         {
             decimal TotalWeekelyWorkingHours = 0;

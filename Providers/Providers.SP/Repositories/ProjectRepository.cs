@@ -406,6 +406,7 @@ namespace Providers.Providers.SP.Repositories
                     DesignHours = model.EstimateDesignHours.ToString(),
                     QAHours = model.QualityAnalystHours.ToString(),
                     HourlyRate = model.HourlyRate,
+                    FixedPrice=model.FixedPrice,
                     CreatedDate = DateTime.Now
                 }).First();
                 return response;

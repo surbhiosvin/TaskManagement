@@ -42,5 +42,6 @@ namespace DomainModel.EntityModel
         public decimal? MaintainenceHours { get; set; }
         public decimal? NetworkSupportHours { get; set; }
         public decimal? QualityAnalystHours { get; set; }
+        public decimal? FixedPrice { get; set; }
     }
 }

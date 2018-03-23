@@ -43,5 +43,6 @@ namespace DomainModel.EntityModel
         public string MaintainenceHours { get; set; }
         public string NetworkSupprotHours { get; set; }
         public decimal? HourlyRate { get; set; }
+        public decimal? FixedPrice { get; set; }
     }
 }
