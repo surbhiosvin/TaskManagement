@@ -777,8 +777,8 @@ namespace TaskManagementOsvin.Controllers
 
             var resultSet = new DataTableResultModel();
             resultSet.draw = draw;
-            resultSet.recordsTotal = GetProjects.First().TotalRecords;
-            resultSet.recordsFiltered = GetProjects.First().TotalRecords;
+            resultSet.recordsTotal = GetProjects.Count() > 0 ? GetProjects.First().TotalRecords : 0;
+            resultSet.recordsFiltered = GetProjects.Count() > 0 ? GetProjects.First().TotalRecords : 0;
 
 
             foreach (var recordFromDb in GetProjects)
