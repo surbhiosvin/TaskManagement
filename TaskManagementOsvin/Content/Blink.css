@@ -1,0 +1,30 @@
+﻿@-webkit-keyframes blink {
+    50% { background: rgba(220,0,0,0.8); }
+}
+
+@-moz-keyframes blink {
+    50% { background: rgba(220,0,0,0.8); }
+}
+
+@keyframes blink {
+    50% { background: rgba(220,0,0,0.8); }
+}
+.blink {
+    -webkit-animation-direction: normal;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-name: blink;
+    -webkit-animation-timing-function: linear;
+    
+    -moz-animation-direction: normal;
+    -moz-animation-duration: 1s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-name: blink;
+    -moz-animation-timing-function: linear;
+    
+    animation-direction: normal;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    animation-name: blink;
+    animation-timing-function: linear;
+}
