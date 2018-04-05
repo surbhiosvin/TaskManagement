@@ -20,11 +20,11 @@
                     <td class="text-center"> @Dept.DepartmentName </td>
                     @if (Dept.IsActive)
                     {
-                        <td class="text-center" id="StatusActive_@Dept.DepartmentId"><a title="Active" id="StatusActiveLink_@Dept.DepartmentId" href="#" onclick="ActivateDeactivateDepartment(@Dept.DepartmentId, false)"><img alt='Active' src='~/assets/global/img/Guiimages/Active.png' width='30px' height='30px' /></a></td>
+                    <td id="StatusActiveLink_@Dept.DepartmentId" class="text-center vertical-center"><a id="StatusActiveLink_@Dept.DepartmentId" href="javascript:" title="Active" onclick="ActivateDeactivateDepartment(@Dept.DepartmentId, false)"><i class="fa fa-check-circle" style="font-size:20px;color:forestgreen"></i></a></td>
                     }
                     else
                     {
-                        <td class="text-center" id="StatusActive_@Dept.DepartmentId"><a title="InActive" id="StatusActiveLink_@Dept.DepartmentId" href="#" onclick="ActivateDeactivateDepartment(@Dept.DepartmentId, true)"><img alt='In Active Slip' src='~/assets/global/img/Guiimages/InActive.png' width='30px' height='30px' /></a></td>
+                    <td id="StatusActiveLink_@Dept.DepartmentId" class="text-center vertical-center"><a id="StatusActiveLink_@Dept.DepartmentId" href="javascript:" title="Inactive" onclick="ActivateDeactivateDepartment(@Dept.DepartmentId, true)"><i class="fa fa-times-circle" style="font-size:20px;color:red"></i></a></td>
                     }
                     <td class="text-center"><a class="btn green-dark" href="#" onclick="EditDepartment(@Dept.DepartmentId, '@Dept.DepartmentName')"><i class="fa fa-edit"></i></a> </td>
                     <td class="text-center"><a class="btn red" href="#" onclick="DeleteDepartment(@Dept.DepartmentId)"><i class="fa fa-trash"></i></a> </td>

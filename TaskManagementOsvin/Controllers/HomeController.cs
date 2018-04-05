@@ -10,11 +10,13 @@ using System.Text;
 using System.Net;
 using DomainModel.EntityModel;
 using TaskManagementOsvin.Security;
+using System.Configuration;
 
 namespace TaskManagementOsvin.Controllers
 {
     public class HomeController : Controller
     {
+        string BaseURL = ConfigurationManager.AppSettings["BaseURL"];
         public ActionResult Login(string ReturnUrl = "")
         {
             ViewBag.Class = "display-hide";
@@ -34,7 +36,7 @@ namespace TaskManagementOsvin.Controllers
                     var result = UserManager.validateuser(model);
                     if (result == HttpStatusCode.OK)
                     {
-                        if (ReturnUrl !="")
+                        if (ReturnUrl != "")
                         {
                             return Redirect(ReturnUrl);
                         }
@@ -65,7 +67,7 @@ namespace TaskManagementOsvin.Controllers
         {
             var client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var result = client.GetAsync("/api/Notification/ProfileNotifications").Result;
+            var result = client.GetAsync(BaseURL + "/api/Notification/ProfileNotifications").Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;
@@ -80,7 +82,7 @@ namespace TaskManagementOsvin.Controllers
         {
             var client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var result = client.GetAsync("/api/Notification/BirthDayNotifications").Result;
+            var result = client.GetAsync(BaseURL + "/api/Notification/BirthDayNotifications").Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;

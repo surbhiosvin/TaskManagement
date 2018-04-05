@@ -14,5 +14,6 @@ namespace TaskManagementOsvin.Models
         public string EndDate { get; set; }
         public string ProjectStatus { get; set; }
         public string ProjectUrl { get; set; }
+        public int TotalRecords { get; set; }
     }
 }

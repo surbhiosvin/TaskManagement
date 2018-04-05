@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Providers.Helper;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace TaskManagementOsvin.Controllers
     [Authorize]
     public class EmployeeDailyStatusReportController : Controller
     {
+        string BaseURL = ConfigurationManager.AppSettings["BaseURL"];
         // GET: EmployeeDailyStatusReport
         public ActionResult AddEmployeeDailyStatusReport(long EmployeeId = 0)
         {
@@ -29,7 +31,7 @@ namespace TaskManagementOsvin.Controllers
 
             var client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var ProjectResult = client.GetAsync("/api/Project/GetProjectList").Result;
+            var ProjectResult = client.GetAsync(BaseURL + "/api/Project/GetProjectList").Result;
             if (ProjectResult.StatusCode == HttpStatusCode.OK)
             {
                 var contents = ProjectResult.Content.ReadAsStringAsync().Result;
@@ -40,7 +42,7 @@ namespace TaskManagementOsvin.Controllers
             long DepartmentId = 0;
             if (EmployeeId > 0)
             {
-                var result = client.GetAsync("/api/Management/GetEmployeeDataById?UserId=" + EmployeeId).Result;
+                var result = client.GetAsync(BaseURL + "/api/Management/GetEmployeeDataById?UserId=" + EmployeeId).Result;
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;
@@ -53,7 +55,7 @@ namespace TaskManagementOsvin.Controllers
             {
                 DepartmentId = UserManager.user.DepartmentId;
             }
-            var TaskCategoryResult = client.GetAsync("/api/EmployeeDailyStatusReport/GetProjectReportCategoryByDeptId?DepartmentId=" + DepartmentId).Result;
+            var TaskCategoryResult = client.GetAsync(BaseURL + "/api/EmployeeDailyStatusReport/GetProjectReportCategoryByDeptId?DepartmentId=" + DepartmentId).Result;
             if (TaskCategoryResult.StatusCode == HttpStatusCode.OK)
             {
                 var contents = TaskCategoryResult.Content.ReadAsStringAsync().Result;
@@ -110,7 +112,7 @@ namespace TaskManagementOsvin.Controllers
                     var client = new HttpClient();
                     var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
                     client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                    var result = client.PostAsync("/api/EmployeeDailyStatusReport/AddUpdateEmployeeDailyReport", content).Result;
+                    var result = client.PostAsync(BaseURL + "/api/EmployeeDailyStatusReport/AddUpdateEmployeeDailyReport", content).Result;
                     if (result.StatusCode == HttpStatusCode.OK)
                     {
                         var contents = result.Content.ReadAsStringAsync().Result;
@@ -132,7 +134,7 @@ namespace TaskManagementOsvin.Controllers
             List<EmployeeDailyReportModel> listDailyStatusReports = new List<EmployeeDailyReportModel>();
             var client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var ProjectResult = client.GetAsync("/api/EmployeeDailyStatusReport/GetDailyStatusReportDetailsOfCurrentDate?EmployeeId=" + UserManager.user.UserId).Result;
+            var ProjectResult = client.GetAsync(BaseURL + "/api/EmployeeDailyStatusReport/GetDailyStatusReportDetailsOfCurrentDate?EmployeeId=" + UserManager.user.UserId).Result;
             if (ProjectResult.StatusCode == HttpStatusCode.OK)
             {
                 var contents = ProjectResult.Content.ReadAsStringAsync().Result;
@@ -161,7 +163,7 @@ namespace TaskManagementOsvin.Controllers
             List<EmployeeTotalWorkingHoursReportDomainModel> listEmployeeTotalWorkingHoursReport = new List<EmployeeTotalWorkingHoursReportDomainModel>();
             var client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var res = client.GetAsync("/api/EmployeeDailyStatusReport/GetEmployeeTotalWorkingHoursReport?DepartmentId=" + UserManager.user.DepartmentId + "&EmployeeId=" + UserManager.user.UserId + "&StartDate=" + StartDate + "&EndDate=" + EndDate).Result;
+            var res = client.GetAsync(BaseURL + "/api/EmployeeDailyStatusReport/GetEmployeeTotalWorkingHoursReport?DepartmentId=" + UserManager.user.DepartmentId + "&EmployeeId=" + UserManager.user.UserId + "&StartDate=" + StartDate + "&EndDate=" + EndDate).Result;
             if (res.StatusCode == HttpStatusCode.OK)
             {
                 var contents = res.Content.ReadAsStringAsync().Result;
@@ -185,7 +187,7 @@ namespace TaskManagementOsvin.Controllers
                 }
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var ProjectResult = client.GetAsync("/api/Project/GetProjectList").Result;
+                var ProjectResult = client.GetAsync(BaseURL + "/api/Project/GetProjectList").Result;
                 if (ProjectResult.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = ProjectResult.Content.ReadAsStringAsync().Result;
@@ -193,7 +195,7 @@ namespace TaskManagementOsvin.Controllers
                     listProjects = response;
                     listProjects = listProjects.Where(p => p.ProjectId != 11).ToList();
                 }
-                var TaskCategoryResult = client.GetAsync("/api/EmployeeDailyStatusReport/GetProjectReportCategoryByDeptId?DepartmentId=" + UserManager.user.DepartmentId).Result;
+                var TaskCategoryResult = client.GetAsync(BaseURL + "/api/EmployeeDailyStatusReport/GetProjectReportCategoryByDeptId?DepartmentId=" + UserManager.user.DepartmentId).Result;
                 if (TaskCategoryResult.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = TaskCategoryResult.Content.ReadAsStringAsync().Result;
@@ -204,7 +206,7 @@ namespace TaskManagementOsvin.Controllers
                 List<EmployeeDomainModel> listusers = new List<EmployeeDomainModel>();
                 var serialized = new JavaScriptSerializer().Serialize(usermodel);
                 var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
-                var result = client.PostAsync("/api/Management/UserListBySearch", content).Result;
+                var result = client.PostAsync(BaseURL + "/api/Management/UserListBySearch", content).Result;
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;
@@ -259,7 +261,7 @@ namespace TaskManagementOsvin.Controllers
                     var client = new HttpClient();
                     var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
                     client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                    var result = client.PostAsync("/api/EmployeeDailyStatusReport/AddUpdateEmployeeDailyReportByTeamLeader", content).Result;
+                    var result = client.PostAsync(BaseURL + "/api/EmployeeDailyStatusReport/AddUpdateEmployeeDailyReportByTeamLeader", content).Result;
                     if (result.StatusCode == HttpStatusCode.OK)
                     {
                         var contents = result.Content.ReadAsStringAsync().Result;
@@ -280,7 +282,7 @@ namespace TaskManagementOsvin.Controllers
             List<EmployeeTotalWorkingHoursReportDomainModel> listDailyStatusReportsByTeamLeader = new List<EmployeeTotalWorkingHoursReportDomainModel>();
             var client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var res = client.GetAsync("/api/EmployeeDailyStatusReport/GetEmployeeReportFilledByTeamLeaderWithTotalWorkingHours?DepartmentId=" + UserManager.user.DepartmentId + "&TLEmployeeId=" + UserManager.user.UserId).Result;
+            var res = client.GetAsync(BaseURL + "/api/EmployeeDailyStatusReport/GetEmployeeReportFilledByTeamLeaderWithTotalWorkingHours?DepartmentId=" + UserManager.user.DepartmentId + "&TLEmployeeId=" + UserManager.user.UserId).Result;
             if (res.StatusCode == HttpStatusCode.OK)
             {
                 var contents = res.Content.ReadAsStringAsync().Result;
@@ -290,12 +292,14 @@ namespace TaskManagementOsvin.Controllers
             }
             return PartialView(listDailyStatusReportsByTeamLeader);
         }
+
+        [CustomAuthorize(roles: "HR,Admin,Team Leader,Project Manager")]
         public ActionResult TeamLeaderFilledEmployeeDailyStatusReportDetails()
         {
             ViewBag.Class = "display-hide";
             var client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var res = client.GetAsync("/api/Management/GetAllTeamLeaders").Result;
+            var res = client.GetAsync(BaseURL + "/api/Management/GetAllTeamLeaders").Result;
             if (res.StatusCode == HttpStatusCode.OK)
             {
                 var contents = res.Content.ReadAsStringAsync().Result;
@@ -304,7 +308,7 @@ namespace TaskManagementOsvin.Controllers
             }
             if (UserManager.user.roleType == roleTypeModel.TeamLeader)
             {
-                var EmpRes = client.GetAsync("/api/Management/GetEmployeeByTeamLeaderId?TeamLeaderId=" + UserManager.user.UserId).Result;
+                var EmpRes = client.GetAsync(BaseURL + "/api/Management/GetEmployeeByTeamLeaderId?TeamLeaderId=" + UserManager.user.UserId).Result;
                 if (EmpRes.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = EmpRes.Content.ReadAsStringAsync().Result;
@@ -323,7 +327,7 @@ namespace TaskManagementOsvin.Controllers
             List<EmployeeTotalWorkingHoursReportDomainModel> listDailyStatusReportsByTeamLeader = new List<EmployeeTotalWorkingHoursReportDomainModel>();
             var client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var res = client.GetAsync("/api/EmployeeDailyStatusReport/GetEmployeeReportFilledByTeamLeaderAccToEmployeeId?TLEmployeeId=" + TeamLeaderId + "&EmployeeId=" + EmployeeId).Result;
+            var res = client.GetAsync(BaseURL + "/api/EmployeeDailyStatusReport/GetEmployeeReportFilledByTeamLeaderAccToEmployeeId?TLEmployeeId=" + TeamLeaderId + "&EmployeeId=" + EmployeeId).Result;
             if (res.StatusCode == HttpStatusCode.OK)
             {
                 var contents = res.Content.ReadAsStringAsync().Result;
@@ -344,13 +348,15 @@ namespace TaskManagementOsvin.Controllers
             }  
             return PartialView(listDailyStatusReportsByTeamLeader);
         }
+
+        [CustomAuthorize(roles: "HR,Admin,Team Leader,Project Manager")]
         public ActionResult EmployeeReport()
         {
             ViewBag.Class = "display-hide";
             List<DepartmentDomainModel> listDepartment = new List<DepartmentDomainModel>();
             var client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var ProjectResult = client.GetAsync("/api/Management/GetAllDepartments").Result;
+            var ProjectResult = client.GetAsync(BaseURL + "/api/Management/GetAllDepartments").Result;
             if (ProjectResult.StatusCode == HttpStatusCode.OK)
             {
                 var contents = ProjectResult.Content.ReadAsStringAsync().Result;
@@ -360,6 +366,7 @@ namespace TaskManagementOsvin.Controllers
             ViewBag.listDepartment = new SelectList(listDepartment, "DepartmentId", "DepartmentName");
             return View();
         }
+
         [HttpGet]
         public ActionResult _EmployeeReport(long DepartmentId = 0)
         {
@@ -369,7 +376,7 @@ namespace TaskManagementOsvin.Controllers
             var client = new HttpClient();
             var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var result = client.PostAsync("/api/Management/UserListBySearch", content).Result;
+            var result = client.PostAsync(BaseURL + "/api/Management/UserListBySearch", content).Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;
@@ -385,20 +392,10 @@ namespace TaskManagementOsvin.Controllers
         public ActionResult EmployeeReporting(long EmployeeId)
         {
             ViewBag.EmployeeId = EmployeeId;
-            //var client = new HttpClient();
-            //client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            //var result = client.GetAsync("/api/Management/GetEmployeeDataById?UserId=" + EmployeeId).Result;
-            //if (result.StatusCode == HttpStatusCode.OK)
-            //{
-            //    var contents = result.Content.ReadAsStringAsync().Result;
-            //    var Response = new JavaScriptSerializer().Deserialize<EmployeeModel>(contents);
-            //    if (Response != null && Response.UserId > 0)
-            //    {
-            //        ViewBag.EmpInfo = Response.FirstName + " " + Response.LastName+" "+Response.DepartmentName+" "+Response.DesignationName;
-            //    }
-            //}
             return View();
         }
+
+        [CustomAuthorize(roles: "HR,Admin,Team Leader,Project Manager")]
         [HttpGet]
         public ActionResult _EmployeeReporting(long EmployeeId, string StartDate, string EndDate)
         {
@@ -419,7 +416,7 @@ namespace TaskManagementOsvin.Controllers
                 long DepartmentId = 0;
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var result = client.GetAsync("/api/Management/GetEmployeeDataById?UserId=" + EmployeeId).Result;
+                var result = client.GetAsync(BaseURL + "/api/Management/GetEmployeeDataById?UserId=" + EmployeeId).Result;
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;
@@ -427,7 +424,7 @@ namespace TaskManagementOsvin.Controllers
                     if (Response != null && Response.UserId > 0)
                         DepartmentId = Response.DepartmentId;
                 }
-                var res = client.GetAsync("/api/EmployeeDailyStatusReport/GetEmployeeTotalWorkingHoursReport?DepartmentId=" + DepartmentId + "&EmployeeId=" + EmployeeId + "&StartDate=" + StartDate + "&EndDate=" + EndDate).Result;
+                var res = client.GetAsync(BaseURL + "/api/EmployeeDailyStatusReport/GetEmployeeTotalWorkingHoursReport?DepartmentId=" + DepartmentId + "&EmployeeId=" + EmployeeId + "&StartDate=" + StartDate + "&EndDate=" + EndDate).Result;
                 if (res.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = res.Content.ReadAsStringAsync().Result;
@@ -448,6 +445,8 @@ namespace TaskManagementOsvin.Controllers
             }
             return PartialView(listEmployeeTotalWorkingHoursReport);
         }
+
+        [CustomAuthorize(roles: "HR,Admin")]
         public ActionResult EmployeeTotalWorkingHoursInMonth()
         {
             return View();
@@ -468,7 +467,7 @@ namespace TaskManagementOsvin.Controllers
             }
             var client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var result = client.GetAsync("/api/EmployeeDailyStatusReport/GetEmployeeTotalWorkingHours?StartDate=" + StartDate + "&EndDate=" + EndDate).Result;
+            var result = client.GetAsync(BaseURL + "/api/EmployeeDailyStatusReport/GetEmployeeTotalWorkingHours?StartDate=" + StartDate + "&EndDate=" + EndDate).Result;
             if(result.StatusCode==HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;

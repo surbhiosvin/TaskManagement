@@ -1,6 +1,7 @@
 ﻿using DomainModel.EntityModel;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -11,8 +12,10 @@ using TaskManagementOsvin.Security;
 
 namespace TaskManagementOsvin.Controllers
 {
+    [CustomAuthorize(roles: "HR,Admin,Team Leader,Project Manager")]
     public class ClientController : Controller
     {
+        string BaseURL = ConfigurationManager.AppSettings["BaseURL"];
         [HttpGet]
         public ActionResult Clients()
         {
@@ -25,7 +28,7 @@ namespace TaskManagementOsvin.Controllers
             var client = new HttpClient();
             List<ClientDomainModel> listClients = new List<ClientDomainModel>();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var Clientresult = client.GetAsync("/api/Client/GetAllClients?Archived="+ (Archived == true ? "Archive" : "NonArchive")).Result;
+            var Clientresult = client.GetAsync(BaseURL + "/api/Client/GetAllClients?Archived="+ (Archived == true ? "Archive" : "NonArchive")).Result;
             if (Clientresult.StatusCode == HttpStatusCode.OK)
             {
                 var contents = Clientresult.Content.ReadAsStringAsync().Result;
@@ -40,7 +43,7 @@ namespace TaskManagementOsvin.Controllers
             ResponseDomainModel objRes = new ResponseDomainModel();
             var client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var result = client.GetAsync("/api/Client/UpdateClientArchive?ClientId=" + ClientId).Result;
+            var result = client.GetAsync(BaseURL + "/api/Client/UpdateClientArchive?ClientId=" + ClientId).Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;
@@ -61,7 +64,7 @@ namespace TaskManagementOsvin.Controllers
                 var client = new HttpClient();
                 var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var result = client.PostAsync("/api/Client/AddUpdateClient", content).Result;
+                var result = client.PostAsync(BaseURL + "/api/Client/AddUpdateClient", content).Result;
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;

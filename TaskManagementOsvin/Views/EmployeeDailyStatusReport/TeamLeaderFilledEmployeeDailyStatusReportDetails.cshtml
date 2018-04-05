@@ -1,4 +1,4 @@
-﻿
+﻿@using System.Configuration
 @{
     ViewBag.Title = "TeamLeaderFilledEmployeeDailyStatusReportDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -102,6 +102,7 @@
 </div>
 
 <script type="text/javascript">
+    var basehref = '@ConfigurationManager.AppSettings["BaseURL"]';
     jQuery(document).on('ready', function () {
         var table = $('#sample_2').DataTable();
         table.state.clear();
@@ -120,7 +121,7 @@
             if (typeof TeamLeaderId != 'undefined') {
                 $.ajax({
                     type: "GET",
-                    url: "/api/Management/GetEmployeeByTeamLeaderId?TeamLeaderId=" + TeamLeaderId,
+                    url: basehref + "/api/Management/GetEmployeeByTeamLeaderId?TeamLeaderId=" + TeamLeaderId,
                     //data: { sortBy: sortByval },
                     contentType: "application/text; charset=utf-8",
                     dataType: "text",
@@ -147,7 +148,7 @@
             if (typeof EmployeeId != 'undefined') {
                 $.ajax({
                     type: "GET",
-                    url: "/EmployeeDailyStatusReport/_TeamLeaderFilledEmployeeDailyStatusReportDetails?EmployeeId=" + EmployeeId + "&TeamLeaderId=" + TeamLeaderId,
+                    url: basehref + "/EmployeeDailyStatusReport/_TeamLeaderFilledEmployeeDailyStatusReportDetails?EmployeeId=" + EmployeeId + "&TeamLeaderId=" + TeamLeaderId,
                     //data: { sortBy: sortByval },
                     contentType: "application/text; charset=utf-8",
                     dataType: "text",

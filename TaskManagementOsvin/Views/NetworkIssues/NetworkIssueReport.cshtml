@@ -3,7 +3,7 @@
     ViewBag.Title = "NetworkIssueReport";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@using System.Configuration
 @using TaskManagementOsvin.Security;
 @using TaskManagementOsvin.Models;
 <div class="page-content">
@@ -140,6 +140,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
 <script type="text/javascript">
+    var basehref = '@ConfigurationManager.AppSettings["BaseURL"]';
     jQuery(document).on('ready', function () {
         var minOffset = -3, maxOffset = 100; // Change to whatever you want // minOffset = 0 for current year
         var thisYear = (new Date()).getFullYear();
@@ -160,7 +161,7 @@
         $.ajax({
             type: "GET",
             contentType: "application/json; charset=utf-8",
-            url: "/api/NetworkIssues/GetNetworkResolvedIssue?Month=" + Month + "&Year=" + Year,
+            url: basehref + "/api/NetworkIssues/GetNetworkResolvedIssue?Month=" + Month + "&Year=" + Year,
             beforeSend: function () {
             },
             success: function (response) {

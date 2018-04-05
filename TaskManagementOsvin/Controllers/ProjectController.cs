@@ -13,12 +13,14 @@ using Providers.Helper;
 using Newtonsoft.Json;
 using System.IO;
 using System.Globalization;
+using System.Configuration;
 
 namespace TaskManagementOsvin.Controllers
 {
-    //[Authorize] // assign roles
+    [Authorize]
     public class ProjectController : Controller
     {
+        string BaseURL = ConfigurationManager.AppSettings["BaseURL"];
         // GET: Project
         public ActionResult AddUpdateProject(int ProjectId = 0)
         {
@@ -30,7 +32,7 @@ namespace TaskManagementOsvin.Controllers
                 {
                     var client = new HttpClient();
                     client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                    var Clientresult = client.GetAsync("/api/Project/GetProjectDetailsById?ProjectId=" + ProjectId).Result;
+                    var Clientresult = client.GetAsync(BaseURL + "/api/Project/GetProjectDetailsById?ProjectId=" + ProjectId).Result;
                     if (Clientresult.StatusCode == HttpStatusCode.OK)
                     {
                         var contents = Clientresult.Content.ReadAsStringAsync().Result;
@@ -108,7 +110,7 @@ namespace TaskManagementOsvin.Controllers
                     var client = new HttpClient();
                     var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
                     client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                    var Clientresult = client.PostAsync("/api/Project/AddUpdateProject", content).Result;
+                    var Clientresult = client.PostAsync(BaseURL + "/api/Project/AddUpdateProject", content).Result;
                     if (Clientresult.StatusCode == HttpStatusCode.OK)
                     {
                         ViewBag.Class = "alert-success";
@@ -152,7 +154,7 @@ namespace TaskManagementOsvin.Controllers
                 {
                     var client = new HttpClient();
                     client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                    var Clientresult = client.GetAsync("/api/Profile/GetProfilesByProjectId/" + ProjectId).Result;
+                    var Clientresult = client.GetAsync(BaseURL + "/api/Profile/GetProfilesByProjectId/" + ProjectId).Result;
                     if (Clientresult.StatusCode == HttpStatusCode.OK)
                     {
                         var contents = Clientresult.Content.ReadAsStringAsync().Result;
@@ -197,7 +199,7 @@ namespace TaskManagementOsvin.Controllers
                         {
                             var client = new HttpClient();
                             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                            var Clientresult = client.GetAsync("/api/Profile/GetProfilesByProjectId/" + ProjectId).Result;
+                            var Clientresult = client.GetAsync(BaseURL + "/api/Profile/GetProfilesByProjectId/" + ProjectId).Result;
                             if (Clientresult.StatusCode == HttpStatusCode.OK)
                             {
                                 var contents = Clientresult.Content.ReadAsStringAsync().Result;
@@ -208,7 +210,7 @@ namespace TaskManagementOsvin.Controllers
 
                                 if (joinedIdsToDel != "")
                                 {
-                                    var Getresult = client.PostAsync("/api/Profile/DeleteProfiles/" + joinedIdsToDel, null).Result;
+                                    var Getresult = client.PostAsync(BaseURL + "/api/Profile/DeleteProfiles/" + joinedIdsToDel, null).Result;
                                     if (Getresult.StatusCode == HttpStatusCode.InternalServerError)
                                     {
                                         return Json(new { isSuccess = false, reason = "Error occurred" });
@@ -232,7 +234,7 @@ namespace TaskManagementOsvin.Controllers
                         var serialized = new JavaScriptSerializer().Serialize(model);
                         var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
                         client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                        var Clientresult = client.PostAsync("/api/Profile/AddProfile", content).Result;
+                        var Clientresult = client.PostAsync(BaseURL + "/api/Profile/AddProfile", content).Result;
                         if (Clientresult.StatusCode == HttpStatusCode.OK)
                         {
                             var contents = Clientresult.Content.ReadAsStringAsync().Result;
@@ -293,7 +295,7 @@ namespace TaskManagementOsvin.Controllers
                     var client = new HttpClient();
                     var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
                     client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                    var Clientresult = client.PostAsync("/api/Project/UpdateProjectStatus", content).Result;
+                    var Clientresult = client.PostAsync(BaseURL + "/api/Project/UpdateProjectStatus", content).Result;
                     if (Clientresult.StatusCode == HttpStatusCode.OK)
                     {
                         ViewBag.Class = "alert-success";
@@ -319,7 +321,7 @@ namespace TaskManagementOsvin.Controllers
             {
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var Clientresult = client.GetAsync("/api/Project/GetProjectPaymentById/" + ProfileID).Result;
+                var Clientresult = client.GetAsync(BaseURL + "/api/Project/GetProjectPaymentById/" + ProfileID).Result;
                 if (Clientresult.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = Clientresult.Content.ReadAsStringAsync().Result;
@@ -349,11 +351,11 @@ namespace TaskManagementOsvin.Controllers
                     HttpResponseMessage Clientresult = null;
                     if (model.PaymentId > 0)
                     {
-                        Clientresult = client.PostAsync("/api/Project/UpdatePaymentRelease", content).Result;
+                        Clientresult = client.PostAsync(BaseURL + "/api/Project/UpdatePaymentRelease", content).Result;
                     }
                     else
                     {
-                        Clientresult = client.PostAsync("/api/Project/AddPaymentRelease", content).Result;
+                        Clientresult = client.PostAsync(BaseURL + "/api/Project/AddPaymentRelease", content).Result;
                     }
                     if (Clientresult.StatusCode == HttpStatusCode.OK)
                     {
@@ -383,14 +385,14 @@ namespace TaskManagementOsvin.Controllers
         {
             var client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var Clientresult = client.GetAsync("/api/Client/GetClients").Result;
+            var Clientresult = client.GetAsync(BaseURL + "/api/Client/GetClients").Result;
             if (Clientresult.StatusCode == HttpStatusCode.OK)
             {
                 var contents = Clientresult.Content.ReadAsStringAsync().Result;
                 var response = new JavaScriptSerializer().Deserialize<List<ClientModel>>(contents);
                 ViewBag.Clients = response;
             }
-            var ProjectTypeResult = client.GetAsync("/api/Project/GetProjectType").Result;
+            var ProjectTypeResult = client.GetAsync(BaseURL + "/api/Project/GetProjectType").Result;
             if (ProjectTypeResult.StatusCode == HttpStatusCode.OK)
             {
                 var contents = ProjectTypeResult.Content.ReadAsStringAsync().Result;
@@ -403,8 +405,8 @@ namespace TaskManagementOsvin.Controllers
         {
             var client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var Clientresult = client.GetAsync("/api/Client/GetClients").Result;
-            var ProjectTypeResult = client.GetAsync("/api/Project/GetProjectType").Result;
+            var Clientresult = client.GetAsync(BaseURL + "/api/Client/GetClients").Result;
+            var ProjectTypeResult = client.GetAsync(BaseURL + "/api/Project/GetProjectType").Result;
             if (ProjectTypeResult.StatusCode == HttpStatusCode.OK)
             {
                 var contents = ProjectTypeResult.Content.ReadAsStringAsync().Result;
@@ -428,7 +430,7 @@ namespace TaskManagementOsvin.Controllers
             {
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var Clientresult = client.GetAsync("/api/Project/GetProjectFullDetails?ProjectId=" + ProjectId).Result;
+                var Clientresult = client.GetAsync(BaseURL + "/api/Project/GetProjectFullDetails?ProjectId=" + ProjectId).Result;
                 if (Clientresult.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = Clientresult.Content.ReadAsStringAsync().Result;
@@ -446,7 +448,7 @@ namespace TaskManagementOsvin.Controllers
             {
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var Clientresult = client.GetAsync("/api/Project/GetProjectAddendumDetails?ProjectId=" + ProjectId).Result;
+                var Clientresult = client.GetAsync(BaseURL + "/api/Project/GetProjectAddendumDetails?ProjectId=" + ProjectId).Result;
                 if (Clientresult.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = Clientresult.Content.ReadAsStringAsync().Result;
@@ -464,7 +466,7 @@ namespace TaskManagementOsvin.Controllers
             {
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var Clientresult = client.GetAsync("/api/Feedback/GetProjectFeedback?ProjectId=" + ProjectId).Result;
+                var Clientresult = client.GetAsync(BaseURL + "/api/Feedback/GetProjectFeedback?ProjectId=" + ProjectId).Result;
                 if (Clientresult.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = Clientresult.Content.ReadAsStringAsync().Result;
@@ -482,7 +484,7 @@ namespace TaskManagementOsvin.Controllers
             {
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var Clientresult = client.GetAsync("/api/Project/GetProjectAssignToUserWithTotalWorkingHours?ProjectId=" + ProjectId + "&Status=ProjectReport").Result;
+                var Clientresult = client.GetAsync(BaseURL + "/api/Project/GetProjectAssignToUserWithTotalWorkingHours?ProjectId=" + ProjectId + "&Status=ProjectReport").Result;
                 if (Clientresult.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = Clientresult.Content.ReadAsStringAsync().Result;
@@ -498,6 +500,7 @@ namespace TaskManagementOsvin.Controllers
             return PartialView(listProjectAssignToUser);
         }
 
+        [CustomAuthorize(roles: "HR,Admin,Team Leader,Project Manager")]
         [HttpGet]
         public ActionResult AddWorkingHoursOfProjectBeforePMS()
         {
@@ -524,7 +527,7 @@ namespace TaskManagementOsvin.Controllers
                     var client = new HttpClient();
                     var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
                     client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                    var result = client.PostAsync("/api/Project/AddProjectWorkingHoursBeforePms", content).Result;
+                    var result = client.PostAsync(BaseURL + "/api/Project/AddProjectWorkingHoursBeforePms", content).Result;
                     if (result.StatusCode == HttpStatusCode.OK)
                     {
                         var contents = result.Content.ReadAsStringAsync().Result;
@@ -560,6 +563,8 @@ namespace TaskManagementOsvin.Controllers
             }
             return View(model);
         }
+
+        [CustomAuthorize(roles: "HR,Admin,Team Leader,Project Manager")]
         [HttpGet]
         public ActionResult ProjectTaskCategories()
         {
@@ -567,7 +572,7 @@ namespace TaskManagementOsvin.Controllers
             List<DepartmentDomainModel> listDepartments = new List<DepartmentDomainModel>();
             var client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var result = client.GetAsync("/api/Management/GetAllDepartments").Result;
+            var result = client.GetAsync(BaseURL + "/api/Management/GetAllDepartments").Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;
@@ -583,7 +588,7 @@ namespace TaskManagementOsvin.Controllers
             List<ProjectReportCategoryDomainModel> listProjectReportCategories = new List<ProjectReportCategoryDomainModel>();
             var client = new System.Net.Http.HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var Clientresult = client.GetAsync("/api/Project/GetProjectReportCategories").Result;
+            var Clientresult = client.GetAsync(BaseURL + "/api/Project/GetProjectReportCategories").Result;
             if (Clientresult.StatusCode == HttpStatusCode.OK)
             {
                 var contents = Clientresult.Content.ReadAsStringAsync().Result;
@@ -603,7 +608,7 @@ namespace TaskManagementOsvin.Controllers
                 var client = new HttpClient();
                 var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var result = client.PostAsync("/api/Project/AddUpdateReportCategory", content).Result;
+                var result = client.PostAsync(BaseURL + "/api/Project/AddUpdateReportCategory", content).Result;
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;
@@ -619,7 +624,7 @@ namespace TaskManagementOsvin.Controllers
             {
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var result = client.GetAsync("/api/Project/DeleteProjectReportCategory?CategoryId=" + CategoryId).Result;
+                var result = client.GetAsync(BaseURL + "/api/Project/DeleteProjectReportCategory?CategoryId=" + CategoryId).Result;
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;
@@ -635,7 +640,7 @@ namespace TaskManagementOsvin.Controllers
             {
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var result = client.GetAsync("/api/Project/ActivateDeactivateProjectReportCategory?CategoryId=" + CategoryId + "&IsActive=" + IsActive).Result;
+                var result = client.GetAsync(BaseURL + "/api/Project/ActivateDeactivateProjectReportCategory?CategoryId=" + CategoryId + "&IsActive=" + IsActive).Result;
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;
@@ -679,7 +684,7 @@ namespace TaskManagementOsvin.Controllers
                     var client = new HttpClient();
                     var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
                     client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                    var result = client.PostAsync("/api/Project/AddProjectTimeEstimation", content).Result;
+                    var result = client.PostAsync(BaseURL + "/api/Project/AddProjectTimeEstimation", content).Result;
                     if (result.StatusCode == HttpStatusCode.OK)
                     {
                         var contents = result.Content.ReadAsStringAsync().Result;
@@ -717,6 +722,8 @@ namespace TaskManagementOsvin.Controllers
             ViewBag.listProjects = new SelectList(listProjects, "ProjectId", "ProjectTitle");
             return View(model);
         }
+
+        [CustomAuthorize(roles: "HR,Admin,Project Manager")]
         [HttpGet]
         public ActionResult MergeProject()
         {
@@ -725,7 +732,7 @@ namespace TaskManagementOsvin.Controllers
             ViewBag.listProjects = new SelectList(listProjects, "ProjectId", "ProjectTitle");
             return View();
         }
-
+        
         public ActionResult ProjectList()
         {
             return View();
@@ -733,25 +740,72 @@ namespace TaskManagementOsvin.Controllers
 
         public PartialViewResult _ProjectList(GetAllProjectsModel model)
         {
+            //List<AllProjectsModel> GetProjects = new List<AllProjectsModel>();
+            //var serialized = new JavaScriptSerializer().Serialize(model);
+            //var client = new HttpClient();
+            //var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
+            //client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
+            //var result = client.PostAsync(BaseURL + "/api/Project/GetProjectsByStatus", content).Result;
+            //if (result.StatusCode == HttpStatusCode.OK)
+            //{
+            //    var contents = result.Content.ReadAsStringAsync().Result;
+            //    GetProjects = new JavaScriptSerializer().Deserialize<List<AllProjectsModel>>(contents);
+            //}
+            return PartialView();
+        }
+        
+        [HttpPost]
+        public JsonResult GetProject(int length = 0, int draw = 0, int start = 0, search search = null, List<order> order = null)
+        {
+            int PageNumber = start / length + 1;
+            GetAllProjectsModel model = new GetAllProjectsModel() { PageNumber = PageNumber, PageSize = length };
+            if (!string.IsNullOrEmpty(search.value))
+            {
+                model.projecttitle = search.value;
+            }
             List<AllProjectsModel> GetProjects = new List<AllProjectsModel>();
             var serialized = new JavaScriptSerializer().Serialize(model);
             var client = new HttpClient();
             var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var result = client.PostAsync("/api/Project/GetProjectsByStatus", content).Result;
+            var result = client.PostAsync(BaseURL + "/api/Project/GetProjectsByStatus", content).Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;
                 GetProjects = new JavaScriptSerializer().Deserialize<List<AllProjectsModel>>(contents);
             }
-            return PartialView(GetProjects);
+
+            var resultSet = new DataTableResultModel();
+            resultSet.draw = draw;
+            resultSet.recordsTotal = GetProjects.First().TotalRecords;
+            resultSet.recordsFiltered = GetProjects.First().TotalRecords;
+
+
+            foreach (var recordFromDb in GetProjects)
+            {
+                var columns = new List<string>();
+                columns.Add(recordFromDb.TypeName);
+                columns.Add(recordFromDb.ProjectTitle);
+                columns.Add(string.IsNullOrEmpty(recordFromDb.StartDate) ? "NA" : DateTime.ParseExact(recordFromDb.StartDate, new[] { "yyyy-MM-dd", "yyyy/MM/dd" }, CultureInfo.InvariantCulture, DateTimeStyles.None).ToString("dd-MMM-yyyy"));
+                columns.Add(string.IsNullOrEmpty(recordFromDb.EndDate) ? "NA" : DateTime.ParseExact(recordFromDb.EndDate, new[] { "yyyy-MM-dd", "yyyy/MM/dd" }, CultureInfo.InvariantCulture, DateTimeStyles.None).ToString("dd-MMM-yyyy"));
+                columns.Add("<span class='label label-success'>" + recordFromDb.ProjectStatus + "</span>");
+                columns.Add((string.IsNullOrEmpty(recordFromDb.ProjectUrl) ? "NA" : recordFromDb.ProjectUrl));
+                columns.Add("<a href='/Project/ProjectAddendumDetails?ProjectId=" + recordFromDb.ProjectId + "'>Addendums Details</a>");
+                columns.Add("<a title='edit' class='btn green-dark' href='/Project/AddUpdateProject?ProjectId=" + recordFromDb.ProjectId + "'><i class='fa fa-edit'></i></a>");
+                columns.Add("<a href='/Project/UpdateProjectStatus?ProjectId=" + recordFromDb.ProjectId + "'>Update Status</a>");
+                columns.Add("<a href='javascript:' onclick='confirm(" + recordFromDb.ProjectId + ")' title='Click here to Archive' style='font-size:20px'><i class='fa fa-archive'></i></a>");
+                resultSet.data.Add(columns);
+            }
+
+            return Json(resultSet, JsonRequestBehavior.AllowGet);
         }
 
+        [CustomAuthorize(roles: "HR,Admin,Team Leader,Project Manager")]
         public ActionResult ProjectAddendumDetails(long ProjectId)
         {
             var client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var result = client.GetAsync("/api/Project/GetProjectAddendumDetails?ProjectId=" + ProjectId).Result;
+            var result = client.GetAsync(BaseURL + "/api/Project/GetProjectAddendumDetails?ProjectId=" + ProjectId).Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;
@@ -761,10 +815,12 @@ namespace TaskManagementOsvin.Controllers
             return View();
         }
 
+        [CustomAuthorize(roles: "HR,Admin,Project Manager")]
         public ActionResult ProjectListReport(GetAllProjectsModel model)
         {
             return View();
         }
+
         public ActionResult _ProjectListReport(string StartDate, string EndDate)
         {
             List<ProjectFullDetailsDomainModel> list = new List<ProjectFullDetailsDomainModel>();
@@ -781,7 +837,7 @@ namespace TaskManagementOsvin.Controllers
             }
             var client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var result = client.GetAsync("/api/Project/GetProjectReportDetails?&StartDate=" + StartDate + "&EndDate=" + EndDate).Result;
+            var result = client.GetAsync(BaseURL + "/api/Project/GetProjectReportDetails?&StartDate=" + StartDate + "&EndDate=" + EndDate).Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;
@@ -814,7 +870,7 @@ namespace TaskManagementOsvin.Controllers
             List<ProjectModel> listProjects = new List<ProjectModel>();
             var client1 = new HttpClient();
             client1.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var ProjectResult = client1.GetAsync("/api/Project/GetProjectList").Result;
+            var ProjectResult = client1.GetAsync(BaseURL + "/api/Project/GetProjectList").Result;
             if (ProjectResult.StatusCode == HttpStatusCode.OK)
             {
                 var contents = ProjectResult.Content.ReadAsStringAsync().Result;

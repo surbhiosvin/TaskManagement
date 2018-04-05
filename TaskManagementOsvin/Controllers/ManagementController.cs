@@ -8,6 +8,7 @@ using Providers.Providers.SP.Repositories;
 using Providers.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -23,8 +24,10 @@ using TaskManagementOsvin.Security;
 
 namespace TaskManagementOsvin.Controllers
 {
+    [Authorize]
     public class ManagementController : Controller
     {
+        string BaseURL = ConfigurationManager.AppSettings["BaseURL"];
         static readonly IManagement managementRepository = new ManagementRepository();
         [HttpGet]
         public ActionResult AddEmployee(int UserId = 0)
@@ -34,7 +37,7 @@ namespace TaskManagementOsvin.Controllers
             {
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var result = client.GetAsync("/api/Management/GetEmployeeDataById?UserId=" + UserId).Result;
+                var result = client.GetAsync(BaseURL + "/api/Management/GetEmployeeDataById?UserId=" + UserId).Result;
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;
@@ -153,7 +156,7 @@ namespace TaskManagementOsvin.Controllers
                     var client = new HttpClient();
                     var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
                     client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                    var result = client.PostAsync("/api/Management/AddUpdateEmployee", content).Result;
+                    var result = client.PostAsync(BaseURL + "/api/Management/AddUpdateEmployee", content).Result;
                     if (result.StatusCode == HttpStatusCode.OK)
                     {
                         var contents = result.Content.ReadAsStringAsync().Result;
@@ -201,7 +204,7 @@ namespace TaskManagementOsvin.Controllers
             return View(model);
         }
         // GET: Management
-
+        [CustomAuthorize(roles: "HR,Admin,Team Leader,Project Manager")]
         public ActionResult AddUpdateUser()
         {
             return View();
@@ -216,7 +219,7 @@ namespace TaskManagementOsvin.Controllers
             var client = new HttpClient();
             var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var result = client.PostAsync("/api/Management/UserListBySearch", content).Result;
+            var result = client.PostAsync(BaseURL + "/api/Management/UserListBySearch", content).Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;
@@ -234,6 +237,7 @@ namespace TaskManagementOsvin.Controllers
         }
 
         [HttpGet]
+        [CustomAuthorize(roles: "HR,Admin")]
         public ActionResult Departments()
         {
             ViewBag.Class = "display-hide";
@@ -254,7 +258,7 @@ namespace TaskManagementOsvin.Controllers
             {
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var result = client.GetAsync("/api/Management/GetEmployeeDataById?UserId=" + UserId).Result;
+                var result = client.GetAsync(BaseURL + "/api/Management/GetEmployeeDataById?UserId=" + UserId).Result;
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;
@@ -271,7 +275,7 @@ namespace TaskManagementOsvin.Controllers
             ResponseDomainModel objRes = new ResponseDomainModel();
             var client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var result = client.GetAsync("/api/Management/UpdateEmployeeArchive?UserId=" + UserId).Result;
+            var result = client.GetAsync(BaseURL + "/api/Management/UpdateEmployeeArchive?UserId=" + UserId).Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;
@@ -282,6 +286,7 @@ namespace TaskManagementOsvin.Controllers
         }
 
         [HttpGet]
+        [CustomAuthorize(roles: "HR,Admin,Team Leader,Project Manager")]
         public ActionResult Designations()
         {
             ViewBag.Class = "display-hide";
@@ -315,7 +320,7 @@ namespace TaskManagementOsvin.Controllers
                     model = new PaySlipModel();
                     var client = new HttpClient();
                     client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                    var result = client.GetAsync("/api/Management/GetEmployeeDataById?UserId=" + UserId).Result;
+                    var result = client.GetAsync(BaseURL + "/api/Management/GetEmployeeDataById?UserId=" + UserId).Result;
                     if (result.StatusCode == HttpStatusCode.OK)
                     {
                         var contents = result.Content.ReadAsStringAsync().Result;
@@ -354,7 +359,7 @@ namespace TaskManagementOsvin.Controllers
                     var client = new HttpClient();
                     var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
                     client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                    var result = client.PostAsync("/api/Management/AddUpdateEmployeePaySlip", content).Result;
+                    var result = client.PostAsync(BaseURL + "/api/Management/AddUpdateEmployeePaySlip", content).Result;
                     if (result.StatusCode == HttpStatusCode.OK)
                     {
                         var contents = result.Content.ReadAsStringAsync().Result;
@@ -431,7 +436,7 @@ namespace TaskManagementOsvin.Controllers
             {
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var result = client.GetAsync("/api/Management/DeleteDepartmentById?DepartmentId=" + DepartmentId).Result;
+                var result = client.GetAsync(BaseURL + "/api/Management/DeleteDepartmentById?DepartmentId=" + DepartmentId).Result;
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;
@@ -449,7 +454,7 @@ namespace TaskManagementOsvin.Controllers
                 var client = new HttpClient();
                 var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var result = client.PostAsync("/api/Management/AddupdateDepartment", content).Result;
+                var result = client.PostAsync(BaseURL + "/api/Management/AddupdateDepartment", content).Result;
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;
@@ -471,7 +476,7 @@ namespace TaskManagementOsvin.Controllers
                 var client = new HttpClient();
                 var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var result = client.PostAsync("/api/Management/AddupdateDesignation", content).Result;
+                var result = client.PostAsync(BaseURL + "/api/Management/AddupdateDesignation", content).Result;
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;
@@ -487,7 +492,7 @@ namespace TaskManagementOsvin.Controllers
             {
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var result = client.GetAsync("/api/Management/DeleteDesignationById?DesignationId=" + DesignationId).Result;
+                var result = client.GetAsync(BaseURL + "/api/Management/DeleteDesignationById?DesignationId=" + DesignationId).Result;
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;
@@ -503,7 +508,7 @@ namespace TaskManagementOsvin.Controllers
             {
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var result = client.GetAsync("/api/Management/ActivateDeactivateDepartment?DepartmentId=" + DepartmentId + "&IsActive=" + IsActive).Result;
+                var result = client.GetAsync(BaseURL + "/api/Management/ActivateDeactivateDepartment?DepartmentId=" + DepartmentId + "&IsActive=" + IsActive).Result;
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;
@@ -519,7 +524,7 @@ namespace TaskManagementOsvin.Controllers
             {
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var result = client.GetAsync("/api/Management/ActivateDeactivateDesignation?DesignationId=" + DesignationId + "&IsActive=" + IsActive).Result;
+                var result = client.GetAsync(BaseURL + "/api/Management/ActivateDeactivateDesignation?DesignationId=" + DesignationId + "&IsActive=" + IsActive).Result;
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;
@@ -535,7 +540,7 @@ namespace TaskManagementOsvin.Controllers
             {
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var result = client.GetAsync("/api/Management/ActivateDeactivateUser?UserId=" + UserId + "&IsActive=" + IsActive).Result;
+                var result = client.GetAsync(BaseURL + "/api/Management/ActivateDeactivateUser?UserId=" + UserId + "&IsActive=" + IsActive).Result;
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;
@@ -551,7 +556,7 @@ namespace TaskManagementOsvin.Controllers
             List<DepartmentDomainModel> listDepartments = new List<DepartmentDomainModel>();
             var client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var result = client.GetAsync("/api/Management/GetAllDepartments").Result;
+            var result = client.GetAsync(BaseURL + "/api/Management/GetAllDepartments").Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;
@@ -565,7 +570,7 @@ namespace TaskManagementOsvin.Controllers
             List<DesignationDomainModel> listDesignaton = new List<DesignationDomainModel>();
             var client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var result = client.GetAsync("/api/Management/GetDesignationByDeptId?DepartmentId=" + DepartmentId).Result;
+            var result = client.GetAsync(BaseURL + "/api/Management/GetDesignationByDeptId?DepartmentId=" + DepartmentId).Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;
@@ -579,7 +584,7 @@ namespace TaskManagementOsvin.Controllers
             List<DesignationDomainModel> listDesignaton = new List<DesignationDomainModel>();
             var client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var result = client.GetAsync("/api/Management/GetDesignationsBasedOnRole?DepartmentId=" + DepartmentId).Result;
+            var result = client.GetAsync(BaseURL + "/api/Management/GetDesignationsBasedOnRole?DepartmentId=" + DepartmentId).Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;
@@ -593,7 +598,7 @@ namespace TaskManagementOsvin.Controllers
             List<EmployeeDomainModel> listEmployees = new List<EmployeeDomainModel>();
             var client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var result = client.GetAsync("/api/Management/GetEmployeeList").Result;
+            var result = client.GetAsync(BaseURL + "/api/Management/GetEmployeeList").Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;

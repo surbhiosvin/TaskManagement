@@ -32,3 +32,71 @@
         </div>
     </div>
 </div>
+<style>
+    .fixed-header{
+  top:50px;
+  position:fixed;
+  width:auto;
+  display:none;
+  border:none;
+  background-color:white;
+}
+    .fixed-footer{
+  bottom:0;
+  position:fixed;
+  width:auto;
+  display:table;
+  border:none;
+  background-color:white;
+  margin-bottom:0;
+}
+</style>
+<script>
+    (function ($) {
+        $.fn.fixMe = function () {
+            return this.each(function () {
+                var $this = $(this),
+                   $t_fixed,$t_foot
+                function init() {
+                    $this.wrap('<div/>');
+                    $t_fixed = $this.clone();
+                    $t_foot = $this.clone();
+                    $t_fixed.find("tbody,tfoot").remove().end().addClass("fixed-header").insertBefore($this);
+                    $t_foot.find("tbody,thead").remove().end().addClass("fixed-footer").insertAfter($this);
+                    resizeFixed();
+                }
+                function resizeFixed() {
+                    $t_fixed.find("th").each(function (index) {
+                        $(this).css("width", $this.find("th").eq(index).outerWidth() + "px");
+                    });
+                    $t_foot.find("th").each(function (index) {
+                        $(this).css("width", $this.find("tfoot th").eq(index).outerWidth() + "px");
+                    });
+                }
+                function scrollFixed() {
+                    var offset = $(this).scrollTop(),
+                    tableOffsetTop = $this.offset().top,
+                    tableOffsetBottom = tableOffsetTop + $this.height() - $this.find("thead").height();
+                    tableOffsetBottomTfoot = tableOffsetTop + $this.height() - $this.find("tfoot").height();
+                    if (offset >= tableOffsetTop && offset > tableOffsetBottomTfoot)
+                        $t_foot.hide();
+                    else if (offset <= tableOffsetBottomTfoot && $t_foot.is(":hidden"))
+                        $t_foot.show();
+
+                    if (offset < tableOffsetTop || offset > tableOffsetBottom)
+                        $t_fixed.hide();
+                    else if (offset >= tableOffsetTop && offset <= tableOffsetBottom && $t_fixed.is(":hidden"))
+                        $t_fixed.show();
+                }
+                $(window).resize(resizeFixed);
+                $(window).scroll(scrollFixed);
+                init();
+            });
+        };
+    })(jQuery);
+</script>
+<script>
+    $(window).load(function () {
+        $("table").fixMe();
+    })
+</script>

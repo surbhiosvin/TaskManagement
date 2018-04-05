@@ -13,11 +13,14 @@ using System.Web.Script.Serialization;
 using TaskManagementOsvin.Models;
 using TaskManagementOsvin.Security;
 using DomainModel.EntityModel;
+using System.Configuration;
 
 namespace TaskManagementOsvin.Controllers
 {
+    [Authorize]
     public class BugsController : Controller
     {
+        string BaseURL = ConfigurationManager.AppSettings["BaseURL"];
         // GET: Bugs
         public ActionResult ReportBug(long BugId = 0)
         {
@@ -32,7 +35,7 @@ namespace TaskManagementOsvin.Controllers
                 var serialized = JsonConvert.SerializeObject(model);
                 var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var result = client.PostAsync("/api/Bugs/GetBugDetails", content).Result;
+                var result = client.PostAsync(BaseURL + "/api/Bugs/GetBugDetails", content).Result;
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;
@@ -43,14 +46,14 @@ namespace TaskManagementOsvin.Controllers
             }
             client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var Clientresult = client.GetAsync("/api/Bugs/GetEmployees").Result;
+            var Clientresult = client.GetAsync(BaseURL + "/api/Bugs/GetEmployees").Result;
             if (Clientresult.StatusCode == HttpStatusCode.OK)
             {
                 var contents = Clientresult.Content.ReadAsStringAsync().Result;
                 var response = new JavaScriptSerializer().Deserialize<List<EmployeesDomainModel>>(contents);
                 model.listEmployees = response;
             }
-            var ClientResult1 = client.GetAsync("/api/Project/GetProjectList").Result;
+            var ClientResult1 = client.GetAsync(BaseURL + "/api/Project/GetProjectList").Result;
             if (ClientResult1.StatusCode == HttpStatusCode.OK)
             {
                 var contents = ClientResult1.Content.ReadAsStringAsync().Result;
@@ -91,7 +94,7 @@ namespace TaskManagementOsvin.Controllers
                     var serialized = JsonConvert.SerializeObject(model);
                     var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
                     client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                    var result = client.PostAsync("/api/Bugs/AddUpdateBug", content).Result;
+                    var result = client.PostAsync(BaseURL + "/api/Bugs/AddUpdateBug", content).Result;
                     if (result.StatusCode == HttpStatusCode.OK)
                     {
                         var contents = result.Content.ReadAsStringAsync().Result;
@@ -209,14 +212,14 @@ namespace TaskManagementOsvin.Controllers
             }
             client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var Clientresult = client.GetAsync("/api/Bugs/GetEmployees").Result;
+            var Clientresult = client.GetAsync(BaseURL + "/api/Bugs/GetEmployees").Result;
             if (Clientresult.StatusCode == HttpStatusCode.OK)
             {
                 var contents = Clientresult.Content.ReadAsStringAsync().Result;
                 var response = new JavaScriptSerializer().Deserialize<List<EmployeesDomainModel>>(contents);
                 model.listEmployees = response;
             }
-            var ClientResult1 = client.GetAsync("/api/Project/GetProjectList").Result;
+            var ClientResult1 = client.GetAsync(BaseURL + "/api/Project/GetProjectList").Result;
             if (ClientResult1.StatusCode == HttpStatusCode.OK)
             {
                 var contents = ClientResult1.Content.ReadAsStringAsync().Result;
@@ -244,14 +247,14 @@ namespace TaskManagementOsvin.Controllers
         {
             var client = new HttpClient();
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var Clientresult = client.GetAsync("/api/Bugs/GetEmployees").Result;
+            var Clientresult = client.GetAsync(BaseURL + "/api/Bugs/GetEmployees").Result;
             if (Clientresult.StatusCode == HttpStatusCode.OK)
             {
                 var contents = Clientresult.Content.ReadAsStringAsync().Result;
                 var response = new JavaScriptSerializer().Deserialize<List<EmployeesDomainModel>>(contents);
                 ViewBag.listEmployees = new SelectList(response, "UserId", "EmployeeName");
             }
-            var ClientResult1 = client.GetAsync("/api/Project/GetProjectList").Result;
+            var ClientResult1 = client.GetAsync(BaseURL + "/api/Project/GetProjectList").Result;
             if (ClientResult1.StatusCode == HttpStatusCode.OK)
             {
                 var contents = ClientResult1.Content.ReadAsStringAsync().Result;
@@ -282,7 +285,7 @@ namespace TaskManagementOsvin.Controllers
             var serialized = JsonConvert.SerializeObject(model);
             var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var result = client.PostAsync("/api/Bugs/GetBugDetails", content).Result;
+            var result = client.PostAsync(BaseURL + "/api/Bugs/GetBugDetails", content).Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;
@@ -300,7 +303,7 @@ namespace TaskManagementOsvin.Controllers
             var serialized = JsonConvert.SerializeObject(model);
             var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var result = client.PostAsync("/api/Bugs/AddBugFiles", content).Result;
+            var result = client.PostAsync(BaseURL + "/api/Bugs/AddBugFiles", content).Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;
@@ -316,7 +319,7 @@ namespace TaskManagementOsvin.Controllers
             var serialized = JsonConvert.SerializeObject(model);
             var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var result = client.PostAsync("/api/Bugs/UpdateBugFiles", content).Result;
+            var result = client.PostAsync(BaseURL + "/api/Bugs/UpdateBugFiles", content).Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;
@@ -333,7 +336,7 @@ namespace TaskManagementOsvin.Controllers
                 {
                     var client = new HttpClient();
                     client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                    var result = client.GetAsync("/api/Management/GetEmployeeDataById?UserId=" + UserId).Result;
+                    var result = client.GetAsync(BaseURL + "/api/Management/GetEmployeeDataById?UserId=" + UserId).Result;
                     if (result.StatusCode == HttpStatusCode.OK)
                     {
                         var contents = result.Content.ReadAsStringAsync().Result;
@@ -358,7 +361,7 @@ namespace TaskManagementOsvin.Controllers
             {
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var result = client.GetAsync("/api/Project/GetProjectFullDetails?ProjectId=" + ProjectId).Result;
+                var result = client.GetAsync(BaseURL + "/api/Project/GetProjectFullDetails?ProjectId=" + ProjectId).Result;
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;

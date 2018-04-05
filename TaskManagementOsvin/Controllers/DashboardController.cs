@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -16,10 +17,10 @@ namespace TaskManagementOsvin.Controllers
     [Authorize]
     public class DashboardController : Controller
     {
+        string BaseURL = ConfigurationManager.AppSettings["BaseURL"];
         // GET: Dashboard
-        static GetDSRModel GetDSRModel = new GetDSRModel() { startdate = DateTime.Now.AddDays(-48).ToString("dd/MM/yyyy"), enddate = DateTime.Now.AddDays(-40).ToString("dd/MM/yyyy") };
-        //static GetDSRModel GetDSRModel = new GetDSRModel() { startdate = DateTime.Now.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Sunday).ToString("dd/MM/yyyy"), enddate = DateTime.Now.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Saturday).ToString("dd/MM/yyyy") };
-
+        //static GetDSRModel GetDSRModel = new GetDSRModel() { startdate = DateTime.Now.AddDays(-48).ToString("dd/MM/yyyy"), enddate = DateTime.Now.AddDays(-40).ToString("dd/MM/yyyy") };
+        static GetDSRModel GetDSRModel = new GetDSRModel() { startdate = DateTime.Now.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Sunday).ToString("dd/MM/yyyy"), enddate = DateTime.Now.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Saturday).ToString("dd/MM/yyyy") };
         public ActionResult Welcome()
         {
             return View(GetDSRModel);
@@ -62,7 +63,7 @@ namespace TaskManagementOsvin.Controllers
             var serialized = new JavaScriptSerializer().Serialize(GetDSRModel);
             var content = new StringContent(serialized, Encoding.UTF8, "application/json");
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var result = client.PostAsync("/api/Employee/GetWeekelySummaryOfEmpDetails", content).Result;
+            var result = client.PostAsync(BaseURL + "/api/Employee/GetWeekelySummaryOfEmpDetails", content).Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;
@@ -232,6 +233,7 @@ namespace TaskManagementOsvin.Controllers
         {
             if (ProjectId > 0)
             {
+                var overallWorkingHrs = new List<HoursByDateAndProjModel>();
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
                 StringBuilder sb = new StringBuilder();
@@ -239,7 +241,7 @@ namespace TaskManagementOsvin.Controllers
                 sb.Append("<thead>");
                 // heading
 
-                var Clientresult = client.GetAsync("/api/Project/GetDepartmentAndEmployeeInProject/" + ProjectId).Result;
+                var Clientresult = client.GetAsync(BaseURL + "/api/Project/GetDepartmentAndEmployeeInProject/" + ProjectId).Result;
                 if (Clientresult.StatusCode == HttpStatusCode.OK)
                 {
                     sb.Append("<tr>");
@@ -256,7 +258,7 @@ namespace TaskManagementOsvin.Controllers
                     sb.Append("</tr>");
                 }
                 List<long> UserList = new List<long>();
-                var EmployeesWorked = client.GetAsync("/api/Project/EmployeesWorkedOnProject/" + ProjectId).Result;
+                var EmployeesWorked = client.GetAsync(BaseURL + "/api/Project/EmployeesWorkedOnProject/" + ProjectId).Result;
                 if (EmployeesWorked.StatusCode == HttpStatusCode.OK)
                 {
                     sb.Append("<tr>");
@@ -275,6 +277,9 @@ namespace TaskManagementOsvin.Controllers
                             }
                         }
                         sb.Append("</th>");
+                        //--------
+                        overallWorkingHrs.Add(new HoursByDateAndProjModel() { DepartmentName = item.DepartmentName, EmployeeName = item.EmployeeName, WorkingHours = "0.0" });
+                        //-----------------------
                         UserList.Add(item.UserId);
                     }
                     sb.Append("<th>Week Total</th>");
@@ -283,7 +288,7 @@ namespace TaskManagementOsvin.Controllers
                 sb.Append("</thead>");
                 sb.Append("<tbody>");
                 // body here
-                var WeeksBetweenDatesresult = client.GetAsync("/api/Project/WeeksBetweenDates/" + ProjectId).Result;
+                var WeeksBetweenDatesresult = client.GetAsync(BaseURL + "/api/Project/WeeksBetweenDates/" + ProjectId).Result;
                 if (WeeksBetweenDatesresult.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = WeeksBetweenDatesresult.Content.ReadAsStringAsync().Result;
@@ -299,7 +304,7 @@ namespace TaskManagementOsvin.Controllers
                         GetHrsByDateAndProjModel model = new GetHrsByDateAndProjModel() { Projectid = ProjectId, startdate = item.StartDate.ToString("dd/MM/yyyy").ToString(), enddate = item.EndDate.ToString("dd/MM/yyyy").ToString() };
                         var serialized = new JavaScriptSerializer().Serialize(model);
                         var content = new StringContent(serialized, Encoding.UTF8, "application/json");
-                        var WorkedHoursresult = client.PostAsync("/api/Project/GetHoursBetweenTwoDates", content).Result;
+                        var WorkedHoursresult = client.PostAsync(BaseURL + "/api/Project/GetHoursBetweenTwoDates", content).Result;
                         if (WorkedHoursresult.StatusCode == HttpStatusCode.OK)
                         {
                             totalWorkingMins = 0;
@@ -311,6 +316,11 @@ namespace TaskManagementOsvin.Controllers
                                 var user = WorkedHoursresponse.FirstOrDefault(x => x.UserId == userId);
                                 if (user != null)
                                 {
+                                    //----------
+                                    var getUser = overallWorkingHrs.First(x => x.DepartmentName == user.DepartmentName && x.EmployeeName == user.EmployeeName);
+                                    var dec = ConversionInMinute(user.WorkingHours) + ConversionInMinute(getUser.WorkingHours);
+                                    getUser.WorkingHours = ConversionInHour(dec).ToString();
+                                    //---------
                                     totalWorkingMins += ConversionInMinute(user.WorkingHours);
                                     sb.Append(user.WorkingHours);
                                 }
@@ -319,12 +329,25 @@ namespace TaskManagementOsvin.Controllers
                                     sb.Append("0");
                                 }
                                 sb.Append("</td>");
+
                             }
                         }
                         sb.Append("<td>" + ConversionInHour(totalWorkingMins) + "</td>");
                         sb.Append("</tr>");
                     }
                 }
+                sb.Append("<tfoot>");
+                sb.Append("<tr>");
+                sb.Append("<th>");
+                sb.Append("</th>");
+                foreach (var item in overallWorkingHrs)
+                {
+                    sb.Append("<th>" + item.WorkingHours + "</th>");
+                }
+                sb.Append("<th>");
+                sb.Append("</th>");
+                sb.Append("</tr>");
+                sb.Append("</tfoot>");
                 sb.Append("</tbody>");
                 sb.Append("</table>");
                 ViewBag.Table = sb;
@@ -340,7 +363,7 @@ namespace TaskManagementOsvin.Controllers
             var serialized = new JavaScriptSerializer().Serialize(model);
             var content = new StringContent(serialized, Encoding.UTF8, "application/json");
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var result = client.PostAsync("/api/Employee/GetSummaryOfWeekDetails", content).Result;
+            var result = client.PostAsync(BaseURL + "/api/Employee/GetSummaryOfWeekDetails", content).Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;
@@ -369,7 +392,7 @@ namespace TaskManagementOsvin.Controllers
                     var client = new HttpClient();
                     var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
                     client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                    var result = client.PostAsync("/api/Employee/ChangePassword", content).Result;
+                    var result = client.PostAsync(BaseURL + "/api/Employee/ChangePassword", content).Result;
                     if (result.StatusCode == HttpStatusCode.OK)
                     {
                         var contents = result.Content.ReadAsStringAsync().Result;
@@ -449,7 +472,7 @@ namespace TaskManagementOsvin.Controllers
             var client = new HttpClient();
             var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
             client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-            var result = client.PostAsync("/api/Employee/SummaryOfWeekDetails", content).Result;
+            var result = client.PostAsync(BaseURL + "/api/Employee/SummaryOfWeekDetails", content).Result;
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 var contents = result.Content.ReadAsStringAsync().Result;

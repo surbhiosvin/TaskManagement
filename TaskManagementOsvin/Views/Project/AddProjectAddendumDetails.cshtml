@@ -1,4 +1,4 @@
-﻿
+﻿@using System.Configuration
 @{
     ViewBag.Title = "AddProjectAddendumDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -233,6 +233,7 @@
     </div>
 </div>
 <script type="text/javascript">
+    var basehref = '@ConfigurationManager.AppSettings["BaseURL"]';
     $(document).ready(function () {
         ShowHideDivHourlyRate();
     });
@@ -242,8 +243,8 @@
     });
     function ShowHideDivHourlyRate() {
         var ProjectId = $("#ddlProject").val();
-        if (typeof ProjectId != 'undefined' && ProjectId!="") {
-            var url = "/api/Project/GetProjectTypeById?ProjectId=" + ProjectId
+        if (typeof ProjectId != 'undefined' && ProjectId != "") {
+            var url = basehref + "/api/Project/GetProjectTypeById?ProjectId=" + ProjectId
             $.ajax({
                 type: "GET",
                 url: url,

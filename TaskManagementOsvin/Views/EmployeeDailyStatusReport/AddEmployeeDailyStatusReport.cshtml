@@ -1,4 +1,4 @@
-﻿
+﻿@using System.Configuration
 @{
     ViewBag.Title = "AddEmployeeDailyStatusReport";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -223,8 +223,8 @@
         font-size: 14px;
     }
 </style>
-@*<script src="~/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js"></script>*@
 <script type="text/javascript">
+    var basehref = '@ConfigurationManager.AppSettings["BaseURL"]';
     $(document).ready(function () {
         $("#formatmodal").modal('show');
         var DailyReportId = getParameterByName("DailyReportId");
@@ -232,7 +232,7 @@
         if (DailyReportId > 0 && EmployeeId > 0) {
             $.ajax({
                 type: "Get",
-                url: "/api/EmployeeDailyStatusReport/GetDailyStatusReportDetailsById?DailyReportId=" + DailyReportId,
+                url: basehref + "/api/EmployeeDailyStatusReport/GetDailyStatusReportDetailsById?DailyReportId=" + DailyReportId,
                 contentType: "application/json; charset=utf-8;",
                 dataType: "json",
                 success: function (response) {
@@ -255,36 +255,6 @@
                 }
             });
         }
-        //$(function () {
-        //    window.setInterval(function () {
-        //        $.ajax({
-        //            url: "/api/EmployeeDailyStatusReport/GetTime",
-        //            type: "get",
-        //            async: false,
-        //            dataType: "json",
-        //            contentType: "application/json; charset=utf-8",
-        //            success: function (data) {
-        //                var newtime1 = data;
-        //                $("#ctime").val(data);
-        //                if ("19:00:00" < newtime1 && newtime1 < "23:59:59") {
-        //                    $(".dvAlert").removeClass('alert-danger');
-        //                    $(".dvAlert").addClass('alert-success');
-        //                    $("#lblMessage").html("<strong>Hey ! </strong> Now You can add your Daily Status Report .");
-        //                    $(".dvAlert").show();
-        //                }
-        //                else {
-        //                    $(".dvAlert").addClass('alert-danger');
-        //                    $("#lblMessage").html("<strong>Heads Up ! </strong> You can not add your Daily Status Report before 7:00 P.M. , Please wait till 7:00 P.M. <strong> Current Time is : " + newtime1 + "</strong>");
-        //                    $(".dvAlert").show();
-        //                }
-        //            },
-        //            error: function (error) {
-
-        //            }
-        //        });
-        //    }, 1000);
-        //    //  Do whatever in here that happens every 1 seconds
-        //});
     });
     $("#btnAdd").on('click', function (e) {
         debugger;

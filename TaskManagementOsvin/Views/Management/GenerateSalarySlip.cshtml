@@ -1,4 +1,4 @@
-﻿
+﻿@using System.Configuration
 @{
     ViewBag.Title = "GenerateSalarySlip";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -282,6 +282,7 @@
     }
 </style>
 <script type="text/javascript">
+    var basehref = '@ConfigurationManager.AppSettings["BaseURL"]';
     $(document).ready(function () {
         $('.monthpicker').datepicker({
             format: "mm-yyyy",
@@ -295,7 +296,7 @@
         //debugger
         var DepartmentId = $(".ddlDept").val();
         if (typeof DepartmentId != 'undefined') {
-            var url = "/api/Management/GetDesignationByDeptId?DepartmentId=" + DepartmentId
+            var url = basehref + "/api/Management/GetDesignationByDeptId?DepartmentId=" + DepartmentId
             $.ajax({
                 type: "GET",
                 url: url,

@@ -11,10 +11,10 @@ namespace Providers.Helper
     {
         private static string constr = AppConfig.ConnectionString;
         private SqlConnection con = new SqlConnection(constr);
-         
+
         public int ExecuteScalar(string SpName, object param)
         {
-            int res=Convert.ToInt32(con.ExecuteScalar(SpName, param, commandType: CommandType.StoredProcedure));
+            int res = Convert.ToInt32(con.ExecuteScalar(SpName, param, commandType: CommandType.StoredProcedure));
             return res;
         }
         public int Execute(string SpName, object param)

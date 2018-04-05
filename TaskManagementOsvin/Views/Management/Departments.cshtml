@@ -16,41 +16,7 @@
                 <a href="#">Departments</a>
                 <i class="fa fa-circle"></i>
             </li>
-            @*<li>
-                    <span>Page Layouts</span>
-                </li>*@
         </ul>
-        <div class="page-toolbar">
-            <div class="btn-group pull-right">
-                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
-                    Actions
-                    <i class="fa fa-angle-down"></i>
-                </button>
-                <ul class="dropdown-menu pull-right" role="menu">
-                    <li>
-                        <a href="#">
-                            <i class="icon-bell"></i> Action
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="icon-shield"></i> Another action
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="icon-user"></i> Something else here
-                        </a>
-                    </li>
-                    <li class="divider"> </li>
-                    <li>
-                        <a href="#">
-                            <i class="icon-bag"></i> Separated link
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
     </div>
     <!-- END PAGE BAR -->
     <!-- BEGIN PAGE TITLE-->
@@ -160,16 +126,6 @@
             success: function (response) {
                 $('#dvDepartmentDetails').html(response);
                 TableDatatablesFixedHeader.init();
-                //if (response.isSuccess == true) {
-                //    if (IsActive == false) {
-                //        $("#StatusActiveLink_" + DepartmentId).remove();
-                //        $("#StatusActive_" + DepartmentId).append('<a title="InActive" id="StatusActiveLink_' + DepartmentId + '" href="#" onclick="ActivateDeactivateDepartment(' + DepartmentId + ', true)"><img alt="In Active" src="/assets/global/img/Guiimages/InActive.png" width="30px" height="30px"/></a>');
-                //    }
-                //    else {
-                //        $("#StatusActiveLink_" + DepartmentId).remove();
-                //        $("#StatusActive_" + DepartmentId).append('<a title="Active" id="StatusActiveLink_' + DepartmentId + '" href="#" onclick="ActivateDeactivateDepartment(' + DepartmentId + ', false)"><img alt="Active" src="/assets/global/img/Guiimages/Active.png" width="30px" height="30px"/></a>');
-                //    }
-                //}
             },
             error: function (error) {
                 console.log(error);

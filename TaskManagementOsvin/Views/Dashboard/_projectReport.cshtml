@@ -1,5 +1,6 @@
 ﻿@using TaskManagementOsvin.Models;
 @using TaskManagementOsvin.Security;
+@using System.Configuration
 @model SummaryDSRModel 
 <!-- BEGIN EXAMPLE TABLE PORTLET-->
 <div class="portlet-title">
@@ -48,7 +49,7 @@
                 @foreach (var item in Model.dsr)
                 {
                     <tr>
-                        <td class="highlight"><div class="success"></div><a href="#">@item.ProjectTitle</a></td>
+                        <td class="highlight"><div class="success"></div><a href="@Url.Action("FullProjectReport", new { ProjectId = item.ProjectID })">@item.ProjectTitle</a></td>
                         <td>@item.ClientName</td>
                         <td>@item.Profiles</td>
                         @*<td>@item.ReleasedAmount</td>*@                        
@@ -71,11 +72,9 @@
 </div>
 <!-- END EXAMPLE TABLE PORTLET--> 
 <script>
+    var basehref = '@ConfigurationManager.AppSettings["BaseURL"]';
     function editPayment(td) {
         var ProjectId = $(td).attr('data-id');
-        //var FourthTd = $(td).closest('tr').children('td:eq(3)');
-        //var FifthTd = $(td).closest('tr').children('td:eq(4)');
-        //var SixthTd = $(td).closest('tr').children('td:eq(7)');
         var FourthTd = $(td).closest('tr').children('td:eq(6)');
         var FifthTd = $(td).closest('tr').children('td:eq(7)');
         var SixthTd = $(td).closest('tr').children('td:eq(11)');
@@ -114,7 +113,7 @@
             }, function () {
                 $.ajax({
                     type: "POST",
-                    url: "/api/Project/AddPaymentRelease",
+                    url: basehref + "/api/Project/AddPaymentRelease",
                     data: { PaymentId: 0, ProjectId: ProjectId, ReleasedAmount: ReleasedPayment, NextDueDate: PaymentReleasedDate, CreatedBy: @UserManager.user.UserId},
                     success: function (response) {
                         if (response.isSuccess) {

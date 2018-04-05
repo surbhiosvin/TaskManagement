@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -12,8 +13,10 @@ using TaskManagementOsvin.Security;
 
 namespace TaskManagementOsvin.Controllers
 {
+    [Authorize]
     public class NetworkIssuesController : Controller
     {
+        string BaseURL = ConfigurationManager.AppSettings["BaseURL"];
         // GET: NetworkIssues
         public ActionResult ReportIssue()
         {
@@ -35,7 +38,7 @@ namespace TaskManagementOsvin.Controllers
                 var client = new HttpClient();
                 var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var result = client.PostAsync("/api/NetworkIssues/GetReportIssues", content).Result;
+                var result = client.PostAsync(BaseURL + "/api/NetworkIssues/GetReportIssues", content).Result;
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;
@@ -50,7 +53,7 @@ namespace TaskManagementOsvin.Controllers
                 }
                 else 
                 {
-                    var result1 = client.GetAsync("/api/NetworkIssues/GetReportedIssueCount?UserId=" + model.UserId+"&Role="+model.Role).Result;
+                    var result1 = client.GetAsync(BaseURL + "/api/NetworkIssues/GetReportedIssueCount?UserId=" + model.UserId+"&Role="+model.Role).Result;
                     if (result1.StatusCode == HttpStatusCode.OK)
                     {
                         var contents = result1.Content.ReadAsStringAsync().Result;
@@ -77,7 +80,7 @@ namespace TaskManagementOsvin.Controllers
                 var client = new HttpClient();
                 var content = new StringContent(serialized, System.Text.Encoding.UTF8, "application/json");
                 client.BaseAddress = new Uri(HttpContext.Request.Url.AbsoluteUri);
-                var result = client.PostAsync("/api/NetworkIssues/AddUpdateReportIssue", content).Result;
+                var result = client.PostAsync(BaseURL + "/api/NetworkIssues/AddUpdateReportIssue", content).Result;
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;

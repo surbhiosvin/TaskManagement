@@ -10,11 +10,13 @@ using System.Web.Security;
 using TaskManagementOsvin.Models;
 using System.Web.Mvc;
 using TaskManagementOsvin.Controllers;
+using System.Configuration;
 
 namespace TaskManagementOsvin.Security
 {
     public class UserManager
     {
+        static string BaseURL = ConfigurationManager.AppSettings["BaseURL"];
         public static UserDetailsModel user
         {
             get
@@ -35,8 +37,8 @@ namespace TaskManagementOsvin.Security
                 var serialized = new JavaScriptSerializer().Serialize(model);
                 var client = new HttpClient();
                 var content = new StringContent(serialized, Encoding.UTF8, "application/json");
-                client.BaseAddress = model.url;
-                var result = client.PostAsync("/api/Employee/AuthenticateUser", content).Result;
+                client.BaseAddress = new Uri(HttpContext.Current.Request.Url.AbsoluteUri);
+                var result = client.PostAsync(BaseURL + "/api/Employee/AuthenticateUser", content).Result;
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;

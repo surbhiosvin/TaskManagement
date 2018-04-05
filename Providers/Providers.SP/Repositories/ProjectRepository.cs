@@ -553,7 +553,6 @@ namespace Providers.Providers.SP.Repositories
                 ErrorLog.LogError(ex);
                 return string.Empty;
             }
-        }
         }       
     }
 }

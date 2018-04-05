@@ -1,4 +1,4 @@
-﻿
+﻿@using System.Configuration
 @{
     ViewBag.Title = "AddUpdateUser";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -18,41 +18,7 @@
                 <a href="#">Add/Update User</a>
                 <i class="fa fa-circle"></i>
             </li>
-            @*<li>
-                    <span>Page Layouts</span>
-                </li>*@
         </ul>
-        <div class="page-toolbar">
-            <div class="btn-group pull-right">
-                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
-                    Actions
-                    <i class="fa fa-angle-down"></i>
-                </button>
-                <ul class="dropdown-menu pull-right" role="menu">
-                    <li>
-                        <a href="#">
-                            <i class="icon-bell"></i> Action
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="icon-shield"></i> Another action
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="icon-user"></i> Something else here
-                        </a>
-                    </li>
-                    <li class="divider"> </li>
-                    <li>
-                        <a href="#">
-                            <i class="icon-bag"></i> Separated link
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
     </div>
     <!-- END PAGE BAR -->
     <!-- BEGIN PAGE TITLE-->
@@ -97,6 +63,7 @@
 </div>
 
 <script type="text/javascript">
+    var basehref = '@ConfigurationManager.AppSettings["BaseURL"]';
     jQuery(document).on('ready', function () {
         var table = $('#sample_2').DataTable();
         table.state.clear();
@@ -109,7 +76,7 @@
             if (typeof Archived != 'undefined') {
                 $.ajax({
                     type: "GET",
-                    url: "/Management/_AddUpdateUser?Archived=" + Archived,
+                    url: basehref + "/Management/_AddUpdateUser?Archived=" + Archived,
                     //data: { sortBy: sortByval },
                     contentType: "application/text; charset=utf-8",
                     dataType: "text",
@@ -132,7 +99,7 @@
         $.ajax({
             type: "Get",
             contentType: "application/json; charset=utf-8",
-            url: "/Management/ArchiveEmployee?UserId=" + UserId + "&Archived=" + Archived,
+            url: basehref + "/Management/ArchiveEmployee?UserId=" + UserId + "&Archived=" + Archived,
             success: function (response) {
                 $('.dv_UserTableContainer').html(response);
                 TableDatatablesFixedHeader.init();
@@ -156,7 +123,7 @@
         $.ajax({
             type: "Get",
             contentType: "application/json; charset=utf-8",
-            url: "/Management/ActivateDeactivateUser?UserId=" + UserId + "&IsActive=" + IsActive + "&Archived=" + Archived,
+            url: basehref + "/Management/ActivateDeactivateUser?UserId=" + UserId + "&IsActive=" + IsActive + "&Archived=" + Archived,
             success: function (response) {
                 $('.dv_UserTableContainer').html(response);
                 TableDatatablesFixedHeader.init();
@@ -183,7 +150,7 @@
         $.ajax({
             type: "Get",
             contentType: "application/json; charset=utf-8",
-            url: "/api/Management/DeleteUserById?UserId=" + UserId,
+            url: basehref + "/api/Management/DeleteUserById?UserId=" + UserId,
             beforeSend: function () {
                 $(".lblMessage").html("Please wait...");
                 $(".dvAlert").show();

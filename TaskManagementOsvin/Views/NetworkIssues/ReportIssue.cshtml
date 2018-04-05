@@ -1,4 +1,4 @@
-﻿
+﻿@using System.Configuration
 @{
     ViewBag.Title = "ReportIssue";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -405,6 +405,7 @@
 <link href="~/assets/pages/css/jquery.rating.css" rel="stylesheet" />
 <script src="~/assets/pages/scripts/jquery.rating.js"></script>
 <script type="text/javascript">
+    var basehref = '@ConfigurationManager.AppSettings["BaseURL"]';
     //jQuery(document).on('ready', function () {
     //    var table = $('#tbl_Issues').DataTable();
     //    table.state.clear();
@@ -458,7 +459,7 @@
         $.ajax({
             type: "POST",
             contentType: "application/json; charset=utf-8",
-            url: "/NetworkIssues/AddUpdateReportIssue",
+            url: basehref + "/NetworkIssues/AddUpdateReportIssue",
             data: JSON.stringify(model),
             beforeSend: function () {
                 $("#lblMessage").html("Please wait...");
@@ -545,7 +546,7 @@
         $.ajax({
             type: "POST",
             contentType: "application/json; charset=utf-8",
-            url: "/NetworkIssues/AddUpdateReportIssue",
+            url: basehref + "/NetworkIssues/AddUpdateReportIssue",
             data: JSON.stringify(model),
             beforeSend: function () {
                 $("#lblMessage").html("Please wait...");
@@ -598,7 +599,7 @@
     function ViewIssueDescription(ReportId, Role) {
         $.ajax({
             type: "GET",
-            url: "/api/NetworkIssues/GetIssueDescription?ReportId=" + ReportId,
+            url: basehref + "/api/NetworkIssues/GetIssueDescription?ReportId=" + ReportId,
             contentType: "application/text; charset=utf-8",
             dataType: "text",
             async: false,
@@ -622,7 +623,7 @@
         $("#hdnReportId").val(ReportId);
         $.ajax({
             type: "GET",
-            url: "/api/NetworkIssues/GetIssueDescription?ReportId=" + ReportId,
+            url: basehref + "/api/NetworkIssues/GetIssueDescription?ReportId=" + ReportId,
             contentType: "application/text; charset=utf-8",
             dataType: "text",
             async: false,
@@ -648,7 +649,7 @@
         $.ajax({
             type: "Post",
             contentType: "application/json; charset=utf-8",
-            url: "/NetworkIssues/_ReportIssue",
+            url: basehref + "/NetworkIssues/_ReportIssue",
             data: JSON.stringify(model),
             beforeSend: function () {
             },
@@ -711,7 +712,7 @@
         $.ajax({
             type: "POST",
             contentType: "application/json; charset=utf-8",
-            url: "/NetworkIssues/AddUpdateReportIssue",
+            url: basehref + "/NetworkIssues/AddUpdateReportIssue",
             data: JSON.stringify(model),
             beforeSend: function () {
                 $("#stmsg").show();
@@ -763,7 +764,7 @@
         $("#stmsg1").hide();
         $("#stmsg1").text("");
         $.ajax({
-            url: "/api/NetworkIssues/GetIssueFeedBack?ReportId="+ReportId,
+            url: basehref + "/api/NetworkIssues/GetIssueFeedBack?ReportId=" + ReportId,
             type: "GET",
             async: false,
             dataType: "json",
@@ -774,7 +775,7 @@
                         $("#btnFinalRating").hide();
                     }
                     else {
-                        if (response.UserId !=UserId ) {
+                        if (response.UserId != UserId) {
                             $("#btnFinalRating").hide();
                         }
                         else {
@@ -783,12 +784,11 @@
                     }
 
                     $("#div1").children('input', this).each(function () {
-                        if (response.SpeedOfSolution == null)
-                        {
+                        if (response.SpeedOfSolution == null) {
                             $('#div1 input:radio[value="' + 1 + '"]').attr('checked', 'checked');
                             $('#div1 input:radio[value="' + 1 + '"]').rating('select');
                         }
-                        else if(response.SpeedOfSolution == this.value) {
+                        else if (response.SpeedOfSolution == this.value) {
                             //debugger;
                             $('#div1 input:radio[value="' + response.SpeedOfSolution + '"]').attr('checked', 'checked');
                             $('#div1 input:radio[value="' + response.SpeedOfSolution + '"]').rating('select');
@@ -838,7 +838,6 @@
         $("#RatingModal").modal('show');
     }
     $("#btnFinalRating").click(function () {
-        debugger
         var rating = "";
         var coun1 = 0;
         $('.feed1').each(function () {
@@ -851,7 +850,7 @@
         rating = rating.substring(0, (rating.length - 1));
 
         $.ajax({
-            url: "/api/NetworkIssues/ReportedIssueFeedBack?ReportId="+$("#hdnReportId").val()+"&RatingString="+rating,
+            url: basehref + "/api/NetworkIssues/ReportedIssueFeedBack?ReportId=" + $("#hdnReportId").val() + "&RatingString=" + rating,
             type: "get",
             async: false,
             dataType: "json",
@@ -867,5 +866,5 @@
             }
         });
     });
-  
+
 </script>
