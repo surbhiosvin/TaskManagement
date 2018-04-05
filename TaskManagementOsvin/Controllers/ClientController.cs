@@ -12,6 +12,8 @@ using TaskManagementOsvin.Security;
 
 namespace TaskManagementOsvin.Controllers
 {
+    
+    [Authorize]
     [CustomAuthorize(roles: "HR,Admin,Team Leader,Project Manager")]
     public class ClientController : Controller
     {

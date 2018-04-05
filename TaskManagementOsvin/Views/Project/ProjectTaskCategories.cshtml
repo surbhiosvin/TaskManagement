@@ -19,37 +19,6 @@
                     <span>Page Layouts</span>
                 </li>*@
         </ul>
-        <div class="page-toolbar">
-            <div class="btn-group pull-right">
-                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
-                    Actions
-                    <i class="fa fa-angle-down"></i>
-                </button>
-                <ul class="dropdown-menu pull-right" role="menu">
-                    <li>
-                        <a href="#">
-                            <i class="icon-bell"></i> Action
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="icon-shield"></i> Another action
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="icon-user"></i> Something else here
-                        </a>
-                    </li>
-                    <li class="divider"> </li>
-                    <li>
-                        <a href="#">
-                            <i class="icon-bag"></i> Separated link
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
     </div>
     <!-- END PAGE BAR -->
     <!-- BEGIN PAGE TITLE-->
@@ -87,7 +56,7 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-4">
-                                            @Html.DropDownList("ddlDepartment", ViewBag.listDepartments as SelectList, "Select Department", new { @class = "form-control"})
+                                            @Html.DropDownList("ddlDepartment", ViewBag.listDepartments as SelectList, "Select Department", new { @class = "form-control" })
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -97,7 +66,7 @@
                                             <span class="required"> * </span>
                                         </label>
                                         <div class="col-md-4">
-                                            <input tye="text" class="form-control" id="txtProjectTaskCategory" placeholder="Enter Project Task Category"/>
+                                            <input tye="text" class="form-control" id="txtProjectTaskCategory" placeholder="Enter Project Task Category" />
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -138,7 +107,7 @@
         var table = $('#tbl_ProjectReportCategory').DataTable();
         table.state.clear();
         table.destroy();
-       $('#tbl_ProjectReportCategory').DataTable({
+        $('#tbl_ProjectReportCategory').DataTable({
             "bStateSave": true,
         });
     });
@@ -220,15 +189,15 @@
         else {
             $('#ddlDepartment').css('border-color', '');
         }
-       
+
         if (CategoryName == null || CategoryName == "") {
             $('#txtProjectTaskCategory').css('border-color', 'red');
             IsValid = false;
         }
         else {
             $('#txtProjectTaskCategory').css('border-color', '');
-        }       
-        if (Status == null ||Status=="") {
+        }
+        if (Status == null || Status == "") {
             $('#ddlStatus').css('border-color', 'red');
             IsValid = false;
         }
@@ -302,7 +271,7 @@
         else {
             $('#ddlDepartment').css('border-color', '');
         }
-       
+
         if (CategoryName == null || CategoryName == "") {
             $('#txtProjectTaskCategory').css('border-color', 'red');
             IsValid = false;
@@ -310,7 +279,7 @@
         else {
             $('#txtProjectTaskCategory').css('border-color', '');
         }
-        
+
         if (Status == null || Status == "") {
             $('#ddlStatus').css('border-color', 'red');
             IsValid = false;

@@ -19,6 +19,10 @@ namespace TaskManagementOsvin.Controllers
         string BaseURL = ConfigurationManager.AppSettings["BaseURL"];
         public ActionResult Login(string ReturnUrl = "")
         {
+            if (UserManager.user != null && UserManager.user.UserId > 0)
+            {
+                return RedirectToAction("Welcome", "Dashboard");
+            }            
             ViewBag.Class = "display-hide";
             ViewBag.ReturnUrl = ReturnUrl;
             return View();

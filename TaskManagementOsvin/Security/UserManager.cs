@@ -23,8 +23,9 @@ namespace TaskManagementOsvin.Security
             {
                 if (!HttpContext.Current.User.Identity.IsAuthenticated)
                 {
-                    var a = HttpContext.Current.Session["CurrentUser"];
-                    return HttpContext.Current.Session["CurrentUser"] as UserDetailsModel;
+                    //var a = HttpContext.Current.Session["CurrentUser"];
+                    //return HttpContext.Current.Session["CurrentUser"] as UserDetailsModel;
+                    return null;
                 }
                 return (HttpContext.Current.User as CustomPrincipal).user;
             }
@@ -43,7 +44,7 @@ namespace TaskManagementOsvin.Security
                 {
                     var contents = result.Content.ReadAsStringAsync().Result;
                     var getUser = new JavaScriptSerializer().Deserialize<UserDetailsModel>(contents);
-                    HttpContext.Current.Session["CurrentUser"] = getUser;
+                    //HttpContext.Current.Session["CurrentUser"] = getUser;
                     if (getUser != null)
                     {
                         JavaScriptSerializer serializer = new JavaScriptSerializer();

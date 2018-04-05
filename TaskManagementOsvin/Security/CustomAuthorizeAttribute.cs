@@ -17,11 +17,14 @@ namespace TaskManagementOsvin.Security
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
             bool authorize = false;
-            var loggedInRole = UserManager.user.Role.ToLower().Trim();
-            if (allowedroles.Contains(loggedInRole))
+            if (UserManager.user != null)
             {
-                authorize = true;
-            }
+                var loggedInRole = UserManager.user.Role.ToLower().Trim();
+                if (allowedroles.Contains(loggedInRole))
+                {
+                    authorize = true;
+                }
+            }           
             return authorize;
         }
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
