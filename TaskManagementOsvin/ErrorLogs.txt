@@ -1,0 +1,213 @@
+Time: 22/01/2018 06:49:53 PM
+-----------------------------------------------------------
+Message: Error parsing column 12 (BugReportedBy=Admin Admin - String)
+StackTrace:    at Dapper.SqlMapper.ThrowDataException(Exception ex, Int32 index, IDataReader reader, Object value)
+   at Deserializeba4beec5-1a3c-46e8-8ccc-76e292d38b3c(IDataReader )
+   at Dapper.SqlMapper.<QueryImpl>d__125`1.MoveNext()
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Dapper.SqlMapper.Query[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Boolean buffered, Nullable`1 commandTimeout, Nullable`1 commandType)
+   at Providers.Helper.SqlHelper.Query[type](String SpName, Object param) in F:\Kritika\TaskManagementOsvin\Providers\Helper\SqlHelper.cs:line 27
+   at Providers.Providers.SP.Repositories.BugRepository.GetBugDetails(BugsDomainModel model) in F:\Kritika\TaskManagementOsvin\Providers\Providers.SP\Repositories\BugRepository.cs:line 119
+Source: Dapper
+TargetSite: Void ThrowDataException(System.Exception, Int32, System.Data.IDataReader, System.Object)
+InnerException: System.FormatException: Input string was not in a correct format.
+   at System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberFormatInfo info, Boolean parseDecimal)
+   at System.Number.ParseInt64(String value, NumberStyles options, NumberFormatInfo numfmt)
+   at System.String.System.IConvertible.ToInt64(IFormatProvider provider)
+   at System.Convert.ChangeType(Object value, Type conversionType, IFormatProvider provider)
+   at System.Convert.ChangeType(Object value, Type conversionType)
+   at Deserializeba4beec5-1a3c-46e8-8ccc-76e292d38b3c(IDataReader )
+-----------------------------------------------------------
+
+Time: 22/01/2018 06:52:08 PM
+-----------------------------------------------------------
+Message: Error parsing column 12 (BugReportedBy=Admin Admin - String)
+StackTrace:    at Dapper.SqlMapper.ThrowDataException(Exception ex, Int32 index, IDataReader reader, Object value)
+   at Deserializeba4beec5-1a3c-46e8-8ccc-76e292d38b3c(IDataReader )
+   at Dapper.SqlMapper.<QueryImpl>d__125`1.MoveNext()
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Dapper.SqlMapper.Query[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Boolean buffered, Nullable`1 commandTimeout, Nullable`1 commandType)
+   at Providers.Helper.SqlHelper.Query[type](String SpName, Object param) in F:\Kritika\TaskManagementOsvin\Providers\Helper\SqlHelper.cs:line 27
+   at Providers.Providers.SP.Repositories.BugRepository.GetBugDetails(BugsDomainModel model) in F:\Kritika\TaskManagementOsvin\Providers\Providers.SP\Repositories\BugRepository.cs:line 119
+Source: Dapper
+TargetSite: Void ThrowDataException(System.Exception, Int32, System.Data.IDataReader, System.Object)
+InnerException: System.FormatException: Input string was not in a correct format.
+   at System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberFormatInfo info, Boolean parseDecimal)
+   at System.Number.ParseInt64(String value, NumberStyles options, NumberFormatInfo numfmt)
+   at System.String.System.IConvertible.ToInt64(IFormatProvider provider)
+   at System.Convert.ChangeType(Object value, Type conversionType, IFormatProvider provider)
+   at System.Convert.ChangeType(Object value, Type conversionType)
+   at Deserializeba4beec5-1a3c-46e8-8ccc-76e292d38b3c(IDataReader )
+-----------------------------------------------------------
+
+Time: 22/01/2018 06:52:28 PM
+-----------------------------------------------------------
+Message: Error parsing column 12 (BugReportedBy=Admin Admin - String)
+StackTrace:    at Dapper.SqlMapper.ThrowDataException(Exception ex, Int32 index, IDataReader reader, Object value)
+   at Deserializeba4beec5-1a3c-46e8-8ccc-76e292d38b3c(IDataReader )
+   at Dapper.SqlMapper.<QueryImpl>d__125`1.MoveNext()
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Dapper.SqlMapper.Query[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Boolean buffered, Nullable`1 commandTimeout, Nullable`1 commandType)
+   at Providers.Helper.SqlHelper.Query[type](String SpName, Object param) in F:\Kritika\TaskManagementOsvin\Providers\Helper\SqlHelper.cs:line 27
+   at Providers.Providers.SP.Repositories.BugRepository.GetBugDetails(BugsDomainModel model) in F:\Kritika\TaskManagementOsvin\Providers\Providers.SP\Repositories\BugRepository.cs:line 119
+Source: Dapper
+TargetSite: Void ThrowDataException(System.Exception, Int32, System.Data.IDataReader, System.Object)
+InnerException: System.FormatException: Input string was not in a correct format.
+   at System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberFormatInfo info, Boolean parseDecimal)
+   at System.Number.ParseInt64(String value, NumberStyles options, NumberFormatInfo numfmt)
+   at System.String.System.IConvertible.ToInt64(IFormatProvider provider)
+   at System.Convert.ChangeType(Object value, Type conversionType, IFormatProvider provider)
+   at System.Convert.ChangeType(Object value, Type conversionType)
+   at Deserializeba4beec5-1a3c-46e8-8ccc-76e292d38b3c(IDataReader )
+-----------------------------------------------------------
+
+Time: 22/01/2018 06:53:16 PM
+-----------------------------------------------------------
+Message: Error parsing column 12 (BugReportedBy=Admin Admin - String)
+StackTrace:    at Dapper.SqlMapper.ThrowDataException(Exception ex, Int32 index, IDataReader reader, Object value)
+   at Deserializeba4beec5-1a3c-46e8-8ccc-76e292d38b3c(IDataReader )
+   at Dapper.SqlMapper.<QueryImpl>d__125`1.MoveNext()
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Dapper.SqlMapper.Query[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Boolean buffered, Nullable`1 commandTimeout, Nullable`1 commandType)
+   at Providers.Helper.SqlHelper.Query[type](String SpName, Object param) in F:\Kritika\TaskManagementOsvin\Providers\Helper\SqlHelper.cs:line 27
+   at Providers.Providers.SP.Repositories.BugRepository.GetBugDetails(BugsDomainModel model) in F:\Kritika\TaskManagementOsvin\Providers\Providers.SP\Repositories\BugRepository.cs:line 119
+Source: Dapper
+TargetSite: Void ThrowDataException(System.Exception, Int32, System.Data.IDataReader, System.Object)
+InnerException: System.FormatException: Input string was not in a correct format.
+   at System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberFormatInfo info, Boolean parseDecimal)
+   at System.Number.ParseInt64(String value, NumberStyles options, NumberFormatInfo numfmt)
+   at System.String.System.IConvertible.ToInt64(IFormatProvider provider)
+   at System.Convert.ChangeType(Object value, Type conversionType, IFormatProvider provider)
+   at System.Convert.ChangeType(Object value, Type conversionType)
+   at Deserializeba4beec5-1a3c-46e8-8ccc-76e292d38b3c(IDataReader )
+-----------------------------------------------------------
+
+Time: 22/01/2018 06:55:52 PM
+-----------------------------------------------------------
+Message: Error parsing column 12 (BugReportedBy=Admin Admin - String)
+StackTrace:    at Dapper.SqlMapper.ThrowDataException(Exception ex, Int32 index, IDataReader reader, Object value)
+   at Deserializeba4beec5-1a3c-46e8-8ccc-76e292d38b3c(IDataReader )
+   at Dapper.SqlMapper.<QueryImpl>d__125`1.MoveNext()
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Dapper.SqlMapper.Query[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Boolean buffered, Nullable`1 commandTimeout, Nullable`1 commandType)
+   at Providers.Helper.SqlHelper.Query[type](String SpName, Object param) in F:\Kritika\TaskManagementOsvin\Providers\Helper\SqlHelper.cs:line 27
+   at Providers.Providers.SP.Repositories.BugRepository.GetBugDetails(BugsDomainModel model) in F:\Kritika\TaskManagementOsvin\Providers\Providers.SP\Repositories\BugRepository.cs:line 119
+Source: Dapper
+TargetSite: Void ThrowDataException(System.Exception, Int32, System.Data.IDataReader, System.Object)
+InnerException: System.FormatException: Input string was not in a correct format.
+   at System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberFormatInfo info, Boolean parseDecimal)
+   at System.Number.ParseInt64(String value, NumberStyles options, NumberFormatInfo numfmt)
+   at System.String.System.IConvertible.ToInt64(IFormatProvider provider)
+   at System.Convert.ChangeType(Object value, Type conversionType, IFormatProvider provider)
+   at System.Convert.ChangeType(Object value, Type conversionType)
+   at Deserializeba4beec5-1a3c-46e8-8ccc-76e292d38b3c(IDataReader )
+-----------------------------------------------------------
+
+Time: 31/01/2018 01:24:58 PM
+-----------------------------------------------------------
+Message: Error converting data type nvarchar to bigint.
+StackTrace:    at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at Dapper.SqlMapper.ExecuteReaderWithFlagsFallback(IDbCommand cmd, Boolean wasClosed, CommandBehavior behavior)
+   at Dapper.SqlMapper.<QueryImpl>d__125`1.MoveNext()
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Dapper.SqlMapper.Query[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Boolean buffered, Nullable`1 commandTimeout, Nullable`1 commandType)
+   at Providers.Helper.SqlHelper.Query[type](String SpName, Object param) in F:\Kritika\TaskManagementOsvin\Providers\Helper\SqlHelper.cs:line 27
+   at Providers.Providers.SP.Repositories.ManagementRepository.AddUpdateEmployeePaySlip(PaySlipDomainModel model) in F:\Kritika\TaskManagementOsvin\Providers\Providers.SP\Repositories\ManagementRepository.cs:line 393
+Source: .Net SqlClient Data Provider
+TargetSite: Void OnError(System.Data.SqlClient.SqlException, Boolean, System.Action`1[System.Action])
+-----------------------------------------------------------
+
+Time: 31/01/2018 01:25:23 PM
+-----------------------------------------------------------
+Message: Error converting data type nvarchar to bigint.
+StackTrace:    at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at Dapper.SqlMapper.ExecuteReaderWithFlagsFallback(IDbCommand cmd, Boolean wasClosed, CommandBehavior behavior)
+   at Dapper.SqlMapper.<QueryImpl>d__125`1.MoveNext()
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Dapper.SqlMapper.Query[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Boolean buffered, Nullable`1 commandTimeout, Nullable`1 commandType)
+   at Providers.Helper.SqlHelper.Query[type](String SpName, Object param) in F:\Kritika\TaskManagementOsvin\Providers\Helper\SqlHelper.cs:line 27
+   at Providers.Providers.SP.Repositories.ManagementRepository.AddUpdateEmployeePaySlip(PaySlipDomainModel model) in F:\Kritika\TaskManagementOsvin\Providers\Providers.SP\Repositories\ManagementRepository.cs:line 393
+Source: .Net SqlClient Data Provider
+TargetSite: Void OnError(System.Data.SqlClient.SqlException, Boolean, System.Action`1[System.Action])
+-----------------------------------------------------------
+
+Time: 20/03/2018 03:46:02 PM
+-----------------------------------------------------------
+Message: There is already an open DataReader associated with this Command which must be closed first.
+StackTrace:    at System.Data.SqlClient.SqlInternalConnectionTds.ValidateConnectionForExecute(SqlCommand command)
+   at System.Data.SqlClient.SqlConnection.ValidateConnectionForExecute(String method, SqlCommand command)
+   at System.Data.SqlClient.SqlCommand.ValidateCommand(String method, Boolean async)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at Dapper.SqlMapper.ExecuteReaderWithFlagsFallback(IDbCommand cmd, Boolean wasClosed, CommandBehavior behavior)
+   at Dapper.SqlMapper.<QueryImpl>d__125`1.MoveNext()
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Dapper.SqlMapper.Query[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Boolean buffered, Nullable`1 commandTimeout, Nullable`1 commandType)
+   at Providers.Helper.SqlHelper.Query[type](String SpName, Object param) in F:\Kritika\TaskManagementOsvin\Providers\Helper\SqlHelper.cs:line 27
+   at Providers.Providers.SP.Repositories.EmployeeDailyStatusReportRepository.GetEmployeeTotalWorkingHoursReport(Int64 DepartmentId, Int64 EmployeeId, String StartDate, String EndDate) in F:\Kritika\TaskManagementOsvin\Providers\Providers.SP\Repositories\EmployeeDailyStatusReportRepository.cs:line 49
+Source: System.Data
+TargetSite: Void ValidateConnectionForExecute(System.Data.SqlClient.SqlCommand)
+-----------------------------------------------------------
+
+Time: 20/03/2018 04:21:40 PM
+-----------------------------------------------------------
+Message: Procedure or function 'AddUpdateProjectAndEstimation' expects parameter '@FixedPrice', which was not supplied.
+StackTrace:    at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at Dapper.SqlMapper.ExecuteReaderWithFlagsFallback(IDbCommand cmd, Boolean wasClosed, CommandBehavior behavior)
+   at Dapper.SqlMapper.<QueryImpl>d__125`1.MoveNext()
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Dapper.SqlMapper.Query[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Boolean buffered, Nullable`1 commandTimeout, Nullable`1 commandType)
+   at Providers.Helper.SqlHelper.Query[type](String SpName, Object param) in F:\Kritika\TaskManagementOsvin\Providers\Helper\SqlHelper.cs:line 27
+   at Providers.Providers.SP.Repositories.ProjectRepository.AddUpdateProject(AddUpdateProjectDomainModel model) in F:\Kritika\TaskManagementOsvin\Providers\Providers.SP\Repositories\ProjectRepository.cs:line 388
+Source: .Net SqlClient Data Provider
+TargetSite: Void OnError(System.Data.SqlClient.SqlException, Boolean, System.Action`1[System.Action])
+-----------------------------------------------------------
+

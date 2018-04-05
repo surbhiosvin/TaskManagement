@@ -240,3 +240,7 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/TaskManagementOsvin/assets/global/img/Guiimages
+/TaskManagementOsvin/BugUploadDocument
+/TaskManagementOsvin/Images/UserImages
+/TaskManagementOsvin/UploadDocuments

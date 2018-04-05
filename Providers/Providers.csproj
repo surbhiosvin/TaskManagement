@@ -53,10 +53,29 @@
     <Compile Include="Helper\DataMapper.cs" />
     <Compile Include="Helper\Email.cs" />
     <Compile Include="Helper\ErrorLog.cs" />
+    <Compile Include="Helper\HelperMethods.cs" />
     <Compile Include="Helper\SqlHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers.SP\Repositories\BugRepository.cs" />
+    <Compile Include="Providers.SP\Repositories\ClientRepository.cs" />
+    <Compile Include="Providers.SP\Repositories\EmployeeDailyStatusReportRepository.cs" />
     <Compile Include="Providers.SP\Repositories\EmployeeRepository.cs" />
+    <Compile Include="Providers.SP\Repositories\FeedbackRepository.cs" />
+    <Compile Include="Providers.SP\Repositories\ManagementRepository.cs" />
+    <Compile Include="Providers.SP\Repositories\NetworkRepository.cs" />
+    <Compile Include="Providers.SP\Repositories\NotificationRepository.cs" />
+    <Compile Include="Providers.SP\Repositories\ProfileRepository.cs" />
+    <Compile Include="Providers.SP\Repositories\ProjectRepository.cs" />
+    <Compile Include="Repositories\IBug.cs" />
+    <Compile Include="Repositories\IClient.cs" />
     <Compile Include="Repositories\IEmployee.cs" />
+    <Compile Include="Repositories\IEmployeeDailyStatusReport.cs" />
+    <Compile Include="Repositories\IFeedback.cs" />
+    <Compile Include="Repositories\IManagement.cs" />
+    <Compile Include="Repositories\INetwork.cs" />
+    <Compile Include="Repositories\INotification.cs" />
+    <Compile Include="Repositories\IProfile.cs" />
+    <Compile Include="Repositories\IProject.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

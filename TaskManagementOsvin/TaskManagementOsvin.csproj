@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -44,8 +45,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DomainModel">
-      <HintPath>..\DomainModel\bin\Debug\DomainModel.dll</HintPath>
+    <Reference Include="itextsharp, Version=5.5.11.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.11\lib\itextsharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="itextsharp.xmlworker, Version=5.5.11.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\itextsharp.xmlworker.5.5.11\lib\itextsharp.xmlworker.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.6\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
@@ -75,8 +81,8 @@
       <HintPath>..\packages\Microsoft.ApplicationInsights.2.2.0\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.8.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
@@ -164,22 +170,83 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\BugsApiController.cs" />
+    <Compile Include="Controllers\BugsController.cs" />
+    <Compile Include="Controllers\ClientApiController.cs" />
+    <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Controllers\EmployeeDailyStatusReportApiController.cs" />
+    <Compile Include="Controllers\EmployeeDailyStatusReportController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\FeedbackApiController.cs" />
+    <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ManagementApiController.cs" />
+    <Compile Include="Controllers\ManagementController.cs" />
+    <Compile Include="Controllers\NetworkIssuesAPIController.cs" />
+    <Compile Include="Controllers\NetworkIssuesController.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\ProjectApiController.cs" />
+    <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\ChangePassword.cs" />
+    <Compile Include="Models\AddEmployeeDailyReportModel.cs" />
+    <Compile Include="Models\AddendumModel.cs" />
+    <Compile Include="Models\AddUpdatePaymentReleaseModel.cs" />
+    <Compile Include="Models\AddUpdateProjectModel.cs" />
+    <Compile Include="Models\AddUpworkProfileModel.cs" />
+    <Compile Include="Models\AllProjectsModel.cs" />
+    <Compile Include="Models\BirthDayNotificationModel.cs" />
+    <Compile Include="Models\BugsModel.cs" />
+    <Compile Include="Models\ChangePasswordModel.cs" />
+    <Compile Include="Models\ClientModel.cs" />
+    <Compile Include="Models\DataTableResultModel.cs" />
+    <Compile Include="Models\DepartmentModel.cs" />
+    <Compile Include="Models\DesignationModel.cs" />
+    <Compile Include="Models\EmployeeDailyReportModel.cs" />
+    <Compile Include="Models\EmployeeModel.cs" />
+    <Compile Include="Models\EmployeesModel.cs" />
+    <Compile Include="Models\EmpWorkedOnProjModel.cs" />
+    <Compile Include="Models\GetAddendumModel.cs" />
+    <Compile Include="Models\GetAllProjectsModel.cs" />
+    <Compile Include="Models\GetDepAndEmpProjModel.cs" />
+    <Compile Include="Models\GetDSRModel.cs" />
+    <Compile Include="Models\GetHrsByDateAndProjModel.cs" />
+    <Compile Include="Models\GetIndividualWorkingHoursModel.cs" />
+    <Compile Include="Models\GetPaymentModel.cs" />
+    <Compile Include="Models\GetProfilesModel.cs" />
+    <Compile Include="Models\GetProjectByIdModel.cs" />
     <Compile Include="Models\GetSummaryModel.cs" />
+    <Compile Include="Models\GetWeekelySummaryOfEmpModel.cs" />
+    <Compile Include="Models\GetWeeklyEmployeeDSRModel.cs" />
+    <Compile Include="Models\HoursByDateAndProjModel.cs" />
+    <Compile Include="Models\OverAllSummaryOfWeekDetailsMainModel.cs" />
+    <Compile Include="Models\PaySlipModel.cs" />
+    <Compile Include="Models\ProfilesDomainModel.cs" />
+    <Compile Include="Models\ProjectModel.cs" />
+    <Compile Include="Models\ProjectTypeModel.cs" />
+    <Compile Include="Models\ProjectWorkingHoursBeforePMSModel.cs" />
     <Compile Include="Models\ResponseModel.cs" />
+    <Compile Include="Models\SummaryDSRModel.cs" />
+    <Compile Include="Models\SummaryOfWeekDetailsMainModel.cs" />
+    <Compile Include="Models\UpdateProjectStatusModel.cs" />
+    <Compile Include="Models\UpdateUpworkProfileModel.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserDetailsModel.cs" />
+    <Compile Include="Models\UserListSearchModel.cs" />
+    <Compile Include="Models\WeekelyEmployeeReportModel.cs" />
+    <Compile Include="Models\WeeksBwDateModel.cs" />
+    <Compile Include="Models\WorkingHoursModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\CustomAuthorizeAttribute.cs" />
     <Compile Include="Security\CustomPrincipal.cs" />
     <Compile Include="Security\UserManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Blink.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\custom.css" />
@@ -221,6 +288,69 @@
     <Content Include="Views\Dashboard\Welcome.cshtml" />
     <Content Include="Views\Shared\_header.cshtml" />
     <Content Include="Views\Dashboard\ChangePassword.cshtml" />
+    <Content Include="Views\Bugs\BugsList.cshtml" />
+    <Content Include="Views\Bugs\ReportBug.cshtml" />
+    <Content Include="Views\Bugs\_BugsList.cshtml" />
+    <Content Include="Views\Client\Clients.cshtml" />
+    <Content Include="Views\Client\_Clients.cshtml" />
+    <Content Include="Views\EmployeeDailyStatusReport\AddDailyStatusReportByTeamLeader.cshtml" />
+    <Content Include="Views\EmployeeDailyStatusReport\AddEmployeeDailyStatusReport.cshtml" />
+    <Content Include="Views\EmployeeDailyStatusReport\DailystatusReportDetailsByEmployee.cshtml" />
+    <Content Include="Views\EmployeeDailyStatusReport\EmployeeReport.cshtml" />
+    <Content Include="Views\EmployeeDailyStatusReport\EmployeeReporting.cshtml" />
+    <Content Include="Views\EmployeeDailyStatusReport\EmployeeTotalWorkingHoursInMonth.cshtml" />
+    <Content Include="Views\EmployeeDailyStatusReport\TeamLeaderFilledEmployeeDailyStatusReportDetails.cshtml" />
+    <Content Include="Views\EmployeeDailyStatusReport\_DailystatusReportDetailsByEmployee.cshtml" />
+    <Content Include="Views\EmployeeDailyStatusReport\_EmployeeDailyStatusReport.cshtml" />
+    <Content Include="Views\EmployeeDailyStatusReport\_EmployeeDailyStatusReportByTeamLeader.cshtml" />
+    <Content Include="Views\EmployeeDailyStatusReport\_EmployeeReport.cshtml" />
+    <Content Include="Views\EmployeeDailyStatusReport\_EmployeeReporting.cshtml" />
+    <Content Include="Views\EmployeeDailyStatusReport\_EmployeeTotalWorkingHoursInMonth.cshtml" />
+    <Content Include="Views\EmployeeDailyStatusReport\_TeamLeaderFilledEmployeeDailyStatusReportDetails.cshtml" />
+    <Content Include="Views\Error\NotFound.cshtml" />
+    <Content Include="Views\Feedback\Feedback.cshtml" />
+    <Content Include="Views\Feedback\_Feedback.cshtml" />
+    <Content Include="Views\Management\AddEmployee.cshtml" />
+    <Content Include="Views\Management\AddUpdateUser.cshtml" />
+    <Content Include="Views\Management\Departments.cshtml" />
+    <Content Include="Views\Management\Designations.cshtml" />
+    <Content Include="Views\Management\EmployeeDetails.cshtml" />
+    <Content Include="Views\Management\GenerateSalarySlip.cshtml" />
+    <Content Include="Views\Management\PaySlip.cshtml" />
+    <Content Include="Views\Management\_AddUpdateUser.cshtml" />
+    <Content Include="Views\Management\_Departments.cshtml" />
+    <Content Include="Views\Management\_Designations.cshtml" />
+    <Content Include="Views\Management\_PaySlip.cshtml" />
+    <Content Include="Views\NetworkIssues\NetworkIssueReport.cshtml" />
+    <Content Include="Views\NetworkIssues\ReportIssue.cshtml" />
+    <Content Include="Views\NetworkIssues\_ReportIssue.cshtml" />
+    <Content Include="Views\Project\AddProjectAddendumDetails.cshtml" />
+    <Content Include="Views\Project\AddUpdateProfile.cshtml" />
+    <Content Include="Views\Project\AddUpdateProject.cshtml" />
+    <Content Include="Views\Project\AddWorkingHoursOfProjectBeforePMS.cshtml" />
+    <Content Include="Views\Project\GetProfiles.cshtml" />
+    <Content Include="Views\Project\MergeProject.cshtml" />
+    <Content Include="Views\Project\PaymentRelease.cshtml" />
+    <Content Include="Views\Project\ProjectAddendumDetails.cshtml" />
+    <Content Include="Views\Project\ProjectFullDetails.cshtml" />
+    <Content Include="Views\Project\ProjectList.cshtml" />
+    <Content Include="Views\Project\ProjectListReport.cshtml" />
+    <Content Include="Views\Project\ProjectTaskCategories.cshtml" />
+    <Content Include="Views\Project\UpdateProjectStatus.cshtml" />
+    <Content Include="Views\Project\_EmployeeWorkedonProject.cshtml" />
+    <Content Include="Views\Project\_ProjectAddendumDetails.cshtml" />
+    <Content Include="Views\Project\_ProjectFeedBackDetails.cshtml" />
+    <Content Include="Views\Project\_ProjectFullDetail.cshtml" />
+    <Content Include="Views\Project\_ProjectList.cshtml" />
+    <Content Include="Views\Project\_ProjectListReport.cshtml" />
+    <Content Include="Views\Project\_ProjectTaskCategories.cshtml" />
+    <Content Include="Views\Dashboard\FullProjectReport.cshtml" />
+    <Content Include="Views\Dashboard\_employeeReport.cshtml" />
+    <Content Include="Views\Dashboard\_projectReport.cshtml" />
+    <Content Include="Views\Shared\_birthdayNotifications.cshtml" />
+    <Content Include="Views\Shared\_header_.cshtml" />
+    <Content Include="Views\Shared\_notifications.cshtml" />
+    <Content Include="Views\Shared\_responsiveHeader.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -236,6 +366,10 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DomainModel\DomainModel.csproj">
+      <Project>{4dcb7c8a-7252-448d-b74d-30352d3516c8}</Project>
+      <Name>DomainModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Providers\Providers.csproj">
       <Project>{db4c6a35-61ea-4504-864c-db14a0bc999a}</Project>
       <Name>Providers</Name>
@@ -275,6 +409,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
